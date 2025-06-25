@@ -1,0 +1,88 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+:root {
+	--primary-color: #0D1821;
+	--secondary-color: #339989;
+	--black: #111820;
+	--white: #fff;
+	--red: #DB504A;
+	--blue: #3C91E6;
+	--section-bg: #d5f2eb;
+}
+
+
+.fi-body {
+    @apply bg-gray-100;
+}
+
+.fi-ta-table th, .fi-section-header {
+	background-color: var(--secondary-color);
+	span, h3 {
+		color: var(--white);
+	}
+}
+
+.fi-btn {
+background-color: var(--primary-color);
+	span {
+		color: var(--white);
+	}
+	&:hover {
+		background-color: var(--secondary-color);
+		transition: all 0.3s ease;
+	}
+	transition: all 0.3s ease;
+}
+
+.fi-link {
+	background-color: var(--primary-color);
+	padding: 0.4rem 0.8rem;
+	transition: all 0.3s ease;
+	svg {
+		color: var(--white);
+	}
+	span {
+		color: var(--white);
+	}
+	border-radius: 0.25rem;
+	&:hover {
+		background-color: var(--blue);
+		transition: all 0.3s ease;
+		text-decoration: none;
+	}
+}
+
+.fi-link.fi-color-danger {
+	background-color: var(--primary-color);
+	padding: 0.4rem 0.8rem;
+	transition: all 0.3s ease;
+	svg {
+		color: var(--white);
+	}
+	span {
+		color: var(--white);
+	}
+	border-radius: 0.25rem;
+	&:hover {
+		background-color: var(--red);
+		transition: all 0.3s ease;
+		text-decoration: none;
+	}
+}
+
+.fi-fo-builder-item-header {
+	background-color: var(--section-bg);
+	h4 {
+		color: var(--black) !important;
+	}
+}
+
+.fi-fo-repeater-item-header {
+	background-color: #f3f3f3;
+}
+
+.fi-icon-btn[title="Delete"] {
+	color: var(--red);
+}

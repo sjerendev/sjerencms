@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #ffffff;
+    --text-color: #111820;
+    --primary-color: #18f2b2;
+    --secondary-color: #b0fe76;
+    --headline-1: clamp(2rem, 10vw, 4rem);
+}
+
+:root.dark {
+    --background: #111820;
+    --text-color: #ffffff;
+    --primary-color: #18f2b2;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-color);
+    font-size: 18px;
+    font-family: "Nunito", system-ui, -apple-system, sans-serif;
+}
+
+.prose {
+    max-width: none;
+    p {
+        font-size: 18px;
+    }
+}
+
+.container {
+    max-width: 1366px;
+}
+
+h1 {
+    font-size: var(--headline-1);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 1.5rem 0;
+    color: var(--text-color);
+}
+h2 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+p {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.home-hero {
+    background-color: #111820;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    h1 {
+        font-size: var(--headline-1);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        margin: 1.5rem 0;
+        color: var(--primary-color);
+    }
+    h2 {
+        font-size: 2.5rem;
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+    }
+    p {
+        color: #fff;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.service-hero {
+    background-color: #111820;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    text-align: center;
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    h1,
+    p {
+        color: var(--primary-color);
+    }
+}
+
+.service-section {
+    background-color: #e2f3e9;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.service-card {
+    background-color: #111820;
+    padding: 2rem;
+    transition: transform 0.2s ease-in-out;
+    h3 {
+        color: var(--primary-color);
+    }
+    p {
+        color: #fff;
+    }
+    button {
+        background-color: var(--primary-color);
+        color: #111820;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    button:hover {
+        background-color: #fff;
+    }
+}
+
+.services {
+    background-color: #f3f3f3;
+}
+
+.blog-block {
+    background-color: #ffffff;
+}
+
+.contact {
+    padding-bottom: 3rem;
+    button {
+        background-color: var(--primary-color);
+        color: #111820;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    button:hover {
+        background-color: var(--text-color);
+        color: #fff;
+    }
+}
+
+.home-contact {
+    background-color: #111820;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    h2 {
+        color: var(--primary-color);
+    }
+    p,
+    label {
+        color: #fff;
+    }
+    button {
+        background-color: var(--primary-color);
+        color: #111820;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    button:hover {
+        background-color: #fff;
+    }
+}
+
+.footer-bg {
+    background-color: #111820;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+/* blog related css */
+
+.blogg {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+
+    .blog-intro {
+        font-size: 1.5rem;
+        padding-top: 2rem;
+    }
+
+    h3,
+    h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        margin-bottom: 1.3rem;
+    }
+
+    ul {
+        margin-bottom: 1.3rem;
+        list-style-type: disc;
+        padding-left: 1.4rem;
+    }
+    .home-contact {
+        margin-top: 3rem;
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+        border-radius: 30px;
+        h2 {
+            color: var(--primary-color);
+        }
+        p,
+        label {
+            color: #fff;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: #111820;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+        button:hover {
+            background-color: #fff;
+        }
+    }
+}
+
+.category-tag {
+    background-color: var(--primary-color);
+    color: #111820;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.faq {
+    .faq-item {
+        margin-bottom: 0.5rem;
+        background-color: var(--text-color);
+        color: var(--primary-color);
+        border-radius: 1rem;
+        padding: 1.5rem;
+    }
+}
+
+#page-integritetspolicy,
+#page-anvandarvillkor,
+#page-om-kalibr {
+    ul {
+        margin-bottom: 1.5rem;
+        list-style-type: disc;
+        padding-left: 1.4rem;
+    }
+    p {
+        margin-bottom: 1.5rem;
+    }
+}
+
+footer {
+    ul {
+        list-style-type: none !important;
+        padding-left: 0 !important;
+    }
+}
