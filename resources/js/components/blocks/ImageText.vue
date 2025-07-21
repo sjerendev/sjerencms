@@ -1,9 +1,9 @@
 <template>
     <section :class="block.section_class">
-        <div class="container py-12 px-6 md:px-8 lg:px-12 mx-auto">
-            <div class="flex flex-col md:flex-row items-center"
+        <div class="container px-6 py-12 mx-auto md:px-8 lg:px-12">
+            <div class="flex flex-col items-center md:flex-row"
                 :class="{ 'md:flex-row-reverse': block.reverse_layout }">
-                <div class="flex items-center w-full px-2 md:w-1/2 order-1" :class="{
+                <div class="flex order-1 items-center px-2 w-full md:w-1/2" :class="{
                     'lg:pl-6': !block.reverse_layout,
                     'lg:pr-6': block.reverse_layout,
                     'md:order-1': !block.reverse_layout,
@@ -16,29 +16,33 @@
                         <div v-else>
                             <div v-html="parsedContent" class="mb-4 content-visibility-auto"></div>
                         </div>
-                        <div v-if="block.button1_text || block.button2_text" class="block md:flex gap-4 mt-10">
-                            <a v-if="block.button1_text" :href="block.button1_url"
-                                class="block md:inline-flex text-center items-center px-4 py-2 font-semibold text-white transition-colors rounded-xl button-one mb-4 md:mb-0">
+                        <div v-if="block.button1_text || block.button2_text" class="block gap-4 mt-10 md:flex">
+													<MagneticElement :strength="0.3" :scale="true" :rotate="true">
+														<a v-if="block.button1_text" :href="block.button1_url"
+                                class="block items-center px-4 py-2 mb-4 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-one md:mb-0">
                                 {{ block.button1_text }}
                             </a>
+													</MagneticElement>
+													<MagneticElement :strength="0.3" :scale="true" :rotate="true">
                             <a v-if="block.button2_text" :href="block.button2_url"
-                                class="block md:inline-flex text-center items-center px-4 py-2 font-semibold text-white transition-colors rounded-xl button-two">
+                                class="block items-center px-4 py-2 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-two">
                                 {{ block.button2_text }}
                             </a>
+														</MagneticElement>
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/2 mb-8 md:mb-0 order-2" :class="{
+                <div class="order-2 mb-8 w-full md:w-1/2 md:mb-0" :class="{
                     'lg:pr-6': !block.reverse_layout,
                     'lg:pl-6': block.reverse_layout,
                     'md:order-2': !block.reverse_layout,
                     'md:order-1': block.reverse_layout
                 }">
-                    <div class="aspect-ratio-box relative z-0" :style="{ paddingBottom: aspectRatio + '%' }">
-                        <img :src="`/storage/${block.image}`" 
+                    <div class="relative z-0 aspect-ratio-box" :style="{ paddingBottom: aspectRatio + '%' }">
+                        <img :src="`/storage/${block.image}`"
                              :fetchpriority="isFirstBlock ? 'low' : 'auto'"
                              :loading="isFirstBlock ? 'lazy' : 'lazy'"
-                             class="absolute inset-0 w-full h-full object-cover" 
+                             class="object-cover absolute inset-0 w-full h-full"
                              :alt="block.image_alt || ''"
                              @load="onImageLoad" />
                     </div>
@@ -52,6 +56,7 @@
 import { marked } from "marked";
 import { computed, ref } from "vue";
 import DOMPurify from "dompurify";
+import MagneticElement from "../common/MagneticElement.vue";
 
 const props = defineProps({
     block: {

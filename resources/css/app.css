@@ -3,24 +3,81 @@
 @tailwind utilities;
 
 :root {
-    --background: #ffffff;
-    --text-color: #111820;
-    --primary-color: #18f2b2;
+    --background: #10181f;
+    --text-color: #ffffff;
+    --primary-color: #60f2c2;
     --secondary-color: #b0fe76;
-    --headline-1: clamp(2rem, 10vw, 4rem);
+    --headline-1: clamp(2rem, 10vw, 5rem);
+    --headline-2: clamp(1.4rem, 6vw, 3rem);
+    --h1-family: "Satoshi-Black", system-ui, -apple-system, sans-serif;
+    --h2-family: "Satoshi-Bold", system-ui, -apple-system, sans-serif;
+    --h3-family: "Satoshi-Medium", system-ui, -apple-system, sans-serif;
+    --h4-family: "Satoshi-Regular", system-ui, -apple-system, sans-serif;
+    --fs-about-big: clamp(1.222rem, 3dvw, 2.111rem);
+    --fs-about-normal: clamp(1.222rem, 2dvw, 1.944rem);
+    --fs-selected-title: clamp(1.444rem, 4dvw, 6.667rem);
+    --fs-hover-links-big: clamp(1.111rem, 6dvw, 3.333rem);
+    --fs-hover-links-skills: clamp(1.111rem, 2dvw, 1.333rem);
+    --fs-skills-item: clamp(1.111rem, 4dvw, 2.889rem);
+    --fs-footer-headline: clamp(2.222rem, 8dvw, 10.667rem);
+    --mr-about-intro: clamp(0.833rem, 2dvw, 2.222rem);
+    --lh-about-intro: clamp(3rem, 6dvw + 1.5rem, 16rem);
+    --card-pad-x: clamp(20px, 3vw, 30px);
+    --card-pad-y: clamp(15px, 3vw, 26px);
+    --border-color: #dbdada;
+    --fs-card-title: clamp(25px, 1dvw, 18px);
+    --fs-info-row: clamp(18px, 1dvw, 16px);
+    --fs-about-headline: clamp(1rem, 8dvw, 4.5rem);
+    --fs-about-p: clamp(1rem, 6dvw, 2.8rem);
+    --lh-about-p: clamp(1rem, 5dvw + 1.5rem, 5rem);
+    --fw-black: "Satoshi-Black";
+    --fw-bold: "Satoshi-Bold";
+    --fw-light: "Satoshi-Light";
+    --fw-medium: "Satoshi-Medium";
+    --fw-regular: "Satoshi-Regular";
 }
 
 :root.dark {
     --background: #111820;
     --text-color: #ffffff;
-    --primary-color: #18f2b2;
+    --primary-color: #60f2c2;
+}
+
+@font-face {
+    font-family: "Satoshi-Black";
+    src: url("/fonts/Satoshi-Black.woff");
+}
+
+@font-face {
+    font-family: "Satoshi-Bold";
+    src: url("../fonts/Satoshi-Bold.woff");
+}
+
+@font-face {
+    font-family: "Satoshi-Light";
+    src: url("../fonts/Satoshi-Light.woff");
+}
+
+@font-face {
+    font-family: "Satoshi-Medium";
+    src: url("../fonts/Satoshi-Medium.woff");
+}
+
+@font-face {
+    font-family: "Satoshi-Regular";
+    src: url("../fonts/Satoshi-Regular.woff");
 }
 
 body {
     background-color: var(--background);
     color: var(--text-color);
     font-size: 18px;
-    font-family: "Nunito", system-ui, -apple-system, sans-serif;
+    font-family: "Satoshi-Regular", system-ui, -apple-system, sans-serif;
+}
+
+nav {
+    background-color: var(--background);
+    color: var(--text-color);
 }
 
 .prose {
@@ -36,6 +93,7 @@ body {
 
 h1 {
     font-size: var(--headline-1);
+    font-family: var(--h1-family);
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.02em;
@@ -44,6 +102,7 @@ h1 {
 }
 h2 {
     font-size: 2.5rem;
+    font-family: var(--h2-family);
     font-weight: 400;
     line-height: 1;
     letter-spacing: -0.02em;
@@ -52,6 +111,13 @@ h2 {
 }
 h3 {
     font-size: 1.8rem;
+    font-family: var(--h3-family);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+h4 {
+    font-size: 1.5rem;
+    font-family: var(--h4-family);
     font-weight: 700;
     margin-bottom: 1rem;
 }
@@ -73,7 +139,7 @@ p {
         color: var(--primary-color);
     }
     h2 {
-        font-size: 2.5rem;
+        font-size: var(--headline-2);
         font-weight: 400;
         line-height: 1;
         letter-spacing: -0.02em;
@@ -83,6 +149,91 @@ p {
     p {
         color: #fff;
         margin-bottom: 1.5rem;
+    }
+}
+
+.home-about {
+    background: var(--primary-color);
+    color: var(--background);
+    padding: 4rem 0 1rem 0;
+    h2 {
+        color: var(--background);
+        font-size: var(--fs-about-big);
+    }
+    p {
+        color: var(--background);
+        font-size: var(--fs-about-normal);
+        line-height: 1.4;
+        font-weight: var(--fw-medium);
+    }
+}
+
+.home-about-narrow {
+    background: var(--primary-color);
+    color: var(--background);
+    padding: 0 0 4rem 0;
+    h2 {
+        color: var(--background);
+        font-size: var(--fs-about-big);
+        margin-right: 3rem;
+        line-height: 1.4;
+    }
+    p {
+        color: var(--background);
+        font-size: var(--fs-about-normal);
+        line-height: 1.4;
+        font-weight: var(--fw-medium);
+        strong {
+            font-family: var(--fw-bold);
+        }
+    }
+}
+
+.portfolio-items {
+    background: var(--background);
+    padding: 4rem 0;
+    h2 {
+        color: var(--primary-color);
+    }
+    .portfolio-item {
+        a {
+            text-align: center;
+            background: var(--background);
+            h3 {
+                color: var(--primary-color);
+                padding-left: 0;
+                transition: all 0.3s ease;
+                margin-bottom: 0;
+            }
+            .portfolio-description {
+                p {
+                    color: var(--primary-color);
+                    padding-right: 0;
+                    transition: all 0.3s ease;
+                    line-height: 1;
+                    margin-bottom: 0;
+                }
+            }
+            &:hover {
+                text-align: center;
+                background: var(--background);
+                h3 {
+                    color: #fff;
+                    padding-left: 1.5rem;
+                    transition: all 0.3s ease;
+                    margin-bottom: 0;
+                }
+                .portfolio-description {
+                    p {
+                        color: #fff;
+                        padding-right: 1.5rem;
+                        transition: all 0.3s ease;
+                        line-height: 1;
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
     }
 }
 

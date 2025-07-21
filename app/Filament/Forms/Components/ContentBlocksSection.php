@@ -13,6 +13,7 @@ use App\Filament\Forms\Components\Blocks\HeadlineTextBlock;
 use App\Filament\Forms\Components\Blocks\IconCardsBlock;
 use App\Filament\Forms\Components\Blocks\ImageTextBlock;
 use App\Filament\Forms\Components\Blocks\LogoShowcaseBlock;
+use App\Filament\Forms\Components\Blocks\PortfolioItemsBlock;
 use App\Filament\Forms\Components\Blocks\PricingTablesBlock;
 use App\Filament\Forms\Components\Blocks\TeamMembersBlock;
 use App\Filament\Forms\Components\Blocks\ThreeColumnCardsBlock;
@@ -44,6 +45,7 @@ class ContentBlocksSection extends Section
                         ContactFormBlock::make(),
                         FaqAccordionBlock::make(),
                         LogoShowcaseBlock::make(),
+                        PortfolioItemsBlock::make(),
                         PricingTablesBlock::make(),
                         TeamMembersBlock::make(),
                         VideoBlock::make(),

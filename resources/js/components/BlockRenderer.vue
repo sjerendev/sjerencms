@@ -22,6 +22,7 @@ import ContactForm from './blocks/ContactForm.vue'
 import IconCards from './blocks/IconCards.vue'
 import BlogPosts from './blocks/BlogPosts.vue'
 import ServiceCards from './blocks/ServiceCards.vue'
+import PortfolioItems from './blocks/PortfolioItems.vue'
 
 const blockComponents = {
     full_image: FullImage,
@@ -39,7 +40,8 @@ const blockComponents = {
     contact_form: ContactForm,
     icon_cards: IconCards,
     blog_posts: BlogPosts,
-    service_cards: ServiceCards
+    service_cards: ServiceCards,
+    portfolio_items: PortfolioItems
 }
 
 defineProps({
