@@ -12,7 +12,7 @@
                     <h3 class="mb-4 text-xl font-bold min-h-[28px]">Snabblänkar</h3>
                     <ul class="space-y-2 min-h-[96px]">
                         <li v-for="item in menuItems" :key="item.id">
-                            <router-link :to="item.slug === 'home' ? '/' : `/${item.slug}`"
+                            <router-link :to="getRouteForSlug(item.slug)"
                                 class="text-gray-400 hover:text-white">
                                 {{ item.title }}
                             </router-link>
@@ -69,9 +69,22 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useLanguage } from '../../composables/useLanguage'
 
+const { currentLanguage } = useLanguage()
 const settings = ref(null)
 const menuItems = ref([])
+
+const getRouteForSlug = (slug) => {
+    if (slug === 'home') {
+        return currentLanguage.value === 'en' ? '/en/' : '/'
+    }
+    const blogSlug = currentLanguage.value === 'en' ? 'blog' : 'blogg'
+    if (slug === 'blogg' || slug === 'blog') {
+        return { name: currentLanguage.value === 'en' ? 'page-en' : 'page', params: { slug: blogSlug } }
+    }
+    return { name: currentLanguage.value === 'en' ? 'page-en' : 'page', params: { slug } }
+}
 
 onMounted(async () => {
     try {

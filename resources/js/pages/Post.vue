@@ -29,10 +29,10 @@
                             v-for="category in post.categories" 
                             :key="category.id"
                             :to="{ 
-                                name: 'page',
-                                params: { slug: 'blogg' },
-                                query: { category: category.id }
-                            }"
+                        name: currentLanguage === 'en' ? 'page-en' : 'page',
+                        params: { slug: currentLanguage === 'en' ? 'blog' : 'blogg' },
+                        query: { category: category.id }
+                    }"
                             class="text-sm font-medium text-primary-600 hover:text-primary-700">
                             {{ category.name }} 
                         </router-link>
@@ -63,8 +63,8 @@
                         v-for="category in post.categories" 
                         :key="category.id"
                         :to="{ 
-                            name: 'page',
-                            params: { slug: 'blogg' },
+                            name: currentLanguage === 'en' ? 'page-en' : 'page',
+                            params: { slug: currentLanguage === 'en' ? 'blog' : 'blogg' },
                             query: { category: category.id }
                         }"
                         class="text-sm font-medium text-primary-600 hover:text-primary-700">
@@ -87,9 +87,11 @@ import { useRoute } from 'vue-router'
 import BlockRenderer from '../components/BlockRenderer.vue'
 import { useSeo } from '../composables/useSeo'
 import { useStructuredData } from '../composables/useStructuredData'
+import { useLanguage } from '../composables/useLanguage'
 import { marked } from 'marked'
 
 const route = useRoute()
+const { currentLanguage } = useLanguage()
 const post = ref(null)
 
 const renderedContent = computed(() => {
@@ -106,7 +108,8 @@ useSeo(post, {
 
 const formatDate = (date) => {
     if (!date) return '';
-    return new Date(date).toLocaleDateString('sv-SE', {
+    const locale = currentLanguage.value === 'en' ? 'en-US' : 'sv-SE';
+    return new Date(date).toLocaleDateString(locale, {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -114,7 +117,7 @@ const formatDate = (date) => {
 };
 
 onMounted(async () => {
-    const response = await fetch(`/api/posts/${route.params.slug}`)
+    const response = await fetch(`/api/posts/${route.params.slug}?lang=${currentLanguage.value}`)
     post.value = await response.json()
     
     // Add structured data

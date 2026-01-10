@@ -1,49 +1,66 @@
-import { ref, onMounted, resolveComponent, withCtx, openBlock, createBlock, createCommentVNode, createVNode, toDisplayString, createTextVNode, Fragment, renderList, useSSRContext } from "vue";
+import { ref, watch, onMounted, resolveComponent, unref, withCtx, openBlock, createBlock, createCommentVNode, createVNode, toDisplayString, createTextVNode, Fragment, renderList, useSSRContext } from "vue";
 import { ssrRenderAttrs, ssrRenderStyle, ssrRenderAttr, ssrInterpolate, ssrRenderList, ssrRenderComponent } from "vue/server-renderer";
 import { useRoute } from "vue-router";
-import { _ as _sfc_main$1 } from "./BlockRenderer-ffzv9Wx2.js";
+import { _ as _sfc_main$1 } from "./BlockRenderer-DqvUla2H.js";
 import { u as useSeo } from "./useSeo-3U0Uvxby.js";
+import { u as useLanguage } from "../entry-server.js";
 import "marked";
 import "dompurify";
-import "../entry-server.js";
-import "@vueuse/head";
-import "pinia";
-import "gsap";
-import "@vue/server-renderer";
 import "vue3-carousel";
 import "@iconify/vue";
+import "gsap";
+import "@vueuse/head";
+import "pinia";
+import "@vue/server-renderer";
 const _sfc_main = {
   __name: "Page",
   __ssrInlineRender: true,
   setup(__props) {
     const route = useRoute();
+    const { currentLanguage } = useLanguage();
     const page = ref(null);
     const posts = ref([]);
     const formatDate = (date) => {
       if (!date) return "";
-      return new Date(date).toLocaleDateString("sv-SE", {
+      const locale = currentLanguage.value === "en" ? "en-US" : "sv-SE";
+      return new Date(date).toLocaleDateString(locale, {
         year: "numeric",
         month: "long",
         day: "numeric"
       });
+    };
+    const loadPage = async () => {
+      try {
+        const response = await fetch(`/api/pages/${route.params.slug}?lang=${currentLanguage.value}`);
+        page.value = await response.json();
+        const isBlogPage = route.params.slug === "blogg" || route.params.slug === "blog";
+        if (isBlogPage) {
+          const params = new URLSearchParams();
+          params.append("lang", currentLanguage.value);
+          if (route.query.category) {
+            params.append("categories", route.query.category);
+          }
+          const response2 = await fetch("/api/posts?" + params.toString());
+          const data = await response2.json();
+          posts.value = data.data;
+        } else {
+          posts.value = [];
+        }
+      } catch (error) {
+        console.error("Error loading page:", error);
+      }
     };
     useSeo(page, {
       title: "Kalibr",
       description: "Kalibr. är en Webb, Design & AI-byrå med bas i Malmö men har kunder i hela Sverige.",
       type: "article"
     });
-    onMounted(async () => {
-      const response = await fetch(`/api/pages/${route.params.slug}`);
-      page.value = await response.json();
-      if (route.params.slug === "blogg") {
-        const params = new URLSearchParams();
-        if (route.query.category) {
-          params.append("categories", route.query.category);
-        }
-        const response2 = await fetch("/api/posts?" + params.toString());
-        const data = await response2.json();
-        posts.value = data.data;
-      }
+    watch(
+      () => route.params.slug,
+      () => loadPage()
+    );
+    onMounted(() => {
+      loadPage();
     });
     return (_ctx, _push, _parent, _attrs) => {
       var _a, _b, _c, _d;
@@ -97,7 +114,7 @@ const _sfc_main = {
         ssrRenderList(posts.value, (post) => {
           _push(ssrRenderComponent(_component_router_link, {
             key: post.id,
-            to: { name: "post", params: { slug: post.slug } },
+            to: { name: unref(currentLanguage) === "en" ? "post-en" : "post", params: { slug: post.slug } },
             class: "overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
           }, {
             default: withCtx((_, _push2, _parent2, _scopeId) => {

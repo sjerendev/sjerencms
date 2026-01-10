@@ -1,23 +1,24 @@
-import { ref, computed, onMounted, resolveComponent, mergeProps, withCtx, createTextVNode, toDisplayString, useSSRContext } from "vue";
+import { ref, computed, onMounted, resolveComponent, mergeProps, unref, withCtx, createTextVNode, toDisplayString, useSSRContext } from "vue";
 import { ssrRenderAttrs, ssrRenderStyle, ssrRenderAttr, ssrInterpolate, ssrRenderList, ssrRenderComponent } from "vue/server-renderer";
 import { useRoute } from "vue-router";
-import "./BlockRenderer-ffzv9Wx2.js";
+import "./BlockRenderer-DqvUla2H.js";
 import { u as useSeo } from "./useSeo-3U0Uvxby.js";
 import { u as useStructuredData } from "./useStructuredData-DPVNhKsh.js";
+import { u as useLanguage } from "../entry-server.js";
 import { marked } from "marked";
 import "dompurify";
-import "../entry-server.js";
-import "@vueuse/head";
-import "pinia";
-import "gsap";
-import "@vue/server-renderer";
 import "vue3-carousel";
 import "@iconify/vue";
+import "gsap";
+import "@vueuse/head";
+import "pinia";
+import "@vue/server-renderer";
 const _sfc_main = {
   __name: "Post",
   __ssrInlineRender: true,
   setup(__props) {
     const route = useRoute();
+    const { currentLanguage } = useLanguage();
     const post = ref(null);
     const renderedContent = computed(() => {
       var _a;
@@ -32,7 +33,8 @@ const _sfc_main = {
     });
     const formatDate = (date) => {
       if (!date) return "";
-      return new Date(date).toLocaleDateString("sv-SE", {
+      const locale = currentLanguage.value === "en" ? "en-US" : "sv-SE";
+      return new Date(date).toLocaleDateString(locale, {
         year: "numeric",
         month: "long",
         day: "numeric"
@@ -40,7 +42,7 @@ const _sfc_main = {
     };
     onMounted(async () => {
       var _a;
-      const response = await fetch(`/api/posts/${route.params.slug}`);
+      const response = await fetch(`/api/posts/${route.params.slug}?lang=${currentLanguage.value}`);
       post.value = await response.json();
       useStructuredData("BlogPosting", post.value);
       if ((_a = post.value) == null ? void 0 : _a.published_at) {
@@ -75,8 +77,8 @@ const _sfc_main = {
               _push(ssrRenderComponent(_component_router_link, {
                 key: category.id,
                 to: {
-                  name: "page",
-                  params: { slug: "blogg" },
+                  name: unref(currentLanguage) === "en" ? "page-en" : "page",
+                  params: { slug: unref(currentLanguage) === "en" ? "blog" : "blogg" },
                   query: { category: category.id }
                 },
                 class: "text-sm font-medium text-primary-600 hover:text-primary-700"
@@ -125,8 +127,8 @@ const _sfc_main = {
             _push(ssrRenderComponent(_component_router_link, {
               key: category.id,
               to: {
-                name: "page",
-                params: { slug: "blogg" },
+                name: unref(currentLanguage) === "en" ? "page-en" : "page",
+                params: { slug: unref(currentLanguage) === "en" ? "blog" : "blogg" },
                 query: { category: category.id }
               },
               class: "text-sm font-medium text-primary-600 hover:text-primary-700"

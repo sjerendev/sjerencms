@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use Illuminate\Support\Facades\Route;
 
+// Language-aware routes
 Route::get('/pages', [PageController::class, 'index']);
 Route::get('/navigation', [NavigationController::class, 'index']);
 Route::get('/navigation/footer', [NavigationController::class, 'footer']);
@@ -14,6 +15,15 @@ Route::get('/pages/home', [PageController::class, 'home']);
 Route::get('/pages/{slug}', [PageController::class, 'show']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{slug}', [PostController::class, 'show']);
+
+// Explicit language routes for better API clarity
+Route::prefix('{lang}')->where(['lang' => 'sv|en'])->group(function () {
+    Route::get('/pages', [PageController::class, 'index']);
+    Route::get('/pages/home', [PageController::class, 'home']);
+    Route::get('/pages/{slug}', [PageController::class, 'show']);
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts/{slug}', [PostController::class, 'show']);
+});
 Route::get('/settings', [App\Http\Controllers\Api\SettingsController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {

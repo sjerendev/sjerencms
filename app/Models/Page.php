@@ -13,6 +13,7 @@ class Page extends Model implements HasMedia
 	protected $fillable = [
 		'title',
 		'slug',
+		'language',
 		'content',
 		'is_published',
 		'is_homepage',
@@ -66,5 +67,20 @@ class Page extends Model implements HasMedia
 		}
 		
 		return $level;
+	}
+
+	public function scopeLanguage($query, $language)
+	{
+		return $query->where('language', $language);
+	}
+
+	public function scopeSwedish($query)
+	{
+		return $query->where('language', 'sv');
+	}
+
+	public function scopeEnglish($query)
+	{
+		return $query->where('language', 'en');
 	}
 }

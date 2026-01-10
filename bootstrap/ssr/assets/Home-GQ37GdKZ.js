@@ -1,6 +1,6 @@
 import { ssrRenderAttrs, ssrRenderStyle, ssrRenderAttr, ssrInterpolate, ssrRenderList, ssrRenderComponent } from "vue/server-renderer";
 import { ref, onMounted, useSSRContext } from "vue";
-import { _ as _sfc_main$1 } from "./BlockRenderer-ffzv9Wx2.js";
+import { _ as _sfc_main$1 } from "./BlockRenderer-DqvUla2H.js";
 import { u as useSeo } from "./useSeo-3U0Uvxby.js";
 import "marked";
 import "dompurify";

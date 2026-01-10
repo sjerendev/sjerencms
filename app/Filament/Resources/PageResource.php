@@ -75,6 +75,19 @@ class PageResource extends Resource
                         return $record->title;
                     })
                     ->html(),
+                Tables\Columns\TextColumn::make('language')
+                    ->label('Language')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'sv' => 'Svenska',
+                        'en' => 'English',
+                        default => $state,
+                    })
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'sv' => 'primary',
+                        'en' => 'success',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('sort_order')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('parent.title')
@@ -89,7 +102,19 @@ class PageResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('language')
+                    ->label('Language')
+                    ->options([
+                        'sv' => 'Svenska',
+                        'en' => 'English',
+                    ])
+                    ->placeholder('All Languages')
+                    ->query(function ($query, $data) {
+                        if ($data['value']) {
+                            return $query->where('pages.language', $data['value']);
+                        }
+                        return $query;
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

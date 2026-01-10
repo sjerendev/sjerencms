@@ -1,45 +1,55 @@
-import { useSSRContext, mergeProps, computed, unref, withCtx, createVNode, openBlock, createBlock, Fragment, renderList, resolveDynamicComponent, createTextVNode, toDisplayString, ref, reactive, onMounted, resolveComponent, createCommentVNode } from "vue";
-import { ssrRenderAttrs, ssrRenderAttr, ssrRenderClass, ssrInterpolate, ssrRenderComponent, ssrRenderList, ssrRenderStyle, ssrRenderVNode, ssrIncludeBooleanAttr, ssrRenderSuspense } from "vue/server-renderer";
+import { useSSRContext, mergeProps, ref, computed, withCtx, openBlock, createBlock, toDisplayString, createCommentVNode, unref, createVNode, Fragment, renderList, resolveDynamicComponent, createTextVNode, reactive, onMounted, resolveComponent, onUnmounted } from "vue";
+import { ssrRenderAttrs, ssrRenderAttr, ssrRenderClass, ssrRenderComponent, ssrInterpolate, ssrRenderStyle, ssrRenderList, ssrRenderVNode, ssrIncludeBooleanAttr, ssrRenderSuspense } from "vue/server-renderer";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import { _ as _export_sfc } from "../entry-server.js";
+import { M as MagneticElement, _ as _export_sfc } from "../entry-server.js";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
-const _sfc_main$g = {
+import { gsap } from "gsap";
+const _sfc_main$i = {
   __name: "FullImage",
   __ssrInlineRender: true,
   props: {
     block: {
       type: Object,
       required: true
+    },
+    isFirstBlock: {
+      type: Boolean,
+      default: false
     }
   },
   setup(__props) {
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<section${ssrRenderAttrs(mergeProps({
         class: __props.block.section_class
-      }, _attrs))}><div class="container py-12 mx-auto"><img${ssrRenderAttr("src", `/storage/${__props.block.image}`)} class="w-full h-auto" alt=""></div></section>`);
+      }, _attrs))}><div class="container py-12 mx-auto"><img${ssrRenderAttr("src", `/storage/${__props.block.image}`)}${ssrRenderAttr("fetchpriority", __props.isFirstBlock ? "high" : "auto")}${ssrRenderAttr("loading", __props.isFirstBlock ? "eager" : "lazy")} class="w-full h-auto"${ssrRenderAttr("alt", __props.block.image_alt || "")}></div></section>`);
     };
   }
 };
-const _sfc_setup$g = _sfc_main$g.setup;
-_sfc_main$g.setup = (props, ctx) => {
+const _sfc_setup$i = _sfc_main$i.setup;
+_sfc_main$i.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/FullImage.vue");
-  return _sfc_setup$g ? _sfc_setup$g(props, ctx) : void 0;
+  return _sfc_setup$i ? _sfc_setup$i(props, ctx) : void 0;
 };
-const _sfc_main$f = {
+const _sfc_main$h = {
   __name: "ImageText",
   __ssrInlineRender: true,
   props: {
     block: {
       type: Object,
       required: true
+    },
+    isFirstBlock: {
+      type: Boolean,
+      default: false
     }
   },
   setup(__props) {
     const props = __props;
+    const aspectRatio = ref(56.25);
     const parsedContent = computed(() => {
       if (!props.block.text) return "";
       const htmlContent = marked.parse(props.block.text);
@@ -48,41 +58,88 @@ const _sfc_main$f = {
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<section${ssrRenderAttrs(mergeProps({
         class: __props.block.section_class
-      }, _attrs))} data-v-97673b0f><div class="container py-12 px-6 md:px-8 lg:px-12 mx-auto" data-v-97673b0f><div class="${ssrRenderClass([{ "md:flex-row-reverse": __props.block.reverse_layout }, "flex flex-col md:flex-row items-center"])}" data-v-97673b0f><div class="${ssrRenderClass([{
-        "lg:pr-6": !__props.block.reverse_layout,
-        "lg:pl-6": __props.block.reverse_layout
-      }, "w-1/2 md:w-1/2 mb-8 md:mb-0"])}" data-v-97673b0f><img${ssrRenderAttr("src", `/storage/${__props.block.image}`)} class="w-full h-auto" alt="" data-v-97673b0f></div><div class="${ssrRenderClass([{
+      }, _attrs))} data-v-492774c4><div class="container px-6 py-12 mx-auto md:px-8 lg:px-12" data-v-492774c4><div class="${ssrRenderClass([{ "md:flex-row-reverse": __props.block.reverse_layout }, "flex flex-col items-center md:flex-row"])}" data-v-492774c4><div class="${ssrRenderClass([{
         "lg:pl-6": !__props.block.reverse_layout,
-        "lg:pr-6": __props.block.reverse_layout
-      }, "flex items-center w-full px-2 md:w-1/2"])}" data-v-97673b0f><div class="py-4 w-full" data-v-97673b0f><div class="mb-4" data-v-97673b0f>${parsedContent.value ?? ""}</div>`);
+        "lg:pr-6": __props.block.reverse_layout,
+        "md:order-1": !__props.block.reverse_layout,
+        "md:order-2": __props.block.reverse_layout
+      }, "flex order-1 items-center px-2 w-full md:w-1/2"])}" data-v-492774c4><div class="py-4 w-full" data-v-492774c4>`);
+      if (__props.isFirstBlock) {
+        _push(`<div data-v-492774c4><div class="mb-4" data-v-492774c4>${parsedContent.value ?? ""}</div></div>`);
+      } else {
+        _push(`<div data-v-492774c4><div class="mb-4 content-visibility-auto" data-v-492774c4>${parsedContent.value ?? ""}</div></div>`);
+      }
       if (__props.block.button1_text || __props.block.button2_text) {
-        _push(`<div class="block md:flex gap-4 mt-10" data-v-97673b0f>`);
-        if (__props.block.button1_text) {
-          _push(`<a${ssrRenderAttr("href", __props.block.button1_url)} class="block md:inline-flex text-center items-center px-4 py-2 font-semibold text-white transition-colors rounded-xl button-one mb-4 md:mb-0" data-v-97673b0f>${ssrInterpolate(__props.block.button1_text)}</a>`);
-        } else {
-          _push(`<!---->`);
-        }
-        if (__props.block.button2_text) {
-          _push(`<a${ssrRenderAttr("href", __props.block.button2_url)} class="block md:inline-flex text-center items-center px-4 py-2 font-semibold text-white transition-colors rounded-xl button-two" data-v-97673b0f>${ssrInterpolate(__props.block.button2_text)}</a>`);
-        } else {
-          _push(`<!---->`);
-        }
+        _push(`<div class="block gap-4 mt-10 md:flex" data-v-492774c4>`);
+        _push(ssrRenderComponent(MagneticElement, {
+          strength: 0.3,
+          scale: true,
+          rotate: true
+        }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              if (__props.block.button1_text) {
+                _push2(`<a${ssrRenderAttr("href", __props.block.button1_url)} class="block items-center px-4 py-2 mb-4 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-one md:mb-0" data-v-492774c4${_scopeId}>${ssrInterpolate(__props.block.button1_text)}</a>`);
+              } else {
+                _push2(`<!---->`);
+              }
+            } else {
+              return [
+                __props.block.button1_text ? (openBlock(), createBlock("a", {
+                  key: 0,
+                  href: __props.block.button1_url,
+                  class: "block items-center px-4 py-2 mb-4 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-one md:mb-0"
+                }, toDisplayString(__props.block.button1_text), 9, ["href"])) : createCommentVNode("", true)
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+        _push(ssrRenderComponent(MagneticElement, {
+          strength: 0.3,
+          scale: true,
+          rotate: true
+        }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              if (__props.block.button2_text) {
+                _push2(`<a${ssrRenderAttr("href", __props.block.button2_url)} class="block items-center px-4 py-2 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-two" data-v-492774c4${_scopeId}>${ssrInterpolate(__props.block.button2_text)}</a>`);
+              } else {
+                _push2(`<!---->`);
+              }
+            } else {
+              return [
+                __props.block.button2_text ? (openBlock(), createBlock("a", {
+                  key: 0,
+                  href: __props.block.button2_url,
+                  class: "block items-center px-4 py-2 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-two"
+                }, toDisplayString(__props.block.button2_text), 9, ["href"])) : createCommentVNode("", true)
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
         _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div></div></div></div></section>`);
+      _push(`</div></div><div class="${ssrRenderClass([{
+        "lg:pr-6": !__props.block.reverse_layout,
+        "lg:pl-6": __props.block.reverse_layout,
+        "md:order-2": !__props.block.reverse_layout,
+        "md:order-1": __props.block.reverse_layout
+      }, "order-2 mb-8 w-full md:w-1/2 md:mb-0"])}" data-v-492774c4><div class="relative z-0 aspect-ratio-box" style="${ssrRenderStyle({ paddingBottom: aspectRatio.value + "%" })}" data-v-492774c4><img${ssrRenderAttr("src", `/storage/${__props.block.image}`)}${ssrRenderAttr("fetchpriority", __props.isFirstBlock ? "low" : "auto")}${ssrRenderAttr("loading", __props.isFirstBlock ? "lazy" : "lazy")} class="object-cover absolute inset-0 w-full h-full"${ssrRenderAttr("alt", __props.block.image_alt || "")} data-v-492774c4></div></div></div></div></section>`);
     };
   }
 };
-const _sfc_setup$f = _sfc_main$f.setup;
-_sfc_main$f.setup = (props, ctx) => {
+const _sfc_setup$h = _sfc_main$h.setup;
+_sfc_main$h.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/ImageText.vue");
-  return _sfc_setup$f ? _sfc_setup$f(props, ctx) : void 0;
+  return _sfc_setup$h ? _sfc_setup$h(props, ctx) : void 0;
 };
-const ImageText = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["__scopeId", "data-v-97673b0f"]]);
-const _sfc_main$e = {
+const ImageText = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["__scopeId", "data-v-492774c4"]]);
+const _sfc_main$g = {
   __name: "FullText",
   __ssrInlineRender: true,
   props: {
@@ -105,13 +162,13 @@ const _sfc_main$e = {
     };
   }
 };
-const _sfc_setup$e = _sfc_main$e.setup;
-_sfc_main$e.setup = (props, ctx) => {
+const _sfc_setup$g = _sfc_main$g.setup;
+_sfc_main$g.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/FullText.vue");
-  return _sfc_setup$e ? _sfc_setup$e(props, ctx) : void 0;
+  return _sfc_setup$g ? _sfc_setup$g(props, ctx) : void 0;
 };
-const _sfc_main$d = {
+const _sfc_main$f = {
   __name: "Carousel",
   __ssrInlineRender: true,
   props: {
@@ -185,13 +242,13 @@ const _sfc_main$d = {
     };
   }
 };
-const _sfc_setup$d = _sfc_main$d.setup;
-_sfc_main$d.setup = (props, ctx) => {
+const _sfc_setup$f = _sfc_main$f.setup;
+_sfc_main$f.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/Carousel.vue");
-  return _sfc_setup$d ? _sfc_setup$d(props, ctx) : void 0;
+  return _sfc_setup$f ? _sfc_setup$f(props, ctx) : void 0;
 };
-const _sfc_main$c = {
+const _sfc_main$e = {
   __name: "ThreeColumnCards",
   __ssrInlineRender: true,
   props: {
@@ -236,13 +293,13 @@ const _sfc_main$c = {
     };
   }
 };
-const _sfc_setup$c = _sfc_main$c.setup;
-_sfc_main$c.setup = (props, ctx) => {
+const _sfc_setup$e = _sfc_main$e.setup;
+_sfc_main$e.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/ThreeColumnCards.vue");
-  return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
+  return _sfc_setup$e ? _sfc_setup$e(props, ctx) : void 0;
 };
-const _sfc_main$b = {
+const _sfc_main$d = {
   __name: "Video",
   __ssrInlineRender: true,
   props: {
@@ -295,13 +352,13 @@ const _sfc_main$b = {
     };
   }
 };
-const _sfc_setup$b = _sfc_main$b.setup;
-_sfc_main$b.setup = (props, ctx) => {
+const _sfc_setup$d = _sfc_main$d.setup;
+_sfc_main$d.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/Video.vue");
-  return _sfc_setup$b ? _sfc_setup$b(props, ctx) : void 0;
+  return _sfc_setup$d ? _sfc_setup$d(props, ctx) : void 0;
 };
-const _sfc_main$a = {
+const _sfc_main$c = {
   __name: "CallToAction",
   __ssrInlineRender: true,
   props: {
@@ -347,19 +404,23 @@ const _sfc_main$a = {
     };
   }
 };
-const _sfc_setup$a = _sfc_main$a.setup;
-_sfc_main$a.setup = (props, ctx) => {
+const _sfc_setup$c = _sfc_main$c.setup;
+_sfc_main$c.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/CallToAction.vue");
-  return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
+  return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
 };
-const _sfc_main$9 = {
+const _sfc_main$b = {
   __name: "HeadlineText",
   __ssrInlineRender: true,
   props: {
     block: {
       type: Object,
       required: true
+    },
+    isFirstBlock: {
+      type: Boolean,
+      default: false
     }
   },
   setup(__props) {
@@ -374,8 +435,13 @@ const _sfc_main$9 = {
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<section${ssrRenderAttrs(mergeProps({
         class: __props.block.section_class
-      }, _attrs))} data-v-b4eaf0cb><div class="${ssrRenderClass(__props.block.container_type + " mx-auto")}" data-v-b4eaf0cb><div class="${ssrRenderClass(["flex py-12 items-center content-block headline-text", __props.block.container_type === "container-fluid" ? "px-12" : ""])}" data-v-b4eaf0cb><div class="w-3/12" data-v-b4eaf0cb>`);
-      ssrRenderVNode(_push, createVNode(resolveDynamicComponent(headlineType.value), { class: "text-4xl font-bold leading-[1]" }, {
+      }, _attrs))} data-v-49980e11><div class="${ssrRenderClass(__props.block.container_type + " mx-auto")}" data-v-49980e11><div class="${ssrRenderClass([
+        "flex py-12 items-start content-block headline-text",
+        __props.block.container_type === "container-fluid" ? "px-12" : ""
+      ])}" data-v-49980e11><div class="w-3/12" data-v-49980e11>`);
+      ssrRenderVNode(_push, createVNode(resolveDynamicComponent(headlineType.value), {
+        class: ["text-4xl font-bold leading-[1]", { "high-priority": __props.isFirstBlock }]
+      }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(`${ssrInterpolate(headline.value)}`);
@@ -387,18 +453,18 @@ const _sfc_main$9 = {
         }),
         _: 1
       }), _parent);
-      _push(`</div><div class="w-9/12 prose max-w-none leading-[1] text-lg" data-v-b4eaf0cb>${parsedContent.value ?? ""}</div></div></div></section>`);
+      _push(`</div><div class="w-9/12 prose max-w-none leading-[1] text-lg content-visibility-auto" data-v-49980e11>${parsedContent.value ?? ""}</div></div></div></section>`);
     };
   }
 };
-const _sfc_setup$9 = _sfc_main$9.setup;
-_sfc_main$9.setup = (props, ctx) => {
+const _sfc_setup$b = _sfc_main$b.setup;
+_sfc_main$b.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/HeadlineText.vue");
-  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
+  return _sfc_setup$b ? _sfc_setup$b(props, ctx) : void 0;
 };
-const HeadlineText = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-b4eaf0cb"]]);
-const _sfc_main$8 = {
+const HeadlineText = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-49980e11"]]);
+const _sfc_main$a = {
   __name: "pricing_tables",
   __ssrInlineRender: true,
   props: {
@@ -454,13 +520,13 @@ const _sfc_main$8 = {
     };
   }
 };
-const _sfc_setup$8 = _sfc_main$8.setup;
-_sfc_main$8.setup = (props, ctx) => {
+const _sfc_setup$a = _sfc_main$a.setup;
+_sfc_main$a.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/pricing_tables.vue");
-  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
+  return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
 };
-const _sfc_main$7 = {
+const _sfc_main$9 = {
   __name: "FaqAccordion",
   __ssrInlineRender: true,
   props: {
@@ -504,14 +570,14 @@ const _sfc_main$7 = {
     };
   }
 };
-const _sfc_setup$7 = _sfc_main$7.setup;
-_sfc_main$7.setup = (props, ctx) => {
+const _sfc_setup$9 = _sfc_main$9.setup;
+_sfc_main$9.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/FaqAccordion.vue");
-  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
+  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
 };
-const FaqAccordion = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-97ce3b06"]]);
-const _sfc_main$6 = {
+const FaqAccordion = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-97ce3b06"]]);
+const _sfc_main$8 = {
   __name: "TeamMembers",
   __ssrInlineRender: true,
   props: {
@@ -570,13 +636,13 @@ const _sfc_main$6 = {
     };
   }
 };
-const _sfc_setup$6 = _sfc_main$6.setup;
-_sfc_main$6.setup = (props, ctx) => {
+const _sfc_setup$8 = _sfc_main$8.setup;
+_sfc_main$8.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/TeamMembers.vue");
-  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
+  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const _sfc_main$5 = {
+const _sfc_main$7 = {
   __name: "LogoShowcase",
   __ssrInlineRender: true,
   props: {
@@ -630,13 +696,13 @@ const _sfc_main$5 = {
     };
   }
 };
-const _sfc_setup$5 = _sfc_main$5.setup;
-_sfc_main$5.setup = (props, ctx) => {
+const _sfc_setup$7 = _sfc_main$7.setup;
+_sfc_main$7.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/LogoShowcase.vue");
-  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const _sfc_main$4 = {
+const _sfc_main$6 = {
   __name: "ContactForm",
   __ssrInlineRender: true,
   props: {
@@ -701,14 +767,14 @@ const _sfc_main$4 = {
     };
   }
 };
-const _sfc_setup$4 = _sfc_main$4.setup;
-_sfc_main$4.setup = (props, ctx) => {
+const _sfc_setup$6 = _sfc_main$6.setup;
+_sfc_main$6.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/ContactForm.vue");
-  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
 };
-const ContactForm = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-546f7b17"]]);
-const _sfc_main$3 = {
+const ContactForm = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-546f7b17"]]);
+const _sfc_main$5 = {
   __name: "IconCards",
   __ssrInlineRender: true,
   props: {
@@ -726,32 +792,32 @@ const _sfc_main$3 = {
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<section${ssrRenderAttrs(mergeProps({
         class: __props.block.section_class
-      }, _attrs))} data-v-653bf88d><div class="container py-16 lg:py-24 mx-auto px-6 2xl:px-0" data-v-653bf88d>`);
+      }, _attrs))} data-v-ea1b126d><div class="container py-16 lg:py-24 mx-auto px-6 2xl:px-0" data-v-ea1b126d>`);
       if (__props.block.section_title) {
-        _push(`<h2 class="mb-16 text-3xl font-bold text-center" data-v-653bf88d>${ssrInterpolate(__props.block.section_title)}</h2>`);
+        _push(`<h2 class="mb-16 text-3xl font-bold text-center min-h-[40px]" data-v-ea1b126d>${ssrInterpolate(__props.block.section_title)}</h2>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-v-653bf88d><!--[-->`);
+      _push(`<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-v-ea1b126d><!--[-->`);
       ssrRenderList(__props.block.cards, (card, index) => {
-        _push(`<div class="iconCard bg-white" data-v-653bf88d><div class="iconCardContent" data-v-653bf88d><div class="iconBox" data-v-653bf88d>`);
+        _push(`<div class="iconCard" data-v-ea1b126d><div class="iconCardContent" data-v-ea1b126d><div class="iconBox" data-v-ea1b126d><div class="icon-wrapper" data-v-ea1b126d>`);
         ssrRenderSuspense(_push, {
           default: () => {
             _push(ssrRenderComponent(unref(Icon), {
               icon: getIconName(card.icon),
-              class: "text-[#16FBAF]",
-              width: "40",
-              height: "40"
+              class: "text-[#19F2B2] w-6 h-6",
+              width: "24",
+              height: "24"
             }, null, _parent));
           },
           fallback: () => {
-            _push(`<div class="w-10 h-10 animate-pulse bg-gray-200 rounded-full" data-v-653bf88d></div>`);
+            _push(`<div class="w-10 h-10 animate-pulse bg-gray-200 rounded-full" data-v-ea1b126d></div>`);
           },
           _: 2
         });
-        _push(`</div><div class="iconCardText" data-v-653bf88d><h3 class="text-xl font-bold mb-4" data-v-653bf88d>${ssrInterpolate(card.title)}</h3><p class="text-gray-600 mb-4" data-v-653bf88d>${ssrInterpolate(card.text)}</p>`);
+        _push(`</div></div><div class="iconCardText" data-v-ea1b126d><h3 class="text-xl font-bold mb-4 min-h-[28px]" data-v-ea1b126d>${ssrInterpolate(card.title)}</h3><p class="text-gray-600 mb-4 min-h-[72px]" data-v-ea1b126d>${ssrInterpolate(card.text)}</p>`);
         if (card.link_url) {
-          _push(`<a${ssrRenderAttr("href", card.link_url)} class="iconCardLink" data-v-653bf88d>Läs mer</a>`);
+          _push(`<a${ssrRenderAttr("href", card.link_url)} class="iconCardLink" data-v-ea1b126d>Läs mer</a>`);
         } else {
           _push(`<!---->`);
         }
@@ -761,14 +827,14 @@ const _sfc_main$3 = {
     };
   }
 };
-const _sfc_setup$3 = _sfc_main$3.setup;
-_sfc_main$3.setup = (props, ctx) => {
+const _sfc_setup$5 = _sfc_main$5.setup;
+_sfc_main$5.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/IconCards.vue");
-  return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
+  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const IconCards = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-653bf88d"]]);
-const _sfc_main$2 = {
+const IconCards = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-ea1b126d"]]);
+const _sfc_main$4 = {
   __name: "BlogPosts",
   __ssrInlineRender: true,
   props: {
@@ -967,14 +1033,14 @@ const _sfc_main$2 = {
     };
   }
 };
-const _sfc_setup$2 = _sfc_main$2.setup;
-_sfc_main$2.setup = (props, ctx) => {
+const _sfc_setup$4 = _sfc_main$4.setup;
+_sfc_main$4.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/BlogPosts.vue");
-  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
+  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const BlogPosts = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-4580a059"]]);
-const _sfc_main$1 = {
+const BlogPosts = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-4580a059"]]);
+const _sfc_main$3 = {
   __name: "ServiceCards",
   __ssrInlineRender: true,
   props: {
@@ -1026,15 +1092,15 @@ const _sfc_main$1 = {
     };
   }
 };
-const _sfc_setup$1 = _sfc_main$1.setup;
-_sfc_main$1.setup = (props, ctx) => {
+const _sfc_setup$3 = _sfc_main$3.setup;
+_sfc_main$3.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/ServiceCards.vue");
-  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
+  return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
 };
-const ServiceCards = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-e544ace3"]]);
-const _sfc_main = {
-  __name: "BlockRenderer",
+const ServiceCards = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-e544ace3"]]);
+const _sfc_main$2 = {
+  __name: "PortfolioItems",
   __ssrInlineRender: true,
   props: {
     block: {
@@ -1043,28 +1109,175 @@ const _sfc_main = {
     }
   },
   setup(__props) {
+    const previewImage = ref(null);
+    const hoveredItem = ref(null);
+    const getMarkdownContent = (text) => {
+      if (!text) return "";
+      const htmlContent = marked.parse(text);
+      return DOMPurify.sanitize(htmlContent);
+    };
+    onMounted(() => {
+      gsap.set(previewImage.value, {
+        scale: 0,
+        opacity: 0
+      });
+    });
+    onUnmounted(() => {
+      gsap.killTweensOf(previewImage.value);
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<section${ssrRenderAttrs(mergeProps({
+        class: __props.block.section_class
+      }, _attrs))} data-v-41fac906><div class="container px-6 py-12 mx-auto 2xl:px-0" data-v-41fac906>`);
+      if (__props.block.heading || __props.block.subheading) {
+        _push(`<div class="mb-8 text-center" data-v-41fac906>`);
+        if (__props.block.heading) {
+          _push(`<h2 class="mb-4 text-3xl font-bold" data-v-41fac906>${ssrInterpolate(__props.block.heading)}</h2>`);
+        } else {
+          _push(`<!---->`);
+        }
+        if (__props.block.subheading) {
+          _push(`<p class="text-gray-600" data-v-41fac906>${ssrInterpolate(__props.block.subheading)}</p>`);
+        } else {
+          _push(`<!---->`);
+        }
+        _push(`</div>`);
+      } else {
+        _push(`<!---->`);
+      }
+      if (__props.block.section_description) {
+        _push(`<div class="mx-auto mb-12 max-w-3xl text-center text-gray-500" data-v-41fac906>${getMarkdownContent(__props.block.section_description) ?? ""}</div>`);
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`<div class="portfolio-grid" data-v-41fac906><!--[-->`);
+      ssrRenderList(__props.block.portfolio_items, (item, index) => {
+        _push(`<div class="portfolio-item" data-v-41fac906><a${ssrRenderAttr("href", item.website_url)}${ssrRenderAttr("target", item.website_url !== "#" ? "_blank" : "_self")} class="flex flex-row justify-between items-center portfolio-link" data-v-41fac906><h3 class="portfolio-title" data-v-41fac906>${ssrInterpolate(item.name)}</h3><div class="portfolio-description" data-v-41fac906>${getMarkdownContent(item.description) ?? ""}</div></a></div>`);
+      });
+      _push(`<!--]--></div><div class="portfolio-preview" style="${ssrRenderStyle(hoveredItem.value ? null : { display: "none" })}" data-v-41fac906>`);
+      if (hoveredItem.value) {
+        _push(`<img${ssrRenderAttr("src", `/storage/${hoveredItem.value.preview_image}`)}${ssrRenderAttr("alt", hoveredItem.value.name)} class="object-cover object-top preview-img" data-v-41fac906>`);
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`</div></div></section>`);
+    };
+  }
+};
+const _sfc_setup$2 = _sfc_main$2.setup;
+_sfc_main$2.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/PortfolioItems.vue");
+  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
+};
+const PortfolioItems = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-41fac906"]]);
+const _sfc_main$1 = {
+  __name: "TickerBlock",
+  __ssrInlineRender: true,
+  props: {
+    block: {
+      type: Object,
+      required: true,
+      default: () => ({
+        background_color: "#ffffff",
+        text_color: "#000000",
+        angle: 0,
+        direction: "left-to-right",
+        words: [],
+        section_class: ""
+      })
+    },
+    isFirstBlock: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(__props) {
+    const props = __props;
+    const track = ref(null);
+    let animation;
+    onMounted(() => {
+      const items = Array.from(track.value.querySelectorAll(".ticker-item"));
+      const dir = props.block.direction === "right-to-left" ? -1 : 1;
+      items.forEach((item) => {
+        track.value.appendChild(item.cloneNode(true));
+      });
+      const trackWidth = track.value.offsetWidth;
+      const halfTrackWidth = trackWidth / 2;
+      animation = gsap.to(track.value, {
+        x: dir * -halfTrackWidth,
+        ease: "none",
+        duration: 30,
+        repeat: -1
+      });
+    });
+    onUnmounted(() => {
+      if (animation) {
+        animation.kill();
+      }
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<section${ssrRenderAttrs(mergeProps({
+        class: ["ticker-block", __props.block.section_class],
+        style: {
+          "--background-color": __props.block.background_color,
+          "--text-color": __props.block.text_color,
+          "--angle": __props.block.angle + "deg"
+        }
+      }, _attrs))} data-v-e8e7d083><div class="${ssrRenderClass([__props.block.direction, "ticker-wrap"])}" data-v-e8e7d083><div class="ticker-track" data-v-e8e7d083><!--[-->`);
+      ssrRenderList(__props.block.words, (word, index) => {
+        _push(`<div class="ticker-item" data-v-e8e7d083>${ssrInterpolate(word)}</div>`);
+      });
+      _push(`<!--]--></div></div></section>`);
+    };
+  }
+};
+const _sfc_setup$1 = _sfc_main$1.setup;
+_sfc_main$1.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/blocks/TickerBlock.vue");
+  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
+};
+const TickerBlock = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-e8e7d083"]]);
+const _sfc_main = {
+  __name: "BlockRenderer",
+  __ssrInlineRender: true,
+  props: {
+    block: {
+      type: Object,
+      required: true
+    },
+    isFirstBlock: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(__props) {
     const blockComponents = {
-      full_image: _sfc_main$g,
+      full_image: _sfc_main$i,
       image_text: ImageText,
-      full_text: _sfc_main$e,
-      carousel: _sfc_main$d,
-      three_column_cards: _sfc_main$c,
-      video: _sfc_main$b,
-      call_to_action: _sfc_main$a,
+      full_text: _sfc_main$g,
+      carousel: _sfc_main$f,
+      three_column_cards: _sfc_main$e,
+      video: _sfc_main$d,
+      call_to_action: _sfc_main$c,
       headline_text: HeadlineText,
-      pricing_tables: _sfc_main$8,
+      pricing_tables: _sfc_main$a,
       faq_accordion: FaqAccordion,
-      team_members: _sfc_main$6,
-      logo_showcase: _sfc_main$5,
+      team_members: _sfc_main$8,
+      logo_showcase: _sfc_main$7,
       contact_form: ContactForm,
       icon_cards: IconCards,
       blog_posts: BlogPosts,
-      service_cards: ServiceCards
+      service_cards: ServiceCards,
+      portfolio_items: PortfolioItems,
+      ticker: TickerBlock
     };
     return (_ctx, _push, _parent, _attrs) => {
       if (blockComponents[__props.block.type]) {
         ssrRenderVNode(_push, createVNode(resolveDynamicComponent(blockComponents[__props.block.type]), mergeProps({
-          block: __props.block.data
+          block: __props.block.data,
+          "is-first-block": __props.isFirstBlock
         }, _attrs), null), _parent);
       } else {
         _push(`<!---->`);

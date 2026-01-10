@@ -1,9 +1,9 @@
-import { ref, onMounted, onUnmounted, watch, resolveComponent, mergeProps, withCtx, openBlock, createBlock, toDisplayString, createTextVNode, useSSRContext, computed, createVNode, createSSRApp } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch, resolveComponent, mergeProps, unref, withCtx, openBlock, createBlock, toDisplayString, createTextVNode, useSSRContext, createVNode, createCommentVNode, createSSRApp } from "vue";
 import { createHead, renderHeadToString } from "@vueuse/head";
 import { defineStore, createPinia } from "pinia";
-import { ssrRenderAttrs, ssrRenderComponent, ssrRenderAttr, ssrInterpolate, ssrRenderList, ssrRenderStyle, ssrRenderSlot } from "vue/server-renderer";
-import { useRoute, createRouter as createRouter$1, createWebHistory, createMemoryHistory } from "vue-router";
-import gsap from "gsap";
+import { ssrRenderAttrs, ssrRenderComponent, ssrRenderAttr, ssrInterpolate, ssrRenderList, ssrRenderSlot, ssrRenderStyle, ssrRenderClass } from "vue/server-renderer";
+import { useRoute, useRouter, createRouter as createRouter$1, createWebHistory, createMemoryHistory } from "vue-router";
+import gsap, { gsap as gsap$1 } from "gsap";
 import renderer from "@vue/server-renderer";
 const useDarkModeStore = defineStore("darkMode", () => {
   const isDark = ref(false);
@@ -25,8 +25,61 @@ const useDarkModeStore = defineStore("darkMode", () => {
     initDarkMode
   };
 });
+function useLanguage() {
+  const route = useRoute();
+  const router = useRouter();
+  const currentLanguage = computed(() => {
+    var _a;
+    return ((_a = route.meta) == null ? void 0 : _a.language) || "sv";
+  });
+  const isSwedish = computed(() => currentLanguage.value === "sv");
+  const isEnglish = computed(() => currentLanguage.value === "en");
+  const getLocalizedPath = (path, targetLanguage = null) => {
+    const lang = targetLanguage || currentLanguage.value;
+    if (lang === "sv") {
+      return path;
+    } else if (lang === "en") {
+      return `/en${path}`;
+    }
+    return path;
+  };
+  const switchLanguage = (newLang) => {
+    if (newLang === currentLanguage.value) return;
+    const currentPath = route.path;
+    let newPath;
+    if (newLang === "sv") {
+      newPath = currentPath.replace(/^\/en/, "") || "/";
+    } else if (newLang === "en") {
+      if (currentPath.startsWith("/en")) {
+        newPath = currentPath;
+      } else {
+        newPath = `/en${currentPath}`;
+      }
+    }
+    if (newLang === "en") {
+      newPath = newPath.replace("/blogg", "/blog");
+    } else if (newLang === "sv") {
+      newPath = newPath.replace("/blog", "/blogg");
+    }
+    router.push(newPath);
+  };
+  const getLanguageLabel = (lang) => {
+    return {
+      "sv": "Svenska",
+      "en": "English"
+    }[lang] || lang;
+  };
+  return {
+    currentLanguage,
+    isSwedish,
+    isEnglish,
+    getLocalizedPath,
+    switchLanguage,
+    getLanguageLabel
+  };
+}
 const scrollThreshold = 5;
-const _sfc_main$6 = {
+const _sfc_main$8 = {
   __name: "NormalNav",
   __ssrInlineRender: true,
   props: {
@@ -41,11 +94,19 @@ const _sfc_main$6 = {
   },
   setup(__props) {
     useDarkModeStore();
+    const { currentLanguage } = useLanguage();
     const isOpen = ref(false);
     const menuContainer = ref(null);
     const isSticky = ref(false);
     const hasScrolled = ref(false);
     const lastScrollTop = ref(0);
+    const getRouteForSlug = (slug) => {
+      const blogSlug = currentLanguage.value === "en" ? "blog" : "blogg";
+      if (slug === "blogg" || slug === "blog") {
+        return { name: currentLanguage.value === "en" ? "page-en" : "page", params: { slug: blogSlug } };
+      }
+      return { name: currentLanguage.value === "en" ? "page-en" : "page", params: { slug } };
+    };
     const handleScroll = () => {
       const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
       hasScrolled.value = currentScrollTop > 0;
@@ -94,7 +155,7 @@ const _sfc_main$6 = {
     return (_ctx, _push, _parent, _attrs) => {
       const _component_router_link = resolveComponent("router-link");
       _push(`<nav${ssrRenderAttrs(mergeProps({
-        class: ["px-8 py-4 transition-all duration-300", {
+        class: ["px-8 py-4 transition-all duration-300 z-50", {
           "fixed w-full top-0": isSticky.value && hasScrolled.value,
           "relative": !isSticky.value || !hasScrolled.value
         }],
@@ -105,7 +166,7 @@ const _sfc_main$6 = {
         }
       }, _attrs))}><div class="items-center justify-between hidden md:flex">`);
       _push(ssrRenderComponent(_component_router_link, {
-        to: "/",
+        to: unref(currentLanguage) === "en" ? "/en/" : "/",
         class: "flex items-center"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -137,7 +198,7 @@ const _sfc_main$6 = {
         _push(`<div class="relative group">`);
         if (!item.children) {
           _push(ssrRenderComponent(_component_router_link, {
-            to: { name: "page", params: { slug: item.slug } },
+            to: getRouteForSlug(item.slug),
             class: "text-[var(--text-color)] hover:opacity-70 transition-opacity"
           }, {
             default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -156,7 +217,7 @@ const _sfc_main$6 = {
           ssrRenderList(item.children, (child) => {
             _push(ssrRenderComponent(_component_router_link, {
               key: child.id,
-              to: { name: "page", params: { slug: child.slug } },
+              to: getRouteForSlug(child.slug),
               class: "block px-4 py-2 text-[var(--text-color)] hover:opacity-70 transition-opacity"
             }, {
               default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -177,7 +238,7 @@ const _sfc_main$6 = {
       });
       _push(`<!--]--></div></div><div class="md:hidden"><div class="flex items-center justify-between">`);
       _push(ssrRenderComponent(_component_router_link, {
-        to: "/",
+        to: unref(currentLanguage) === "en" ? "/en/" : "/",
         class: "flex items-center"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -217,7 +278,7 @@ const _sfc_main$6 = {
           _push(`<!--[-->`);
           if (!item.children) {
             _push(ssrRenderComponent(_component_router_link, {
-              to: { name: "page", params: { slug: item.slug } },
+              to: getRouteForSlug(item.slug),
               class: "text-[var(--text-color)] text-xl hover:opacity-70 transition-opacity",
               onClick: ($event) => isOpen.value = false
             }, {
@@ -237,7 +298,7 @@ const _sfc_main$6 = {
             ssrRenderList(item.children, (child) => {
               _push(ssrRenderComponent(_component_router_link, {
                 key: child.id,
-                to: { name: "page", params: { slug: child.slug } },
+                to: getRouteForSlug(child.slug),
                 class: "text-[var(--text-color)] text-base hover:opacity-70 transition-opacity",
                 onClick: ($event) => isOpen.value = false
               }, {
@@ -265,13 +326,106 @@ const _sfc_main$6 = {
     };
   }
 };
-const _sfc_setup$6 = _sfc_main$6.setup;
-_sfc_main$6.setup = (props, ctx) => {
+const _sfc_setup$8 = _sfc_main$8.setup;
+_sfc_main$8.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/layout/navigation/NormalNav.vue");
-  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
+  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const _sfc_main$5 = {
+const _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+const _sfc_main$7 = {
+  __name: "MagneticElement",
+  __ssrInlineRender: true,
+  props: {
+    // Magnetic strength (how much the element moves towards the cursor)
+    strength: {
+      type: Number,
+      default: 0.3
+    },
+    // Animation duration for the magnetic effect
+    duration: {
+      type: Number,
+      default: 0.4
+    },
+    // Animation duration for snapping back to original position
+    snapDuration: {
+      type: Number,
+      default: 0.6
+    },
+    // Easing function for magnetic movement
+    ease: {
+      type: String,
+      default: "power2.out"
+    },
+    // Easing function for snapping back
+    snapEase: {
+      type: String,
+      default: "elastic.out(1, 0.3)"
+    },
+    // Whether to scale the element on hover
+    scale: {
+      type: Boolean,
+      default: false
+    },
+    // Scale amount when hovering
+    scaleAmount: {
+      type: Number,
+      default: 1.05
+    },
+    // Whether to add a subtle rotation effect
+    rotate: {
+      type: Boolean,
+      default: false
+    },
+    // Maximum rotation in degrees
+    maxRotation: {
+      type: Number,
+      default: 5
+    },
+    // Disable on mobile devices
+    disableOnMobile: {
+      type: Boolean,
+      default: true
+    }
+  },
+  setup(__props) {
+    const magneticElement = ref(null);
+    onMounted(() => {
+      gsap$1.set(magneticElement.value, {
+        x: 0,
+        y: 0,
+        rotation: 0,
+        scale: 1
+      });
+    });
+    onUnmounted(() => {
+      gsap$1.killTweensOf(magneticElement.value);
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({
+        ref_key: "magneticElement",
+        ref: magneticElement,
+        class: "magnetic-element"
+      }, _attrs))} data-v-15834192>`);
+      ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
+      _push(`</div>`);
+    };
+  }
+};
+const _sfc_setup$7 = _sfc_main$7.setup;
+_sfc_main$7.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/common/MagneticElement.vue");
+  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
+};
+const MagneticElement = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-15834192"]]);
+const _sfc_main$6 = {
   __name: "HamburgerNav",
   __ssrInlineRender: true,
   props: {
@@ -291,8 +445,16 @@ const _sfc_main$5 = {
     linkedin: String
   },
   setup(__props) {
+    const { currentLanguage } = useLanguage();
     const isOpen = ref(false);
     const menuContainer = ref(null);
+    const getRouteForSlug = (slug) => {
+      const blogSlug = currentLanguage.value === "en" ? "blog" : "blogg";
+      if (slug === "blogg" || slug === "blog") {
+        return { name: currentLanguage.value === "en" ? "page-en" : "page", params: { slug: blogSlug } };
+      }
+      return { name: currentLanguage.value === "en" ? "page-en" : "page", params: { slug } };
+    };
     function toggleMenu(open) {
       if (open) {
         gsap.fromTo(
@@ -321,9 +483,9 @@ const _sfc_main$5 = {
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_router_link = resolveComponent("router-link");
-      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "relative px-4 py-4" }, _attrs))}><div class="flex items-center justify-between">`);
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "relative px-8 py-6" }, _attrs))}><div class="flex items-center justify-between">`);
       _push(ssrRenderComponent(_component_router_link, {
-        to: "/",
+        to: unref(currentLanguage) === "en" ? "/en/" : "/",
         class: "flex items-center"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -350,18 +512,54 @@ const _sfc_main$5 = {
         }),
         _: 1
       }, _parent));
-      _push(`<button class="text-gray-900">`);
-      if (!isOpen.value) {
-        _push(`<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>`);
-      } else {
-        _push(`<!---->`);
-      }
-      _push(`</button></div><div style="${ssrRenderStyle([
+      _push(ssrRenderComponent(MagneticElement, {
+        strength: 0.8,
+        scale: true,
+        "scale-amount": 1.3,
+        rotate: true,
+        "max-rotation": 8
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<button class="bg-white p-3 rounded-full"${_scopeId}>`);
+            if (!isOpen.value) {
+              _push2(`<svg class="w-6 h-6 text-background-color" fill="none" viewBox="0 0 24 24" stroke="currentColor"${_scopeId}><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"${_scopeId}></path></svg>`);
+            } else {
+              _push2(`<!---->`);
+            }
+            _push2(`</button>`);
+          } else {
+            return [
+              createVNode("button", {
+                onClick: ($event) => isOpen.value = !isOpen.value,
+                class: "bg-white p-3 rounded-full"
+              }, [
+                !isOpen.value ? (openBlock(), createBlock("svg", {
+                  key: 0,
+                  class: "w-6 h-6 text-background-color",
+                  fill: "none",
+                  viewBox: "0 0 24 24",
+                  stroke: "currentColor"
+                }, [
+                  createVNode("path", {
+                    "stroke-linecap": "round",
+                    "stroke-linejoin": "round",
+                    "stroke-width": "2",
+                    d: "M4 6h16M4 12h16M4 18h16"
+                  })
+                ])) : createCommentVNode("", true)
+              ], 8, ["onClick"])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`</div><div style="${ssrRenderStyle([
         isOpen.value ? null : { display: "none" },
         { "height": "100svh" }
       ])}" class="fixed inset-0 z-50"><div class="bg-white"><div class="flex items-center justify-between px-4 py-4">`);
       _push(ssrRenderComponent(_component_router_link, {
-        to: "/",
+        to: unref(currentLanguage) === "en" ? "/en/" : "/",
         class: "flex items-center"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -392,7 +590,7 @@ const _sfc_main$5 = {
       ssrRenderList(__props.navigation, (item) => {
         _push(ssrRenderComponent(_component_router_link, {
           key: item.id,
-          to: { name: "page", params: { slug: item.slug } },
+          to: getRouteForSlug(item.slug),
           onClick: ($event) => isOpen.value = false,
           class: "block py-4 text-2xl text-gray-900 hover:text-gray-600"
         }, {
@@ -439,13 +637,13 @@ const _sfc_main$5 = {
     };
   }
 };
-const _sfc_setup$5 = _sfc_main$5.setup;
-_sfc_main$5.setup = (props, ctx) => {
+const _sfc_setup$6 = _sfc_main$6.setup;
+_sfc_main$6.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/layout/navigation/HamburgerNav.vue");
-  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
 };
-const _sfc_main$4 = {
+const _sfc_main$5 = {
   __name: "Navigation",
   __ssrInlineRender: true,
   props: {
@@ -504,12 +702,12 @@ const _sfc_main$4 = {
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(_attrs)}>`);
       if (__props.type === "normal") {
-        _push(ssrRenderComponent(_sfc_main$6, {
+        _push(ssrRenderComponent(_sfc_main$8, {
           navigation: menuItems.value,
           settings: __props.settings
         }, null, _parent));
       } else {
-        _push(ssrRenderComponent(_sfc_main$5, {
+        _push(ssrRenderComponent(_sfc_main$6, {
           navigation: menuItems.value,
           settings: __props.settings,
           "show-contact": __props.showContact,
@@ -524,18 +722,29 @@ const _sfc_main$4 = {
     };
   }
 };
-const _sfc_setup$4 = _sfc_main$4.setup;
-_sfc_main$4.setup = (props, ctx) => {
+const _sfc_setup$5 = _sfc_main$5.setup;
+_sfc_main$5.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/layout/Navigation.vue");
-  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const _sfc_main$3 = {
+const _sfc_main$4 = {
   __name: "Footer",
   __ssrInlineRender: true,
   setup(__props) {
-    const menuItems = ref([]);
+    const { currentLanguage } = useLanguage();
     const settings = ref(null);
+    const menuItems = ref([]);
+    const getRouteForSlug = (slug) => {
+      if (slug === "home") {
+        return currentLanguage.value === "en" ? "/en/" : "/";
+      }
+      const blogSlug = currentLanguage.value === "en" ? "blog" : "blogg";
+      if (slug === "blogg" || slug === "blog") {
+        return { name: currentLanguage.value === "en" ? "page-en" : "page", params: { slug: blogSlug } };
+      }
+      return { name: currentLanguage.value === "en" ? "page-en" : "page", params: { slug } };
+    };
     onMounted(async () => {
       try {
         const [navResponse, settingsResponse] = await Promise.all([
@@ -553,13 +762,13 @@ const _sfc_main$3 = {
       }
     });
     return (_ctx, _push, _parent, _attrs) => {
-      var _a, _b, _c, _d;
+      var _a, _b, _c;
       const _component_router_link = resolveComponent("router-link");
-      _push(`<footer${ssrRenderAttrs(mergeProps({ class: "footer-bg py-12 text-white" }, _attrs))}><div class="container px-4 mx-auto"><div class="grid grid-cols-1 lg:grid-cols-4 gap-8 text-center lg:text-start"><div><h3 class="mb-4 text-xl font-bold">Kalibr.</h3><p class="text-gray-400">Vi är en utvecklings- ai- och designbyrå i Malmö, men har hela världen som vårt spelfält. Vi brinner för att skapa lösningar som gör skillnad.</p></div><div><h3 class="mb-4 text-xl font-bold">Snabblänkar</h3><ul class="space-y-2"><!--[-->`);
+      _push(`<footer${ssrRenderAttrs(mergeProps({ class: "footer-bg py-12 text-white" }, _attrs))} data-v-55a62e24><div class="container px-4 mx-auto" data-v-55a62e24><div class="grid grid-cols-1 lg:grid-cols-4 gap-8 text-center lg:text-start" data-v-55a62e24><div class="footer-column" data-v-55a62e24><h3 class="mb-4 text-xl font-bold min-h-[28px]" data-v-55a62e24>Kalibr.</h3><p class="text-gray-400 min-h-[96px]" data-v-55a62e24>Vi är en utvecklings- ai- och designbyrå i Malmö, men har hela världen som vårt spelfält. Vi brinner för att skapa lösningar som gör skillnad.</p></div><div class="footer-column" data-v-55a62e24><h3 class="mb-4 text-xl font-bold min-h-[28px]" data-v-55a62e24>Snabblänkar</h3><ul class="space-y-2 min-h-[96px]" data-v-55a62e24><!--[-->`);
       ssrRenderList(menuItems.value, (item) => {
-        _push(`<li>`);
+        _push(`<li data-v-55a62e24>`);
         _push(ssrRenderComponent(_component_router_link, {
-          to: item.slug === "home" ? "/" : `/${item.slug}`,
+          to: getRouteForSlug(item.slug),
           class: "text-gray-400 hover:text-white"
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -575,37 +784,56 @@ const _sfc_main$3 = {
         }, _parent));
         _push(`</li>`);
       });
-      _push(`<!--]--></ul></div><div><h3 class="mb-4 text-xl font-bold">Kontakt</h3><ul class="space-y-2 text-gray-400"><li>E-post: info@kalibr.se</li><li>Telefon: +46 (0736) 15 12 20</li><li>Adress: Simrishamnsgatan 20a<br>SE-214 23 Malmö<br>Sweden</li></ul></div><div><h3 class="mb-4 text-xl font-bold">Follow Us</h3><div class="flex space-x-4 justify-center lg:justify-start">`);
+      _push(`<!--]--></ul></div><div class="footer-column" data-v-55a62e24><h3 class="mb-4 text-xl font-bold min-h-[28px]" data-v-55a62e24>Kontakt</h3><ul class="space-y-2 text-gray-400 min-h-[96px]" data-v-55a62e24><li data-v-55a62e24>E-post: info@kalibr.se</li><li data-v-55a62e24>Telefon: +46 (0736) 15 12 20</li><li data-v-55a62e24>Adress: Simrishamnsgatan 20a<br data-v-55a62e24>SE-214 23 Malmö<br data-v-55a62e24>Sweden</li></ul></div><div class="footer-column" data-v-55a62e24><h3 class="mb-4 text-xl font-bold min-h-[28px]" data-v-55a62e24>Follow Us</h3><div class="flex space-x-4 justify-center lg:justify-start min-h-[96px]" data-v-55a62e24>`);
       if ((_a = settings.value) == null ? void 0 : _a.facebook_url) {
-        _push(`<a${ssrRenderAttr("href", settings.value.facebook_url)} target="_blank" rel="noopener" class="text-gray-400 hover:text-white"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path></svg></a>`);
+        _push(`<a${ssrRenderAttr("href", settings.value.facebook_url)} target="_blank" rel="noopener" class="text-gray-400 hover:text-white" data-v-55a62e24><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" data-v-55a62e24><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" data-v-55a62e24></path></svg></a>`);
       } else {
         _push(`<!---->`);
       }
       if ((_b = settings.value) == null ? void 0 : _b.instagram_url) {
-        _push(`<a${ssrRenderAttr("href", settings.value.instagram_url)} target="_blank" rel="noopener" class="text-gray-400 hover:text-white"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path></svg></a>`);
+        _push(`<a${ssrRenderAttr("href", settings.value.instagram_url)} target="_blank" rel="noopener" class="text-gray-400 hover:text-white" data-v-55a62e24><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" data-v-55a62e24><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" data-v-55a62e24></path></svg></a>`);
       } else {
         _push(`<!---->`);
       }
       if ((_c = settings.value) == null ? void 0 : _c.linkedin_url) {
-        _push(`<a${ssrRenderAttr("href", settings.value.linkedin_url)} target="_blank" rel="noopener" class="text-gray-400 hover:text-white"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path></svg></a>`);
+        _push(`<a${ssrRenderAttr("href", settings.value.linkedin_url)} target="_blank" rel="noopener" class="text-gray-400 hover:text-white" data-v-55a62e24><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" data-v-55a62e24><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" data-v-55a62e24></path></svg></a>`);
       } else {
         _push(`<!---->`);
       }
-      if ((_d = settings.value) == null ? void 0 : _d.youtube_url) {
-        _push(`<a${ssrRenderAttr("href", settings.value.youtube_url)} target="_blank" rel="noopener" class="text-gray-400 hover:text-white"><svg class="w-8 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" clip-rule="evenodd"></path></svg></a>`);
-      } else {
-        _push(`<!---->`);
-      }
-      _push(`</div></div></div><div class="pt-8 mt-8 text-center text-gray-400 border-t border-gray-800"><p>${ssrInterpolate((/* @__PURE__ */ new Date()).getFullYear())} Kalibr. Alla rättigheter reserverade.</p></div></div></footer>`);
+      _push(`</div></div></div><div class="pt-8 mt-8 text-center text-gray-400 border-t border-gray-800" data-v-55a62e24><p class="min-h-[24px]" data-v-55a62e24>${ssrInterpolate((/* @__PURE__ */ new Date()).getFullYear())} Kalibr. Alla rättigheter reserverade.</p></div></div></footer>`);
+    };
+  }
+};
+const _sfc_setup$4 = _sfc_main$4.setup;
+_sfc_main$4.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/layout/Footer.vue");
+  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+};
+const Footer = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-55a62e24"]]);
+const _sfc_main$3 = {
+  __name: "LanguageSwitcher",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const { currentLanguage, switchLanguage } = useLanguage();
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "language-switcher" }, _attrs))} data-v-7c9fc0e2><button class="${ssrRenderClass([{
+        "active": unref(currentLanguage) === "sv",
+        "inactive": unref(currentLanguage) !== "sv"
+      }, "language-btn"])}" data-v-7c9fc0e2> Svenska </button><span class="separator" data-v-7c9fc0e2>|</span><button class="${ssrRenderClass([{
+        "active": unref(currentLanguage) === "en",
+        "inactive": unref(currentLanguage) !== "en"
+      }, "language-btn"])}" data-v-7c9fc0e2> English </button></div>`);
     };
   }
 };
 const _sfc_setup$3 = _sfc_main$3.setup;
 _sfc_main$3.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/layout/Footer.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/LanguageSwitcher.vue");
   return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
 };
+const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-7c9fc0e2"]]);
 const _sfc_main$2 = {
   __name: "MainLayout",
   __ssrInlineRender: true,
@@ -639,7 +867,7 @@ const _sfc_main$2 = {
         id: pageId.value,
         class: pageClass.value
       }, _attrs))}>`);
-      _push(ssrRenderComponent(_sfc_main$4, {
+      _push(ssrRenderComponent(_sfc_main$5, {
         type: settings.value.navigation_type,
         settings: settings.value,
         "show-contact": settings.value.show_contact_in_menu,
@@ -652,7 +880,8 @@ const _sfc_main$2 = {
       _push(`<main>`);
       ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
       _push(`</main>`);
-      _push(ssrRenderComponent(_sfc_main$3, null, null, _parent));
+      _push(ssrRenderComponent(Footer, null, null, _parent));
+      _push(ssrRenderComponent(LanguageSwitcher, null, null, _parent));
       _push(`</div>`);
     };
   }
@@ -662,13 +891,6 @@ _sfc_main$2.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/layout/MainLayout.vue");
   return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
-};
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
 };
 const COOKIE_CONSENT_KEY = "cookie_consent";
 const _sfc_main$1 = {
@@ -735,45 +957,104 @@ function createRouter(type = "client") {
   return createRouter$1({
     history: type === "client" ? createWebHistory() : createMemoryHistory(),
     routes: [
+      // Swedish routes (no prefix)
       {
         path: "/",
         name: "home",
-        component: () => import("./assets/Home-DOMgO0Jo.js")
+        component: () => import("./assets/Home-GQ37GdKZ.js"),
+        meta: { language: "sv" }
       },
       {
-        path: "/blog",
+        path: "/blogg",
         name: "blog",
-        component: () => import("./assets/Blog-4tajOMKE.js")
+        component: () => import("./assets/Blog-DtNMOMY3.js"),
+        meta: { language: "sv" }
       },
       {
-        path: "/blog/:slug",
+        path: "/blogg/:slug",
         name: "post",
-        component: () => import("./assets/Post-Gu6glD_B.js")
+        component: () => import("./assets/Post-Bzv69R6z.js"),
+        meta: { language: "sv" }
       },
       {
         path: "/shop",
         name: "shop",
-        component: () => import("./assets/Shop-DpsvUdDM.js")
+        component: () => import("./assets/Shop-DpsvUdDM.js"),
+        meta: { language: "sv" }
       },
       {
         path: "/shop/products/:slug",
         name: "product",
-        component: () => import("./assets/Product-CBdFNIVQ.js")
+        component: () => import("./assets/Product-CBdFNIVQ.js"),
+        meta: { language: "sv" }
       },
       {
         path: "/shop/checkout",
         name: "checkout",
-        component: () => import("./assets/Checkout-DW5-EtWq.js")
+        component: () => import("./assets/Checkout-DW5-EtWq.js"),
+        meta: { language: "sv" }
       },
       {
         path: "/shop/downloads",
         name: "downloads",
-        component: () => import("./assets/Downloads-B3QxNZub.js")
+        component: () => import("./assets/Downloads-B3QxNZub.js"),
+        meta: { language: "sv" }
       },
+      // English routes (with /en prefix)
+      {
+        path: "/en",
+        name: "home-en",
+        component: () => import("./assets/Home-GQ37GdKZ.js"),
+        meta: { language: "en" }
+      },
+      {
+        path: "/en/blog",
+        name: "blog-en",
+        component: () => import("./assets/Blog-DtNMOMY3.js"),
+        meta: { language: "en" }
+      },
+      {
+        path: "/en/blog/:slug",
+        name: "post-en",
+        component: () => import("./assets/Post-Bzv69R6z.js"),
+        meta: { language: "en" }
+      },
+      {
+        path: "/en/shop",
+        name: "shop-en",
+        component: () => import("./assets/Shop-DpsvUdDM.js"),
+        meta: { language: "en" }
+      },
+      {
+        path: "/en/shop/products/:slug",
+        name: "product-en",
+        component: () => import("./assets/Product-CBdFNIVQ.js"),
+        meta: { language: "en" }
+      },
+      {
+        path: "/en/shop/checkout",
+        name: "checkout-en",
+        component: () => import("./assets/Checkout-DW5-EtWq.js"),
+        meta: { language: "en" }
+      },
+      {
+        path: "/en/shop/downloads",
+        name: "downloads-en",
+        component: () => import("./assets/Downloads-B3QxNZub.js"),
+        meta: { language: "en" }
+      },
+      {
+        path: "/en/:slug",
+        name: "page-en",
+        component: () => import("./assets/Page-DDrXKOHe.js"),
+        meta: { language: "en" }
+      },
+      // Swedish page routes (must come after specific routes)
       {
         path: "/:slug",
         name: "page",
-        component: () => import("./assets/Page-lsuynfEf.js")
+        component: () => import("./assets/Page-DDrXKOHe.js"),
+        meta: { language: "sv" }
       },
       {
         path: "/:pathMatch(.*)*",
@@ -804,6 +1085,8 @@ async function render(url) {
   };
 }
 export {
+  MagneticElement as M,
   _export_sfc as _,
-  render
+  render,
+  useLanguage as u
 };

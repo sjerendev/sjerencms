@@ -11,6 +11,7 @@ class Post extends Model
     protected $fillable = [
         'title',
         'slug',
+        'language',
         'content',
         'is_published',
         'publish_date',
@@ -66,5 +67,20 @@ class Post extends Model
     public function getListImageAttribute(): ?string
     {
         return $this->attributes['list_image'] ?? $this->attributes['hero_image'] ?? null;
+    }
+
+    public function scopeLanguage($query, $language)
+    {
+        return $query->where('language', $language);
+    }
+
+    public function scopeSwedish($query)
+    {
+        return $query->where('language', 'sv');
+    }
+
+    public function scopeEnglish($query)
+    {
+        return $query->where('language', 'en');
     }
 }

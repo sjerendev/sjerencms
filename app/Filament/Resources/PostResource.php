@@ -66,6 +66,19 @@ class PostResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('language')
+                    ->label('Language')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'sv' => 'Svenska',
+                        'en' => 'English',
+                        default => $state,
+                    })
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'sv' => 'primary',
+                        'en' => 'success',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('categories.name')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_published')
@@ -76,7 +89,13 @@ class PostResource extends Resource
                     ->default(fn ($record) => $record->created_at),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('language')
+                    ->label('Language')
+                    ->options([
+                        'sv' => 'Svenska',
+                        'en' => 'English',
+                    ])
+                    ->placeholder('All Languages'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

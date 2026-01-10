@@ -2,7 +2,7 @@
     <nav class="relative px-8 py-6">
         <!-- Header with Logo and Hamburger -->
         <div class="flex items-center justify-between">
-            <router-link to="/" class="flex items-center">
+            <router-link :to="currentLanguage === 'en' ? '/en/' : '/'" class="flex items-center">
                 <img
                     v-if="settings?.logo"
                     :src="settings.logo"
@@ -48,7 +48,7 @@
             <!-- Fixed Header -->
             <div class="bg-white">
                 <div class="flex items-center justify-between px-4 py-4">
-                    <router-link to="/" class="flex items-center">
+                    <router-link :to="currentLanguage === 'en' ? '/en/' : '/'" class="flex items-center">
                         <img
                             v-if="settings?.logo"
                             :src="settings.logo"
@@ -89,14 +89,7 @@
                         <router-link
                             v-for="item in navigation"
                             :key="item.id"
-                            :to="
-                                item.slug === 'blogg'
-                                    ? { name: 'blog' }
-                                    : {
-                                          name: 'page',
-                                          params: { slug: item.slug },
-                                      }
-                            "
+                            :to="getRouteForSlug(item.slug)"
                             @click="isOpen = false"
                             class="block py-4 text-2xl text-gray-900 hover:text-gray-600"
                         >
@@ -178,6 +171,7 @@
 import { ref, watch } from "vue";
 import gsap from "gsap";
 import MagneticElement from "../../common/MagneticElement.vue";
+import { useLanguage } from '../../../composables/useLanguage';
 
 const props = defineProps({
     navigation: {
@@ -196,8 +190,17 @@ const props = defineProps({
     linkedin: String,
 });
 
+const { currentLanguage } = useLanguage();
 const isOpen = ref(false);
 const menuContainer = ref(null);
+
+const getRouteForSlug = (slug) => {
+    const blogSlug = currentLanguage.value === 'en' ? 'blog' : 'blogg'
+    if (slug === 'blogg' || slug === 'blog') {
+        return { name: currentLanguage.value === 'en' ? 'page-en' : 'page', params: { slug: blogSlug } }
+    }
+    return { name: currentLanguage.value === 'en' ? 'page-en' : 'page', params: { slug } }
+}
 
 function toggleMenu(open) {
     if (open) {

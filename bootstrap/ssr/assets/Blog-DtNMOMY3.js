@@ -40,8 +40,8 @@ const _sfc_main = {
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "container px-4 py-12 mx-auto" }, _attrs))}><h1 class="mb-8 text-4xl font-bold">Blog</h1><div class="grid grid-cols-3 gap-8"><!--[-->`);
       ssrRenderList(posts.value, (post) => {
         _push(`<article class="post-card">`);
-        if (post.hero_image) {
-          _push(`<img${ssrRenderAttr("src", `/storage/${post.hero_image}`)}${ssrRenderAttr("alt", post.title)} class="object-cover w-full h-48 mb-4">`);
+        if (post.list_image || post.featured_image) {
+          _push(`<img${ssrRenderAttr("src", `/storage/${post.list_image || post.featured_image}`)}${ssrRenderAttr("alt", post.title)} class="object-cover w-full h-48 mb-4">`);
         } else {
           _push(`<!---->`);
         }

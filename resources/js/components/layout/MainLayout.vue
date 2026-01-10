@@ -14,6 +14,7 @@
             <slot></slot>
         </main>
         <Footer />
+        <LanguageSwitcher />
     </div>
 </template>
 
@@ -22,6 +23,7 @@ import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Navigation from './Navigation.vue'
 import Footer from './Footer.vue'
+import LanguageSwitcher from '../LanguageSwitcher.vue'
 
 const route = useRoute()
 const settings = ref({

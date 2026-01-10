@@ -1,3 +1,4 @@
+@import "blocks/ticker.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,8 +6,8 @@
 :root {
     --background: #10181f;
     --text-color: #ffffff;
-    --primary-color: #60f2c2;
-    --secondary-color: #b0fe76;
+    --primary-color: #33ffd3;
+    --secondary-color: #91f2e8;
     --headline-1: clamp(2rem, 10vw, 5rem);
     --headline-2: clamp(1.4rem, 6vw, 3rem);
     --h1-family: "Satoshi-Black", system-ui, -apple-system, sans-serif;
@@ -95,7 +96,7 @@ h1 {
     font-size: var(--headline-1);
     font-family: var(--h1-family);
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.2;
     letter-spacing: -0.02em;
     margin: 1.5rem 0;
     color: var(--text-color);
@@ -133,7 +134,7 @@ p {
     h1 {
         font-size: var(--headline-1);
         font-weight: 700;
-        line-height: 1;
+        line-height: 1.1;
         letter-spacing: -0.02em;
         margin: 1.5rem 0;
         color: var(--primary-color);
@@ -141,7 +142,7 @@ p {
     h2 {
         font-size: var(--headline-2);
         font-weight: 400;
-        line-height: 1;
+        line-height: 1.1;
         letter-spacing: -0.02em;
         margin-bottom: 1rem;
         color: var(--primary-color);
@@ -171,7 +172,7 @@ p {
 .home-about-narrow {
     background: var(--primary-color);
     color: var(--background);
-    padding: 0 0 4rem 0;
+    padding: 0 0 1rem 0;
     h2 {
         color: var(--background);
         font-size: var(--fs-about-big);
@@ -186,6 +187,42 @@ p {
         strong {
             font-family: var(--fw-bold);
         }
+    }
+}
+
+.cv-buttons {
+    display: flex;
+    background: var(--primary-color);
+    padding: 0 0 4rem 0;
+    justify-content: flex-end !important;
+    h3 {
+        color: var(--background);
+    }
+    .container div {
+        justify-content: flex-end !important;
+        text-align: right !important;
+    }
+    .button-one {
+        margin-right: 1rem !important;
+        width: 12rem !important;
+        height: 12rem !important;
+        text-align: center !important;
+        line-height: 12rem !important;
+        justify-content: center !important;
+        background: var(--background) !important;
+        color: var(--primary-color) !important;
+        border-radius: 9999px !important;
+    }
+    .button-two {
+        margin-right: 0 !important;
+        width: 12rem !important;
+        height: 12rem !important;
+        text-align: center !important;
+        line-height: 12rem !important;
+        justify-content: center !important;
+        background: var(--background) !important;
+        color: var(--primary-color) !important;
+        border-radius: 9999px !important;
     }
 }
 
@@ -281,6 +318,10 @@ p {
 
 .services {
     background-color: #f3f3f3;
+    h2,
+    h3 {
+        color: var(--background);
+    }
 }
 
 .blog-block {
@@ -423,4 +464,23 @@ footer {
         list-style-type: none !important;
         padding-left: 0 !important;
     }
+}
+
+.ticker-section {
+    padding: 6rem 0 0 0 !important;
+    background-color: var(--background) !important;
+}
+
+.ticker-section-two {
+    padding: 0 !important;
+    background-color: var(--background) !important;
+}
+
+.ticker-section-last {
+    padding: 0 0 6rem 0 !important;
+    background-color: var(--background) !important;
+}
+
+.ticker-stripe {
+    margin: 2rem 0 2rem 0 !important;
 }

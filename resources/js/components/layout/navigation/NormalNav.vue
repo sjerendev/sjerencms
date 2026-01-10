@@ -10,7 +10,7 @@
     }">
         <!-- Desktop Navigation -->
         <div class="items-center justify-between hidden md:flex">
-            <router-link to="/" class="flex items-center">
+            <router-link :to="currentLanguage === 'en' ? '/en/' : '/'" class="flex items-center">
                 <img v-if="settings?.logo" :src="settings.logo" alt="Logo" class="h-8">
                 <span v-else class="text-xl font-bold">{{ settings?.site_name }}</span>
             </router-link>
@@ -19,7 +19,7 @@
                 <div v-for="item in navigation" :key="item.id" class="relative group">
                     <router-link 
                         v-if="!item.children" 
-                        :to="item.slug === 'blogg' ? { name: 'blog' } : { name: 'page', params: { slug: item.slug } }"
+                        :to="getRouteForSlug(item.slug)"
                         class="text-[var(--text-color)] hover:opacity-70 transition-opacity"
                     >
                         {{ item.title }}
@@ -40,7 +40,7 @@
                             <router-link 
                                 v-for="child in item.children" 
                                 :key="child.id"
-                                :to="child.slug === 'blogg' ? { name: 'blog' } : { name: 'page', params: { slug: child.slug } }"
+                                :to="getRouteForSlug(child.slug)"
                                 class="block px-4 py-2 text-[var(--text-color)] hover:opacity-70 transition-opacity"
                             >
                                 {{ child.title }}
@@ -92,7 +92,7 @@
         <!-- Mobile Navigation -->
         <div class="md:hidden">
             <div class="flex items-center justify-between">
-                <router-link to="/" class="flex items-center">
+                <router-link :to="currentLanguage === 'en' ? '/en/' : '/'" class="flex items-center">
                     <img v-if="settings?.logo" :src="settings.logo" alt="Logo" class="h-8">
                     <span v-else class="text-xl font-bold">{{ settings?.site_name }}</span>
                 </router-link>
@@ -112,7 +112,7 @@
                 class="fixed inset-x-0 top-[64px] bottom-0 bg-[var(--background)] z-50 overflow-y-auto border-t border-gray-200">
                 <div class="flex flex-col items-center py-8 space-y-6">
                     <template v-for="item in navigation" :key="item.id">
-                        <router-link v-if="!item.children" :to="{ name: 'page', params: { slug: item.slug } }"
+                        <router-link v-if="!item.children" :to="getRouteForSlug(item.slug)"
                             class="text-[var(--text-color)] text-xl hover:opacity-70 transition-opacity"
                             @click="isOpen = false">
                             {{ item.title }}
@@ -122,7 +122,7 @@
                             <span class="text-[var(--text-color)] text-lg">{{ item.title }}</span>
                             <div class="flex flex-col items-center space-y-4">
                                 <router-link v-for="child in item.children" :key="child.id"
-                                    :to="{ name: 'page', params: { slug: child.slug } }"
+                                    :to="getRouteForSlug(child.slug)"
                                     class="text-[var(--text-color)] text-base hover:opacity-70 transition-opacity"
                                     @click="isOpen = false">
                                     {{ child.title }}
@@ -140,6 +140,7 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import { useDarkModeStore } from '../../../stores/darkMode'
+import { useLanguage } from '../../../composables/useLanguage'
 
 const props = defineProps({
     navigation: {
@@ -153,12 +154,21 @@ const props = defineProps({
 })
 
 const darkModeStore = useDarkModeStore()
+const { currentLanguage } = useLanguage()
 const isOpen = ref(false)
 const menuContainer = ref(null)
 const isSticky = ref(false)
 const hasScrolled = ref(false)
 const lastScrollTop = ref(0)
 const scrollThreshold = 5
+
+const getRouteForSlug = (slug) => {
+    const blogSlug = currentLanguage.value === 'en' ? 'blog' : 'blogg'
+    if (slug === 'blogg' || slug === 'blog') {
+        return { name: currentLanguage.value === 'en' ? 'page-en' : 'page', params: { slug: blogSlug } }
+    }
+    return { name: currentLanguage.value === 'en' ? 'page-en' : 'page', params: { slug } }
+}
 
 const handleScroll = () => {
     const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop

@@ -21,6 +21,14 @@ class BaseContentSection extends Section
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true),
+                Forms\Components\Select::make('language')
+                    ->label('Language')
+                    ->options([
+                        'sv' => 'Svenska',
+                        'en' => 'English',
+                    ])
+                    ->default('sv')
+                    ->required(),
                 Forms\Components\Toggle::make('is_published')
                     ->default(false),
                 Forms\Components\TextInput::make('meta_title')

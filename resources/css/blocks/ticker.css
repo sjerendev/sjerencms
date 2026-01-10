@@ -1,0 +1,20 @@
+.ticker-block {
+    background-color: var(--background-color, #fff);
+    color: var(--text-color, #000);
+    transform: rotate(var(--angle, 0));
+    overflow: hidden;
+}
+
+.ticker-wrap {
+    display: flex;
+}
+
+.ticker-track {
+    display: flex;
+    white-space: nowrap;
+}
+
+.ticker-item {
+    padding: 0 2rem;
+    font-size: 2rem;
+}

@@ -23,6 +23,7 @@ import IconCards from './blocks/IconCards.vue'
 import BlogPosts from './blocks/BlogPosts.vue'
 import ServiceCards from './blocks/ServiceCards.vue'
 import PortfolioItems from './blocks/PortfolioItems.vue'
+import TickerBlock from './blocks/TickerBlock.vue'
 
 const blockComponents = {
     full_image: FullImage,
@@ -41,7 +42,8 @@ const blockComponents = {
     icon_cards: IconCards,
     blog_posts: BlogPosts,
     service_cards: ServiceCards,
-    portfolio_items: PortfolioItems
+    portfolio_items: PortfolioItems,
+    ticker: TickerBlock
 }
 
 defineProps({

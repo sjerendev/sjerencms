@@ -20,6 +20,7 @@ use App\Filament\Forms\Components\Blocks\ThreeColumnCardsBlock;
 use App\Filament\Forms\Components\Blocks\VideoBlock;
 use App\Filament\Forms\Components\Blocks\BlogPostsBlock;
 use App\Filament\Forms\Components\Blocks\ServiceCardsBlock;
+use App\Filament\Forms\Components\Blocks\TickerBlock;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Illuminate\Contracts\Support\Htmlable;
@@ -50,7 +51,8 @@ class ContentBlocksSection extends Section
                         TeamMembersBlock::make(),
                         VideoBlock::make(),
                         BlogPostsBlock::make(),
-                        ServiceCardsBlock::make()
+                        ServiceCardsBlock::make(),
+                        TickerBlock::make()
                     ])
                     ->collapsible(),
             ]);

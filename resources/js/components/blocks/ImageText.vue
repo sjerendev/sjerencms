@@ -3,12 +3,16 @@
         <div class="container px-6 py-12 mx-auto md:px-8 lg:px-12">
             <div class="flex flex-col items-center md:flex-row"
                 :class="{ 'md:flex-row-reverse': block.reverse_layout }">
-                <div class="flex order-1 items-center px-2 w-full md:w-1/2" :class="{
-                    'lg:pl-6': !block.reverse_layout,
-                    'lg:pr-6': block.reverse_layout,
-                    'md:order-1': !block.reverse_layout,
-                    'md:order-2': block.reverse_layout
-                }">
+                <!-- Text column - takes full width if no image -->
+                <div class="flex order-1 items-center px-2 w-full" 
+                     :class="{
+                        'md:w-1/2': hasImage,
+                        'md:w-full': !hasImage,
+                        'lg:pl-6': !block.reverse_layout && hasImage,
+                        'lg:pr-6': block.reverse_layout && hasImage,
+                        'md:order-1': !block.reverse_layout || !hasImage,
+                        'md:order-2': block.reverse_layout && hasImage
+                     }">
                     <div class="py-4 w-full">
                         <div v-if="isFirstBlock">
                             <div v-html="parsedContent" class="mb-4"></div>
@@ -17,22 +21,23 @@
                             <div v-html="parsedContent" class="mb-4 content-visibility-auto"></div>
                         </div>
                         <div v-if="block.button1_text || block.button2_text" class="block gap-4 mt-10 md:flex">
-													<MagneticElement :strength="0.3" :scale="true" :rotate="true">
-														<a v-if="block.button1_text" :href="block.button1_url"
+										<MagneticElement :strength="0.3" :scale="true" :rotate="true">
+											<a v-if="block.button1_text" :href="block.button1_url"
                                 class="block items-center px-4 py-2 mb-4 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-one md:mb-0">
                                 {{ block.button1_text }}
                             </a>
-													</MagneticElement>
-													<MagneticElement :strength="0.3" :scale="true" :rotate="true">
+										</MagneticElement>
+										<MagneticElement :strength="0.3" :scale="true" :rotate="true">
                             <a v-if="block.button2_text" :href="block.button2_url"
                                 class="block items-center px-4 py-2 font-semibold text-center text-white rounded-xl transition-colors md:inline-flex button-two">
                                 {{ block.button2_text }}
                             </a>
-														</MagneticElement>
+											</MagneticElement>
                         </div>
                     </div>
                 </div>
-                <div class="order-2 mb-8 w-full md:w-1/2 md:mb-0" :class="{
+                <!-- Image column - only shown if image exists -->
+                <div v-if="hasImage" class="order-2 mb-8 w-full md:w-1/2 md:mb-0" :class="{
                     'lg:pr-6': !block.reverse_layout,
                     'lg:pl-6': block.reverse_layout,
                     'md:order-2': !block.reverse_layout,
@@ -78,6 +83,10 @@ const onImageLoad = (event) => {
     }
 };
 
+const hasImage = computed(() => {
+    return props.block.image && props.block.image.length > 0;
+});
+
 const parsedContent = computed(() => {
     if (!props.block.text) return "";
     const htmlContent = marked.parse(props.block.text);
@@ -101,8 +110,8 @@ const parsedContent = computed(() => {
 }
 
 .button-one {
-    background-color: #18f2b2;
-    border: 1px solid #18f2b2;
+    background-color: #33FFD3;
+    border: 1px solid #33FFD3;
     color: #111820;
     transition: all 0.3s ease-in-out;
 
@@ -116,8 +125,8 @@ const parsedContent = computed(() => {
 
 .button-two {
     background-color: transparent;
-    color: #18f2b2;
-    border: 1px solid #18f2b2;
+    color: #33FFD3;
+    border: 1px solid #33FFD3;
     transition: all 0.3s ease-in-out;
 
     &:hover {
