@@ -22,3 +22,9 @@ yarn-error.log
 /.vscode
 /.zed
 .claude-flow
+.beads
+.ralph-tui
+AGENTS.md
+CLAUDE.md
+bootstrap/ssr/
+docs/

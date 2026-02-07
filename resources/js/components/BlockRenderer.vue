@@ -10,7 +10,9 @@ import FullImage from './blocks/FullImage.vue'
 import ImageText from './blocks/ImageText.vue'
 import FullText from './blocks/FullText.vue'
 import Carousel from './blocks/Carousel.vue'
+import StickyCarousel from './blocks/StickyCarousel.vue'
 import ThreeColumnCards from './blocks/ThreeColumnCards.vue'
+import ColumnCards from './blocks/ColumnCards.vue'
 import Video from './blocks/Video.vue'
 import CallToAction from './blocks/CallToAction.vue'
 import HeadlineText from './blocks/HeadlineText.vue'
@@ -24,13 +26,17 @@ import BlogPosts from './blocks/BlogPosts.vue'
 import ServiceCards from './blocks/ServiceCards.vue'
 import PortfolioItems from './blocks/PortfolioItems.vue'
 import TickerBlock from './blocks/TickerBlock.vue'
+import StaggerText from './blocks/StaggerText.vue'
+import ColumnsLayout from './blocks/ColumnsLayout.vue'
 
 const blockComponents = {
     full_image: FullImage,
     image_text: ImageText,
     full_text: FullText,
     carousel: Carousel,
+    sticky_carousel: StickyCarousel,
     three_column_cards: ThreeColumnCards,
+    column_cards: ColumnCards,
     video: Video,
     call_to_action: CallToAction,
     headline_text: HeadlineText,
@@ -43,7 +49,9 @@ const blockComponents = {
     blog_posts: BlogPosts,
     service_cards: ServiceCards,
     portfolio_items: PortfolioItems,
-    ticker: TickerBlock
+    ticker: TickerBlock,
+    stagger_text: StaggerText,
+    columns_layout: ColumnsLayout
 }
 
 defineProps({

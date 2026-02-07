@@ -17,10 +17,14 @@ use App\Filament\Forms\Components\Blocks\PortfolioItemsBlock;
 use App\Filament\Forms\Components\Blocks\PricingTablesBlock;
 use App\Filament\Forms\Components\Blocks\TeamMembersBlock;
 use App\Filament\Forms\Components\Blocks\ThreeColumnCardsBlock;
+use App\Filament\Forms\Components\Blocks\ColumnCardsBlock;
+use App\Filament\Forms\Components\Blocks\StickyCarouselBlock;
 use App\Filament\Forms\Components\Blocks\VideoBlock;
 use App\Filament\Forms\Components\Blocks\BlogPostsBlock;
 use App\Filament\Forms\Components\Blocks\ServiceCardsBlock;
 use App\Filament\Forms\Components\Blocks\TickerBlock;
+use App\Filament\Forms\Components\Blocks\StaggerTextBlock;
+use App\Filament\Forms\Components\Blocks\ColumnsLayoutBlock;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Illuminate\Contracts\Support\Htmlable;
@@ -40,7 +44,9 @@ class ContentBlocksSection extends Section
                         HeadlineTextBlock::make(),
                         FullImageBlock::make(),
                         CarouselBlock::make(),
+                        StickyCarouselBlock::make(),
                         ThreeColumnCardsBlock::make(),
+                        ColumnCardsBlock::make(),
                         IconCardsBlock::make(),
                         CallToActionBlock::make(),
                         ContactFormBlock::make(),
@@ -52,7 +58,9 @@ class ContentBlocksSection extends Section
                         VideoBlock::make(),
                         BlogPostsBlock::make(),
                         ServiceCardsBlock::make(),
-                        TickerBlock::make()
+                        TickerBlock::make(),
+                        StaggerTextBlock::make(),
+                        ColumnsLayoutBlock::make()
                     ])
                     ->collapsible(),
             ]);
