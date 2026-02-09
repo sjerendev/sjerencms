@@ -1,17 +1,20 @@
 <template>
-    <section :class="block.section_class">
+    <section ref="sectionRef" :class="block.section_class">
         <div class="container py-16 lg:py-24 mx-auto px-6 2xl:px-0">
             <h2
                 v-if="block.section_title"
                 class="mb-16 text-3xl font-bold text-center min-h-[40px]"
+                data-card-pack-reveal
             >
                 {{ block.section_title }}
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div :class="['grid gap-8 card-pack-grid', getColumnClass]">
                 <div
                     v-for="(card, index) in block.cards"
                     :key="index"
-                    class="iconCard"
+                    class="iconCard card-pack-item"
+                    data-card-pack-item
+                    data-card-pack-reveal
                 >
                     <div class="iconCardContent">
                         <div class="iconBox">
@@ -55,8 +58,10 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { Icon } from "@iconify/vue";
+import { useInViewReveal } from "@/js/composables/useInViewReveal.js";
+import { useCardInteractionPack } from "@/js/composables/useCardInteractionPack.js";
 
 const props = defineProps({
     block: {
@@ -64,12 +69,46 @@ const props = defineProps({
         required: true,
     },
 });
+const sectionRef = ref(null);
+
+const getColumnClass = computed(() => {
+    switch (String(props.block.columns)) {
+        case "2":
+            return "grid-cols-1 sm:grid-cols-2";
+        case "3":
+            return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+        case "4":
+            return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4";
+        case "5":
+            return "grid-cols-1 sm:grid-cols-3 lg:grid-cols-5";
+        default:
+            return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+    }
+});
 
 const getIconName = (iconName) => {
     if (!iconName) return "";
     if (iconName.startsWith("ph:")) return iconName;
     return `ph:${iconName}`;
 };
+
+const { observe } = useInViewReveal({
+    itemSelector: "[data-card-pack-reveal]",
+    once: true,
+    stagger: 80,
+});
+
+const { refresh: refreshCardInteractionPack } = useCardInteractionPack({
+    sectionRef,
+    itemSelector: "[data-card-pack-item]",
+    maxTilt: 4.5,
+    proximityRadius: 300,
+});
+
+onMounted(() => {
+    observe(sectionRef);
+    refreshCardInteractionPack();
+});
 </script>
 
 <style scoped>
@@ -82,13 +121,6 @@ const getIconName = (iconName) => {
     background-color: white;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.iconCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
-        0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .iconCardContent {

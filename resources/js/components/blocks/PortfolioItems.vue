@@ -1,21 +1,21 @@
 <template>
-    <section :class="block.section_class">
+    <section ref="sectionRef" :class="block.section_class">
         <div class="container px-6 py-12 mx-auto 2xl:px-0">
             <div
                 class="mb-8 text-center"
                 v-if="block.heading || block.subheading"
             >
-                <h2 class="mb-4 text-3xl font-bold" v-if="block.heading">
+                <h2 class="mb-4 text-3xl font-bold image-caption-sync-caption" v-if="block.heading">
                     {{ block.heading }}
                 </h2>
-                <p class="text-gray-600" v-if="block.subheading">
+                <p class="text-gray-600 image-caption-sync-caption" v-if="block.subheading">
                     {{ block.subheading }}
                 </p>
             </div>
             <div
                 v-if="block.section_description"
                 v-html="getMarkdownContent(block.section_description)"
-                class="mx-auto mb-12 max-w-3xl text-center text-gray-500"
+                class="mx-auto mb-12 max-w-3xl text-center text-gray-500 image-caption-sync-caption"
             ></div>
 
             <!-- Portfolio Grid -->
@@ -33,10 +33,10 @@
                         :target="item.website_url !== '#' ? '_blank' : '_self'"
                         class="flex flex-row justify-between items-center portfolio-link"
                     >
-                        <h3 class="portfolio-title">{{ item.name }}</h3>
+                        <h3 class="portfolio-title image-caption-sync-caption">{{ item.name }}</h3>
                         <div
                             v-html="getMarkdownContent(item.description)"
-                            class="portfolio-description"
+                            class="portfolio-description image-caption-sync-caption"
                         ></div>
                     </a>
                 </div>
@@ -52,13 +52,13 @@
                     v-if="hoveredItem"
                     :src="`/storage/${hoveredItem.preview_image}`"
                     :alt="hoveredItem.name"
-                    class="object-cover object-top preview-img"
+                    class="object-cover object-top preview-img image-caption-sync-image"
                 />
             </div>
         </div>
         <div class="container mx-auto">
             <div class="portfolio-after">
-                <p>
+                <p class="image-caption-sync-caption">
                     Detta är bara en bråkdel av vad jag gjort de senaste 15+
                     åren på olika byråer...
                 </p>
@@ -68,10 +68,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import { gsap } from "gsap";
+import { useImageCaptionSync } from "@/js/composables/useImageCaptionSync.js";
+import { useMotionPreferences } from "@/js/composables/useMotionPreferences.js";
 
 const props = defineProps({
     block: {
@@ -80,16 +82,111 @@ const props = defineProps({
     },
 });
 
+const sectionRef = ref(null);
 const previewImage = ref(null);
 const hoveredItem = ref(null);
-let mouseX = 0;
-let mouseY = 0;
 let hideTimeout = null;
+let lastMoveTime = 0;
+let lastMoveX = 0;
+let lastMoveY = 0;
+let moveXTo = null;
+let moveYTo = null;
+let rotateXTo = null;
+let rotateYTo = null;
+let scaleTo = null;
+let opacityTo = null;
+
+const { prefersReducedMotion } = useMotionPreferences();
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
 const getMarkdownContent = (text) => {
     if (!text) return "";
     const htmlContent = marked.parse(text);
     return DOMPurify.sanitize(htmlContent);
+};
+
+const parseBoolean = (value, fallback = false) => {
+    if (typeof value === "boolean") return value;
+    if (typeof value === "number") return value === 1;
+    if (typeof value === "string") {
+        const normalized = value.trim().toLowerCase();
+        if (["1", "true", "yes", "on"].includes(normalized)) return true;
+        if (["0", "false", "no", "off"].includes(normalized)) return false;
+    }
+    return fallback;
+};
+
+const parseUnitInterval = (value, fallback) => {
+    const parsed = Number.parseFloat(value);
+    if (!Number.isFinite(parsed)) return fallback;
+    return Math.min(1, Math.max(0, parsed));
+};
+
+const imageCaptionSyncEnabled = computed(() => {
+    const value =
+        props.block.image_caption_sync ??
+        props.block.enable_image_caption_sync ??
+        props.block.scroll_image_sync ??
+        true;
+
+    return parseBoolean(value, true);
+});
+
+const imageCaptionSyncStart = computed(() =>
+    parseUnitInterval(
+        props.block.image_caption_sync_start ??
+            props.block.image_sync_start,
+        0.12
+    )
+);
+
+const imageCaptionSyncEnd = computed(() =>
+    parseUnitInterval(
+        props.block.image_caption_sync_end ??
+            props.block.image_sync_end,
+        0.78
+    )
+);
+
+const { updateProgress: updateImageCaptionSync } = useImageCaptionSync({
+    sectionRef,
+    imageSelector: ".portfolio-preview .image-caption-sync-image",
+    captionSelector: ".image-caption-sync-caption",
+    enabled: imageCaptionSyncEnabled,
+    start: imageCaptionSyncStart,
+    end: imageCaptionSyncEnd,
+    imageTranslateY: 34,
+    imageScaleFrom: 1.08,
+    imageScaleTo: 1,
+    captionTranslateY: 18,
+    captionBlurFrom: 4,
+});
+
+const updatePreviewFollow = (event) => {
+    if (!previewImage.value || !moveXTo || !moveYTo) return;
+
+    const now = performance.now();
+    const dt = Math.max(16, now - lastMoveTime);
+    const velocityX = (event.clientX - lastMoveX) / dt;
+    const velocityY = (event.clientY - lastMoveY) / dt;
+    const tiltY = clamp(velocityX * 70, -10, 10);
+    const tiltX = clamp(velocityY * -70, -10, 10);
+
+    moveXTo(event.clientX + 20);
+    moveYTo(event.clientY - 100);
+
+    if (prefersReducedMotion.value) {
+        rotateXTo?.(0);
+        rotateYTo?.(0);
+    } else {
+        rotateXTo?.(tiltX);
+        rotateYTo?.(tiltY);
+    }
+
+    lastMoveTime = now;
+    lastMoveX = event.clientX;
+    lastMoveY = event.clientY;
 };
 
 const handleMouseEnter = (event, item) => {
@@ -101,6 +198,9 @@ const handleMouseEnter = (event, item) => {
 
     const wasVisible = hoveredItem.value !== null;
     hoveredItem.value = item;
+    lastMoveTime = performance.now();
+    lastMoveX = event.clientX;
+    lastMoveY = event.clientY;
 
     if (!wasVisible) {
         // Set initial position
@@ -109,37 +209,32 @@ const handleMouseEnter = (event, item) => {
             y: event.clientY - 100,
             scale: 0,
             opacity: 0,
+            rotateX: 0,
+            rotateY: 0,
         });
 
         // Animate in
-        gsap.to(previewImage.value, {
-            scale: 1,
-            opacity: 1,
-            duration: 0.3,
-            ease: "power2.out",
-        });
+        scaleTo?.(1);
+        opacityTo?.(1);
     } else {
-        // Just update position if already visible
-        gsap.to(previewImage.value, {
-            x: event.clientX + 20,
-            y: event.clientY - 100,
-            duration: 0.3,
-            ease: "power2.out",
-        });
+        updatePreviewFollow(event);
     }
+
+    nextTick(() => {
+        updateImageCaptionSync();
+    });
 };
 
 const handleMouseLeave = () => {
     // Add a small delay before hiding to allow for quick transitions between items
     hideTimeout = setTimeout(() => {
-        gsap.to(previewImage.value, {
-            scale: 0,
-            opacity: 0,
-            duration: 0.2,
-            ease: "power2.in",
-            onComplete: () => {
-                hoveredItem.value = null;
-            },
+        rotateXTo?.(0);
+        rotateYTo?.(0);
+        scaleTo?.(0);
+        opacityTo?.(0);
+        gsap.delayedCall(prefersReducedMotion.value ? 0 : 0.18, () => {
+            hoveredItem.value = null;
+            updateImageCaptionSync();
         });
         hideTimeout = null;
     }, 50); // 50ms delay
@@ -147,16 +242,7 @@ const handleMouseLeave = () => {
 
 const handleMouseMove = (event) => {
     if (!hoveredItem.value) return;
-
-    mouseX = event.clientX;
-    mouseY = event.clientY;
-
-    gsap.to(previewImage.value, {
-        x: mouseX + 20,
-        y: mouseY - 100,
-        duration: 0.3,
-        ease: "power2.out",
-    });
+    updatePreviewFollow(event);
 };
 
 onMounted(() => {
@@ -164,7 +250,40 @@ onMounted(() => {
     gsap.set(previewImage.value, {
         scale: 0,
         opacity: 0,
+        rotateX: 0,
+        rotateY: 0,
+        transformPerspective: 1200,
+        transformOrigin: "center center",
     });
+    const movementDuration = prefersReducedMotion.value ? 0 : 0.36;
+    const rotationDuration = prefersReducedMotion.value ? 0 : 0.42;
+    const revealDuration = prefersReducedMotion.value ? 0 : 0.28;
+    moveXTo = gsap.quickTo(previewImage.value, "x", {
+        duration: movementDuration,
+        ease: "power3.out",
+    });
+    moveYTo = gsap.quickTo(previewImage.value, "y", {
+        duration: movementDuration,
+        ease: "power3.out",
+    });
+    rotateXTo = gsap.quickTo(previewImage.value, "rotateX", {
+        duration: rotationDuration,
+        ease: "power3.out",
+    });
+    rotateYTo = gsap.quickTo(previewImage.value, "rotateY", {
+        duration: rotationDuration,
+        ease: "power3.out",
+    });
+    scaleTo = gsap.quickTo(previewImage.value, "scale", {
+        duration: revealDuration,
+        ease: "power2.out",
+    });
+    opacityTo = gsap.quickTo(previewImage.value, "opacity", {
+        duration: revealDuration,
+        ease: "power2.out",
+    });
+
+    updateImageCaptionSync();
 });
 
 onUnmounted(() => {
@@ -226,6 +345,7 @@ onUnmounted(() => {
     overflow: hidden;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
         0 10px 10px -5px rgb(0 0 0 / 0.04);
+    transform-style: preserve-3d;
 }
 
 .preview-img {

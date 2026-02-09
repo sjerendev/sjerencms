@@ -1,5 +1,6 @@
 <template>
     <section
+        ref="sectionRef"
         :class="block.section_class"
         :style="{
             backgroundColor: block.background_color || 'transparent',
@@ -20,28 +21,28 @@
                     '--align': alignItems
                 }"
             >
-                <div v-if="block.column_1?.length" class="column">
+                <div v-if="block.column_1?.length" data-reveal-item class="column">
                     <BlockRenderer
                         v-for="(nestedBlock, index) in block.column_1"
                         :key="'col1-' + index"
                         :block="nestedBlock"
                     />
                 </div>
-                <div v-if="block.column_2?.length" class="column">
+                <div v-if="block.column_2?.length" data-reveal-item class="column">
                     <BlockRenderer
                         v-for="(nestedBlock, index) in block.column_2"
                         :key="'col2-' + index"
                         :block="nestedBlock"
                     />
                 </div>
-                <div v-if="block.column_3?.length && showColumn3" class="column">
+                <div v-if="block.column_3?.length && showColumn3" data-reveal-item class="column">
                     <BlockRenderer
                         v-for="(nestedBlock, index) in block.column_3"
                         :key="'col3-' + index"
                         :block="nestedBlock"
                     />
                 </div>
-                <div v-if="block.column_4?.length && showColumn4" class="column">
+                <div v-if="block.column_4?.length && showColumn4" data-reveal-item class="column">
                     <BlockRenderer
                         v-for="(nestedBlock, index) in block.column_4"
                         :key="'col4-' + index"
@@ -54,8 +55,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import BlockRenderer from '../BlockRenderer.vue'
+import { useInViewReveal } from '@/js/composables/useInViewReveal.js'
 
 const props = defineProps({
     block: {
@@ -63,6 +65,7 @@ const props = defineProps({
         required: true
     }
 })
+const sectionRef = ref(null)
 
 const columnCount = computed(() => parseInt(props.block.columns) || 2)
 const showColumn3 = computed(() => columnCount.value >= 3)
@@ -109,6 +112,16 @@ const alignItems = computed(() => {
         'end': 'end',
         'stretch': 'stretch'
     }[align] || 'start'
+})
+
+const { observe } = useInViewReveal({
+    itemSelector: '[data-reveal-item]',
+    once: true,
+    stagger: 90
+})
+
+onMounted(() => {
+    observe(sectionRef)
 })
 </script>
 

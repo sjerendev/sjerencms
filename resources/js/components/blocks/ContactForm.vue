@@ -1,14 +1,14 @@
 <template>
-    <section :class="block.section_class">
+    <section ref="sectionRef" :class="block.section_class">
         <div class="container py-12 mx-auto px-6 2xl:px-0">
             <div class="max-w-3xl mx-auto">
-                <div class="text-center mb-8" v-if="block.heading || block.subheading">
+                <div data-reveal-item class="text-center mb-8" v-if="block.heading || block.subheading">
                     <h2 class="text-3xl font-bold mb-4" v-if="block.heading">{{ block.heading }}</h2>
                     <p class="text-gray-600" v-if="block.subheading">{{ block.subheading }}</p>
                 </div>
-                <div v-if="block.section_description" v-html="getMarkdownContent(block.section_description)"
+                <div data-reveal-item v-if="block.section_description" v-html="getMarkdownContent(block.section_description)"
                     class="max-w-3xl mx-auto mb-12 text-center text-gray-500"></div>
-                <form @submit.prevent="submitForm" class="space-y-6">
+                <form data-reveal-item @submit.prevent="submitForm" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -73,7 +73,8 @@
 <script setup>
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { useInViewReveal } from '@/js/composables/useInViewReveal.js'
 
 const props = defineProps({
     block: {
@@ -85,6 +86,12 @@ const props = defineProps({
         })
     }
 })
+const sectionRef = ref(null)
+const { observe } = useInViewReveal({
+    itemSelector: '[data-reveal-item]',
+    once: true,
+    stagger: 80
+})
 
 const formData = reactive({
     name: '',
@@ -95,6 +102,7 @@ const formData = reactive({
 
 const isSubmitting = ref(false)
 const submitStatus = ref(null)
+let statusTimeout = null
 
 const getMarkdownContent = (text) => {
     if (!text) return '';
@@ -115,12 +123,10 @@ const getCsrfToken = () => {
 }
 
 const submitForm = async () => {
-    console.log('Form submission started');
     isSubmitting.value = true;
     submitStatus.value = null;
 
     try {
-        console.log('Sending form data:', formData);
         const response = await fetch('/contact-form-submit', {
             method: 'POST',
             headers: {
@@ -136,7 +142,6 @@ const submitForm = async () => {
         });
 
         const data = await response.json();
-        console.log('Response:', data);
 
         if (response.ok) {
             submitStatus.value = {
@@ -147,14 +152,17 @@ const submitForm = async () => {
             Object.keys(formData).forEach(key => formData[key] = '');
 
             // Clear success message after 5 seconds
-            setTimeout(() => {
+            if (statusTimeout) {
+                clearTimeout(statusTimeout);
+            }
+
+            statusTimeout = setTimeout(() => {
                 submitStatus.value = null;
             }, 5000);
         } else {
             throw new Error(data.message || 'Something went wrong');
         }
     } catch (error) {
-        console.error('Form submission error:', error);
         submitStatus.value = {
             type: 'error',
             message: error.message
@@ -163,4 +171,14 @@ const submitForm = async () => {
         isSubmitting.value = false;
     }
 };
+
+onMounted(() => {
+    observe(sectionRef)
+})
+
+onUnmounted(() => {
+    if (!statusTimeout) return
+    clearTimeout(statusTimeout)
+    statusTimeout = null
+})
 </script>

@@ -3,11 +3,14 @@ import { createHead } from '@vueuse/head'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import { createRouter } from './router'
+import { setupRouteViewTransitions } from './composables/usePageTransitions'
 
 const app = createApp(App)
 const head = createHead()
 const pinia = createPinia()
 const router = createRouter('client')
+
+setupRouteViewTransitions(router)
 
 app.use(router)
 app.use(head)

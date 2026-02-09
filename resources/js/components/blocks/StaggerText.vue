@@ -111,26 +111,50 @@ const row2Ref = ref(null)
 const row3Ref = ref(null)
 const row4Ref = ref(null)
 
-// Parse text with **bold** markers into array of { char, bold }
-const parseTextWithBold = (text) => {
+// Parse text with markdown bold markers into an array of { char, bold }.
+// Supports both **bold** and __bold__, including escaped markers (\*\*text\*\*).
+const parseTextWithBold = text => {
     if (!text) return []
 
-    const result = []
-    const parts = text.split(/(\*\*.*?\*\*)/g)
+    const input = String(text)
+        .replace(/\\\*/g, '*')
+        .replace(/\\_/g, '_')
 
-    for (const part of parts) {
-        if (part.startsWith('**') && part.endsWith('**')) {
-            // Bold text - remove markers and mark as bold
-            const boldText = part.slice(2, -2)
-            for (const char of boldText) {
-                result.push({ char, bold: true })
-            }
-        } else {
-            // Regular text
-            for (const char of part) {
-                result.push({ char, bold: false })
-            }
+    const result = []
+    let cursor = 0
+    let isBold = false
+
+    const pushChars = segment => {
+        for (const char of segment) {
+            result.push({ char, bold: isBold })
         }
+    }
+
+    const hasClosingMarker = (source, marker, fromIndex) =>
+        source.indexOf(marker, fromIndex) !== -1
+
+    while (cursor < input.length) {
+        const twoChars = input.slice(cursor, cursor + 2)
+        const isBoldMarker = twoChars === '**' || twoChars === '__'
+
+        if (!isBoldMarker) {
+            pushChars(input[cursor])
+            cursor += 1
+            continue
+        }
+
+        const marker = twoChars
+        const nextIndex = cursor + 2
+
+        // Preserve unmatched markers as literal text.
+        if (!isBold && !hasClosingMarker(input, marker, nextIndex)) {
+            pushChars(marker)
+            cursor += 2
+            continue
+        }
+
+        isBold = !isBold
+        cursor += 2
     }
 
     return result

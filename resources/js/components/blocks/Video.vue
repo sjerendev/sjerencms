@@ -1,8 +1,8 @@
 <template>
-	<section :class="block.section_class">
+	<section ref="sectionRef" :class="block.section_class">
     <div class="container py-12 mx-auto">
         <div class="video-container">
-            <div v-if="block.type === 'embed'" class="aspect-w-16 aspect-h-9">
+            <div v-if="block.type === 'embed'" data-reveal-item class="aspect-w-16 aspect-h-9">
                 <iframe
                     :src="getEmbedUrl(block.embed_url)"
                     frameborder="0"
@@ -16,8 +16,9 @@
                 :src="`/storage/${block.video_file}`"
                 controls
                 class="w-full"
+                data-reveal-item
             ></video>
-            <div v-if="block.title || block.description" class="mt-4">
+            <div v-if="block.title || block.description" data-reveal-item class="mt-4">
                 <h3 v-if="block.title" class="mb-2 text-xl font-bold">{{ block.title }}</h3>
                 <div v-if="block.description" v-html="getMarkdownContent(block.description)" class="text-gray-600"></div>
             </div>
@@ -27,8 +28,10 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue'
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { useInViewReveal } from '@/js/composables/useInViewReveal.js';
 
 const props = defineProps({
     block: {
@@ -36,6 +39,12 @@ const props = defineProps({
         required: true
     }
 });
+const sectionRef = ref(null)
+const { observe } = useInViewReveal({
+    itemSelector: '[data-reveal-item]',
+    once: true,
+    stagger: 90
+})
 
 function getEmbedUrl(url) {
     if (url.includes('youtu.be')) {
@@ -50,4 +59,8 @@ const getMarkdownContent = (text) => {
     const htmlContent = marked.parse(text);
     return DOMPurify.sanitize(htmlContent);
 };
+
+onMounted(() => {
+    observe(sectionRef)
+})
 </script>

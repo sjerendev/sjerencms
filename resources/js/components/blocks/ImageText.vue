@@ -1,10 +1,10 @@
 <template>
-    <section :class="block.section_class">
+    <section ref="sectionRef" :class="block.section_class">
         <div class="container px-6 py-12 mx-auto md:px-8 lg:px-12">
             <div class="flex flex-col items-center md:flex-row"
                 :class="{ 'md:flex-row-reverse': block.reverse_layout }">
                 <!-- Text column - takes full width if no image -->
-                <div class="flex order-1 items-center px-2 w-full" 
+                <div data-reveal-item class="flex order-1 items-center px-2 w-full" 
                      :class="{
                         'md:w-1/2': hasImage,
                         'md:w-full': !hasImage,
@@ -13,7 +13,7 @@
                         'md:order-1': !block.reverse_layout || !hasImage,
                         'md:order-2': block.reverse_layout && hasImage
                      }">
-                    <div class="py-4 w-full">
+                    <div ref="contentRef" class="py-4 w-full image-caption-sync-caption">
                         <div v-if="isFirstBlock">
                             <div v-html="parsedContent" class="mb-4"></div>
                         </div>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <!-- Image column - only shown if image exists -->
-                <div v-if="hasImage" class="order-2 mb-8 w-full md:w-1/2 md:mb-0" :class="{
+                <div v-if="hasImage" data-reveal-item class="order-2 mb-8 w-full md:w-1/2 md:mb-0" :class="{
                     'lg:pr-6': !block.reverse_layout,
                     'lg:pl-6': block.reverse_layout,
                     'md:order-2': !block.reverse_layout,
@@ -45,9 +45,10 @@
                 }">
                     <div class="relative z-0 aspect-ratio-box" :style="{ paddingBottom: aspectRatio + '%' }">
                         <img :src="`/storage/${block.image}`"
+                             ref="imageRef"
                              :fetchpriority="isFirstBlock ? 'low' : 'auto'"
                              :loading="isFirstBlock ? 'lazy' : 'lazy'"
-                             class="object-cover absolute inset-0 w-full h-full"
+                             class="object-cover absolute inset-0 w-full h-full image-caption-sync-image"
                              :alt="block.image_alt || ''"
                              @load="onImageLoad" />
                     </div>
@@ -59,9 +60,11 @@
 
 <script setup>
 import { marked } from "marked";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import DOMPurify from "dompurify";
 import MagneticElement from "../common/MagneticElement.vue";
+import { useInViewReveal } from "@/js/composables/useInViewReveal.js";
+import { useImageCaptionSync } from "@/js/composables/useImageCaptionSync.js";
 
 const props = defineProps({
     block: {
@@ -75,6 +78,14 @@ const props = defineProps({
 });
 
 const aspectRatio = ref(56.25); // 16:9 default
+const sectionRef = ref(null);
+const contentRef = ref(null);
+const imageRef = ref(null);
+const { observe } = useInViewReveal({
+    itemSelector: "[data-reveal-item]",
+    once: true,
+    stagger: 100,
+});
 
 const onImageLoad = (event) => {
     if (event.target) {
@@ -91,6 +102,67 @@ const parsedContent = computed(() => {
     if (!props.block.text) return "";
     const htmlContent = marked.parse(props.block.text);
     return DOMPurify.sanitize(htmlContent);
+});
+
+const parseBoolean = (value, fallback = false) => {
+    if (typeof value === "boolean") return value;
+    if (typeof value === "number") return value === 1;
+    if (typeof value === "string") {
+        const normalized = value.trim().toLowerCase();
+        if (["1", "true", "yes", "on"].includes(normalized)) return true;
+        if (["0", "false", "no", "off"].includes(normalized)) return false;
+    }
+    return fallback;
+};
+
+const parseUnitInterval = (value, fallback) => {
+    const parsed = Number.parseFloat(value);
+    if (!Number.isFinite(parsed)) return fallback;
+    return Math.min(1, Math.max(0, parsed));
+};
+
+const imageCaptionSyncEnabled = computed(() => {
+    const value =
+        props.block.image_caption_sync ??
+        props.block.enable_image_caption_sync ??
+        props.block.scroll_image_sync ??
+        true;
+
+    return parseBoolean(value, true);
+});
+
+const imageCaptionSyncStart = computed(() =>
+    parseUnitInterval(
+        props.block.image_caption_sync_start ??
+            props.block.image_sync_start,
+        0.08
+    )
+);
+
+const imageCaptionSyncEnd = computed(() =>
+    parseUnitInterval(
+        props.block.image_caption_sync_end ??
+            props.block.image_sync_end,
+        0.72
+    )
+);
+
+useImageCaptionSync({
+    sectionRef,
+    imageRefs: [imageRef],
+    captionRefs: [contentRef],
+    enabled: imageCaptionSyncEnabled,
+    start: imageCaptionSyncStart,
+    end: imageCaptionSyncEnd,
+    imageTranslateY: 26,
+    imageScaleFrom: 1.06,
+    imageScaleTo: 1,
+    captionTranslateY: 16,
+    captionBlurFrom: 3.5,
+});
+
+onMounted(() => {
+    observe(sectionRef);
 });
 </script>
 

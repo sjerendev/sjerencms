@@ -1,9 +1,15 @@
 <template>
-    <section :class="block.section_class">
+    <section ref="sectionRef" :class="block.section_class">
         <div class="container py-16 lg:py-24 mx-auto px-6 2xl:px-0">
-            <h2 v-if="block.section_title" class="mb-16 text-3xl font-bold text-center">{{ block.section_title }}</h2>
-            <div class="space-y-16">
-                <div v-for="(card, index) in block.cards" :key="index" class="service-card">
+            <h2 v-if="block.section_title" class="mb-16 text-3xl font-bold text-center" data-card-pack-reveal>{{ block.section_title }}</h2>
+            <div class="space-y-16 card-pack-grid">
+                <div
+                    v-for="(card, index) in block.cards"
+                    :key="index"
+                    class="service-card card-pack-item"
+                    data-card-pack-item
+                    data-card-pack-reveal
+                >
                     <div class="card-content">
                         <div class="icon-container flex-shrink-0">
                             <Suspense>
@@ -32,10 +38,12 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { Icon } from '@iconify/vue'
+import { useInViewReveal } from '@/js/composables/useInViewReveal.js'
+import { useCardInteractionPack } from '@/js/composables/useCardInteractionPack.js'
 
 const props = defineProps({
     block: {
@@ -43,6 +51,7 @@ const props = defineProps({
         required: true
     }
 });
+const sectionRef = ref(null);
 
 // Convert icon names to Iconify format
 // If it already has 'ph:' prefix, use it as is
@@ -58,6 +67,24 @@ const getMarkdownContent = (text) => {
     const htmlContent = marked.parse(text);
     return DOMPurify.sanitize(htmlContent);
 };
+
+const { observe } = useInViewReveal({
+    itemSelector: '[data-card-pack-reveal]',
+    once: true,
+    stagger: 90
+});
+
+const { refresh: refreshCardInteractionPack } = useCardInteractionPack({
+    sectionRef,
+    itemSelector: '[data-card-pack-item]',
+    maxTilt: 3.5,
+    proximityRadius: 320
+});
+
+onMounted(() => {
+    observe(sectionRef);
+    refreshCardInteractionPack();
+});
 </script>
 
 <style scoped>

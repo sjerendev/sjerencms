@@ -1,18 +1,19 @@
 <template>
-    <section :class="block.section_class">
+    <section ref="sectionRef" :class="block.section_class">
         <div class="container py-12 mx-auto">
-            <div :class="`grid gap-8 ${getColumnClass}`">
+            <div :class="`grid gap-8 card-pack-grid ${getColumnClass}`">
                 <component
                     :is="card.url ? 'a' : 'div'"
                     v-for="(card, index) in block.cards"
                     :key="index"
                     :href="card.url || undefined"
-                    class="card group"
+                    class="card group card-pack-item"
+                    data-card-pack-item
+                    data-card-pack-reveal
                     :class="{ 'cursor-pointer hover:shadow-lg transition-shadow': card.url }"
                 >
                     <div
                         v-if="card.image"
-                        ref="imageContainers"
                         class="relative overflow-hidden aspect-[4/3] mb-4"
                         :class="{ 'webgl-card-image': !isTouch }"
                     >
@@ -34,6 +35,8 @@ import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { useWebGLDistortion } from '@/js/composables/useWebGLDistortion.js';
+import { useInViewReveal } from '@/js/composables/useInViewReveal.js';
+import { useCardInteractionPack } from '@/js/composables/useCardInteractionPack.js';
 
 const props = defineProps({
     block: {
@@ -44,7 +47,6 @@ const props = defineProps({
 
 // Refs
 const sectionRef = ref(null);
-const imageContainers = ref([]);
 
 // State
 const isTouch = ref(false);
@@ -77,6 +79,19 @@ const hasImages = computed(() => {
     return props.block.cards?.some(card => card.image);
 });
 
+const { observe } = useInViewReveal({
+    itemSelector: '[data-card-pack-reveal]',
+    once: true,
+    stagger: 70
+});
+
+const { refresh: refreshCardInteractionPack } = useCardInteractionPack({
+    sectionRef,
+    itemSelector: '[data-card-pack-item]',
+    maxTilt: 4,
+    proximityRadius: 280
+});
+
 // WebGL distortion (scaled down intensity for cards)
 let webglInstance = null;
 
@@ -88,13 +103,16 @@ const initWebGL = async () => {
     // Wait for refs to be populated
     await nextTick();
 
-    const container = document.querySelector('.webgl-card-image');
+    const section = sectionRef.value;
+    if (!section) return;
+
+    const container = section.querySelector('.webgl-card-image');
     if (!container) return;
 
-    // Create a wrapper ref for all card images
-    const containerWrapper = { value: document.body };
+    // Keep distortion scoped to this section only.
+    const containerWrapper = { value: section };
 
-    const { init, destroy, isTouch: webglIsTouch } = useWebGLDistortion({
+    const { init, destroy } = useWebGLDistortion({
         intensity: 0.6, // Scaled down for cards
         containerRef: containerWrapper,
         imageSelector: '.webgl-card-image img'
@@ -111,6 +129,8 @@ const initWebGL = async () => {
 // Lifecycle
 onMounted(() => {
     isTouch.value = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    observe(sectionRef);
+    refreshCardInteractionPack();
 
     if (!isTouch.value && hasImages.value) {
         initWebGL();

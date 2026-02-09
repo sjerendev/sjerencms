@@ -1,9 +1,15 @@
 <template>
-    <section :class="block.section_class">
+    <section ref="sectionRef" :class="block.section_class">
         <div class="container py-16 lg:py-24 mx-auto px-6 2xl:px-0">
-            <h2 v-if="block.section_title" class="mb-8 text-3xl font-bold text-center">{{ block.section_title }}</h2>
+            <h2
+                v-if="block.section_title"
+                data-reveal-item
+                class="mb-8 text-3xl font-bold text-center"
+            >
+                {{ block.section_title }}
+            </h2>
             <div :class="`grid gap-8 ${getColumnClass}`">
-                <article v-for="post in posts" :key="post.id" class="blog-card">
+                <article v-for="post in posts" :key="post.id" data-reveal-item class="blog-card">
                     <router-link :to="{ name: 'post', params: { slug: post.slug } }" class="block">
                         <img v-if="block.show_hero_image && post.list_image" :src="`/storage/${post.list_image}`"
                             :alt="post.title" class="w-full h-48 object-cover rounded-t-lg">
@@ -32,7 +38,7 @@
                     </router-link>
                 </article>
             </div>
-            <div class="text-center mt-12">
+            <div data-reveal-item class="text-center mt-12">
                 <router-link to="/blogg"
                     class="inline-block px-6 py-3 font-semibold text-[#111820] transition-colors rounded-lg bg-[#18F2B2] hover:bg-primary-600">
                     Se fler Nyheter
@@ -43,10 +49,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted, nextTick } from 'vue';
+import { useInViewReveal } from '@/js/composables/useInViewReveal.js';
 
-const router = useRouter();
 const props = defineProps({
     block: {
         type: Object,
@@ -55,6 +60,12 @@ const props = defineProps({
 });
 
 const posts = ref([]);
+const sectionRef = ref(null);
+const { observe } = useInViewReveal({
+    itemSelector: '[data-reveal-item]',
+    once: true,
+    stagger: 80
+});
 
 const getColumnClass = computed(() => {
     switch (props.block.columns) {
@@ -78,7 +89,14 @@ const formatDate = (date) => {
     });
 };
 
+const applyReveal = async () => {
+    await nextTick();
+    observe(sectionRef);
+};
+
 onMounted(async () => {
+    await applyReveal();
+
     try {
         const params = {
             limit: props.block.posts_count || 3
@@ -91,6 +109,7 @@ onMounted(async () => {
         const response = await fetch('/api/posts?' + new URLSearchParams(params));
         const data = await response.json();
         posts.value = data.data;
+        await applyReveal();
     } catch (error) {
         console.error('Error fetching blog posts:', error);
     }

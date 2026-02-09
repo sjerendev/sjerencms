@@ -24,6 +24,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { gsap } from 'gsap';
+import { useMotionPreferences } from '@/js/composables/useMotionPreferences.js';
 
 const props = defineProps({
     block: {
@@ -46,61 +47,66 @@ const props = defineProps({
 
 const track = ref(null);
 let animation;
+let initTimeout = null;
+const { prefersReducedMotion } = useMotionPreferences();
 
-onMounted(() => {
-    // Wait for next tick to ensure DOM is fully rendered
-    setTimeout(() => {
-        if (!track.value) return;
-        
-        const items = Array.from(track.value.querySelectorAll('.ticker-item'));
-        if (items.length === 0) return;
-        
-        const isRightToLeft = props.block.direction === 'right-to-left';
-        
-        // Clone items multiple times for a more seamless loop
-        for (let i = 0; i < 3; i++) {
-            items.forEach(item => {
-                track.value.appendChild(item.cloneNode(true));
+const setupTicker = () => {
+    if (!track.value) return;
+
+    if (prefersReducedMotion.value) {
+        gsap.set(track.value, { clearProps: 'transform' });
+        return;
+    }
+
+    const items = Array.from(track.value.querySelectorAll('.ticker-item'));
+    if (items.length === 0) return;
+
+    const isRightToLeft = props.block.direction === 'right-to-left';
+
+    for (let i = 0; i < 3; i++) {
+        items.forEach(item => {
+            track.value.appendChild(item.cloneNode(true));
+        });
+    }
+
+    const contentWidth = items.reduce((total, item) => total + item.offsetWidth, 0);
+
+    track.value.style.display = 'none';
+    track.value.offsetHeight;
+    track.value.style.display = 'flex';
+
+    if (isRightToLeft) {
+        gsap.set(track.value, { x: -contentWidth, force3D: true });
+    }
+
+    animation = gsap.to(track.value, {
+        x: isRightToLeft ? 0 : -contentWidth,
+        ease: 'none',
+        duration: contentWidth / 50,
+        repeat: -1,
+        force3D: true,
+        onRepeat: () => {
+            gsap.set(track.value, {
+                x: isRightToLeft ? -contentWidth : 0,
+                force3D: true
             });
         }
-        
-        // Calculate the width of the content
-        const contentWidth = items.reduce((total, item) => total + item.offsetWidth, 0);
-        
-        // Force a browser repaint to ensure smooth animation
-        track.value.style.display = 'none';
-        track.value.offsetHeight; // Trigger reflow
-        track.value.style.display = 'flex';
-        
-        // Set initial position based on direction
-        if (isRightToLeft) {
-            // For right-to-left, start at the negative position
-            gsap.set(track.value, { x: -contentWidth, force3D: true });
-        }
-        
-        // Create infinite loop animation with improved settings
-        animation = gsap.to(track.value, {
-            // For left-to-right, animate to negative
-            // For right-to-left, animate to positive
-            x: isRightToLeft ? 0 : -contentWidth,
-            ease: 'none',
-            duration: contentWidth / 50, // Adjust speed based on content length
-            repeat: -1,
-            force3D: true, // Force 3D transforms for smoother animation
-            onRepeat: () => {
-                // Reset position for seamless looping
-                gsap.set(track.value, { 
-                    x: isRightToLeft ? -contentWidth : 0, 
-                    force3D: true 
-                });
-            }
-        });
-    }, 100);
+    });
+};
+
+onMounted(() => {
+    initTimeout = setTimeout(setupTicker, 100);
 });
 
 onUnmounted(() => {
+    if (initTimeout) {
+        clearTimeout(initTimeout);
+        initTimeout = null;
+    }
+
     if (animation) {
         animation.kill();
+        animation = null;
     }
 });
 </script>
