@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Page extends Model implements HasMedia
 {
-	use InteractsWithMedia;
+	use HasFactory, InteractsWithMedia;
 
 	protected $fillable = [
 		'title',
@@ -41,6 +42,8 @@ class Page extends Model implements HasMedia
 
 	protected $casts = [
 		'content' => 'array',
+		'is_published' => 'boolean',
+		'is_homepage' => 'boolean',
 		'hero_image' => 'array',
 		'show_in_main_nav' => 'boolean',
 		'show_in_footer_nav' => 'boolean'
@@ -67,6 +70,11 @@ class Page extends Model implements HasMedia
 		}
 		
 		return $level;
+	}
+
+	public function scopePublished($query)
+	{
+		return $query->where('is_published', true);
 	}
 
 	public function scopeLanguage($query, $language)
