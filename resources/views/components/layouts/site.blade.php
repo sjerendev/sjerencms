@@ -16,6 +16,7 @@
     @livewireStyles
 </head>
 <body class="font-sans">
+    <x-site-header />
     <main>{{ $slot }}</main>
     @livewireScripts
 </body>

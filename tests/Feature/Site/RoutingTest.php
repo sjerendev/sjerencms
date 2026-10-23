@@ -59,8 +59,8 @@ it('links alternates only to languages where the page exists', function () {
 
     $this->get('/se/om-mig')
         ->assertSee('rel="canonical" href="'.url('/se/om-mig').'"', false)
-        ->assertSee('hreflang="en" href="'.url('/en/om-mig').'"', false);
-    $this->get('/se/bara-svenska')->assertDontSee('hreflang="en"', false);
+        ->assertSee('<link rel="alternate" hreflang="en" href="'.url('/en/om-mig').'"', false);
+    $this->get('/se/bara-svenska')->assertDontSee('<link rel="alternate" hreflang="en"', false);
 });
 
 it('renders a page holding a block type that has no view', function () {

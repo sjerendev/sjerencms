@@ -73,6 +73,10 @@ class ManageSettings extends SettingsPage
 						->url()
 						->prefix('https://')
 						->placeholder('youtube.com/@your-channel'),
+					TextInput::make('bandcamp_url')
+						->url()
+						->prefix('https://')
+						->placeholder('your-name.bandcamp.com'),
 				]),
 			Section::make('Navigation Settings')
 				->schema([
