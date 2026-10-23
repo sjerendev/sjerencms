@@ -26,7 +26,7 @@ fyllas i med påhittad copy.
   `[Logga in]`) är platshållare (`lang/{sv,en}/shop.php`). Ritningen LoggaIn
   visar varken felet eller mejlet. Engelska etiketter översatta av Claude,
   Patrik granskar.
-- Kvittomejlet: ämne och text (`[Kvitto: order :number]`, `[Tack för ditt
-  köp. Här är ditt kvitto.]`) är platshållare (`lang/{sv,en}/shop.php`).
-  "Ladda ner" och "Kvitto ↗" är egna ord, ritningen Tack visar inte mejlet.
-  Engelska etiketter översatta av Claude, Patrik granskar.
+- Kvittomejlet: ämne, text, knapp och länk (`[Kvitto: order :number]`,
+  `[Tack för ditt köp. Här är ditt kvitto.]`, `[Ladda ner]`, `[Kvitto ↗]`) är
+  platshållare (`lang/{sv,en}/shop.php`). Ritningen Tack visar inte mejlet.
+  Engelska är `[EN] …` med svensk text, som inloggningsmejlet.

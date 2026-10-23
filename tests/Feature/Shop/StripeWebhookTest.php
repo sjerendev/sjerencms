@@ -162,3 +162,11 @@ it('renders the receipt with its lines, the total, the download button and the r
 
     expect((new OrderPaid($this->order->fresh(), null))->render())->not->toContain('logga-in');
 });
+
+it('mails the receipt in the language of the order', function () {
+    $this->order->update(['locale' => 'en']);
+
+    stripeEvent('checkout.session.completed', checkoutSession($this->order))->assertOk();
+
+    Mail::assertSent(OrderPaid::class, fn ($mail) => $mail->locale === 'en' && str_contains($mail->loginUrl, '/en/logga-in/'));
+});
