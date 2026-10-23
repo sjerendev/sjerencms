@@ -46,9 +46,7 @@ a shared host (hostup): no Node process, no long-running queue worker.
 - **Admin:** Filament panel at `/admin`, theme in
   `resources/css/filament/admin/theme.css` (Tailwind 4, `@source`, built by
   `@tailwindcss/vite`).
-- **Public site:** not built yet. `routes/web.php` is empty and every public
-  URL answers 404 until phase 2, which renders pages with Blade and
-  Livewire.
+- **Public site:** Blade pages under `/se/` and `/en/`, see below.
 - **Spatie packages:** laravel-medialibrary, laravel-settings
   (`app/Settings/GeneralSettings.php`, migrations in `database/settings/`),
   laravel-sitemap.
@@ -57,8 +55,9 @@ a shared host (hostup): no Node process, no long-running queue worker.
 
 - Filament blocks in `app/Filament/Forms/Components/Blocks/`, registered in
   `ContentBlocksSection.php`. Block `make()` takes `?string $name`.
-- Blocks are stored as JSON in `pages.content`. Phase 2 adds a Blade view per
-  block; until then they only exist in the admin.
+- Blocks are stored as JSON in `pages.content`. A block gets a view in
+  `resources/views/blocks/{type}.blade.php` when it gets the new design;
+  `pages/show.blade.php` skips types without a view. The colophon was first.
 
 ### Multi-Language Content
 
@@ -66,6 +65,41 @@ a shared host (hostup): no Node process, no long-running queue worker.
   language.
 - Model scopes: `->swedish()`, `->english()`, `->language($lang)`.
 - Public URLs use `/se/` and `/en/` prefixes (see the spec).
+
+### Public Site
+
+- `routes/web.php`: the old-site redirects (`/` → `/se`, `/en/about-me` and
+  friends), then `{locale}` (`se|en`) with `page.home` and `page.show`.
+  `SetLocaleFromPrefix` maps `se` → `sv` for the app locale and
+  `Page::$language`; admin stays English. URLs have no trailing slash, and
+  the old slash form still resolves.
+- `ShowPage` finds the published page, its title and description (falling
+  back to `lang/*/meta.php`) and hreflang alternates for the languages where
+  it exists.
+- UI text lives in `lang/{sv,en}/*.php`, copied 1:1 from sjeren-2026
+  `messages/*.json`. Never invent copy; missing text goes in
+  `TODO-INNEHALL.md`.
+- Layout: `components/layouts/site.blade.php` with `site-header`,
+  `site-footer`, `section-head`, `wordmark`, `wave-underline`,
+  `theme-toggle` and `locale-switch`. Classes and SVG data are ported from
+  sjeren-2026's components. Footer and header links come from
+  `GeneralSettings`.
+- Internal links use `wire:navigate`; the layout loads `@livewireScripts` and
+  Vite tags carry `data-navigate-track`.
+- JS has one entry, `resources/js/app.js`: `theme.js` (light/dark, set in
+  `<head>` before first paint and again on swap) and `motion.js`.
+  `defineMotion(name, init)` starts on every `livewire:navigated` for each
+  `[data-motion=name]`; the cleanup `init` returns runs on
+  `livewire:navigating`. `<html data-motion-active>` counts what runs.
+
+### Checking in the Browser
+
+Run behaviour checks with `agent-browser` against Valet:
+`http://sjerencms.test` (this app) and `http://sjeren-2026.test` (the old
+Next site, the visual reference). Local pages come from
+`php artisan db:seed --class=SitePagesSeeder` (adds or updates only). Pair
+every screenshot with an `eval` value, give `screenshot` an absolute path
+outside the repo, and run `git status` afterwards.
 
 ### Directory Structure Highlights
 
@@ -87,7 +121,7 @@ database/seeders/data/         # music.json and covers for the shop seed
 
 1. Create `app/Filament/Forms/Components/Blocks/YourBlock.php`
 2. Register it in `ContentBlocksSection.php`
-3. From phase 2: add its Blade view
+3. Add `resources/views/blocks/your_block.blade.php`; it receives `$data`
 
 ## graphify
 
