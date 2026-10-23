@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Settings\GeneralSettings;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +37,15 @@ class OrderItem extends Model
     public function purchasable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /** Loads what a download row shows (artist, cover, track count, file), not one query per row. */
+    public function scopeWithPurchasable(Builder $query): void
+    {
+        $query->with(['purchasable' => fn (MorphTo $morph) => $morph->morphWith([
+            Track::class => ['release.media', 'media'],
+            Release::class => ['tracks', 'media'],
+        ])]);
     }
 
     /** The track's WAV, or the release's ZIP; null while the ZIP is still being prepared. */
