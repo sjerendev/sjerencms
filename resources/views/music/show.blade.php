@@ -106,7 +106,7 @@
                 </div>
                 <div class="flex flex-col gap-[14px] lg:flex-row lg:items-stretch lg:gap-[12px]">
                     <label class="flex grow items-center gap-[10px] border border-[rgba(237,236,234,0.55)] px-[16px] lg:px-[18px]">
-                        <span class="lbl text-[rgba(237,236,234,0.66)]">
+                        <span class="lbl whitespace-nowrap text-[rgba(237,236,234,0.66)]">
                             <span class="lg:hidden">{{ __('music.atLeast', ['min' => $release->min_price]) }}</span>
                             <span class="hidden lg:inline">{{ __('music.youChoose', ['min' => $release->min_price]) }}</span>
                         </span>
@@ -126,7 +126,7 @@
                         data-cart-add="release"
                         data-id="{{ $release->id }}"
                         data-amount="{{ $release->min_price }}"
-                        class="lbl flex h-[52px] cursor-pointer items-center justify-center rounded-pill bg-accent px-[28px] text-plate lg:h-auto"
+                        class="lbl flex h-[52px] cursor-pointer items-center justify-center rounded-pill bg-accent px-[28px] whitespace-nowrap text-plate lg:h-auto"
                     >{{ __('music.addToCart') }}</button>
                 </div>
             </form>
