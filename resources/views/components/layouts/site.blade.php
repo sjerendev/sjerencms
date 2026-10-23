@@ -18,6 +18,7 @@
 <body class="font-sans">
     <x-site-header :alternates="$alternates" />
     <main>{{ $slot }}</main>
+    <livewire:cart-drawer />
     <x-site-footer />
     {{-- Kept across wire:navigate, so the preview keeps playing between pages. --}}
     @persist('player')

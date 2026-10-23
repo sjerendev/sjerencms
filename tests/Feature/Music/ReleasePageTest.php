@@ -11,7 +11,17 @@ beforeEach(function () {
     }
 });
 
+// Buy buttons need a WAV on every track (decision 13).
+function giveWavs(Release $release): void
+{
+    Storage::fake('music');
+    foreach ($release->tracks as $track) {
+        $track->addMedia(UploadedFile::fake()->create('master.wav', 10, 'audio/wav'))->toMediaCollection('wav');
+    }
+}
+
 it('shows the release with meta, tracks and the album form', function () {
+    giveWavs($this->release);
     // The scrubber is a player control, so it needs a track with a preview.
     Storage::fake('public');
     $this->release->tracks[0]->addMedia(UploadedFile::fake()->create('p.mp3', 10, 'audio/mpeg'))->toMediaCollection('preview');
@@ -44,5 +54,6 @@ it('answers 404 for a draft or unknown release', function () {
 });
 
 it('speaks English', function () {
+    giveWavs($this->release);
     $this->get('/en/musik/s-d-l-past-voyages')->assertSee('10 Sep 2026')->assertSee('Buy · 20 kr');
 });

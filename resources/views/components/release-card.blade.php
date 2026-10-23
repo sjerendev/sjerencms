@@ -4,6 +4,7 @@
     $href = route('music.show', ['release' => $release]);
     $tracks = $release->tracks->count();
     $playable = $release->playlist() !== null;
+    $buyable = $release->isPurchasable();
 @endphp
 <div class="flex flex-col gap-[12px]">
     <a href="{{ $href }}" wire:navigate>
@@ -20,12 +21,14 @@
         @if ($playable)
             <x-play-button :release="$release" class="size-[44px] border border-sound text-sound" />
         @endif
-        <button
-            type="button"
-            data-cart-add="release"
-            data-id="{{ $release->id }}"
-            data-amount="{{ $release->min_price }}"
-            class="lbl inline-flex h-[44px] cursor-pointer items-center rounded-pill border border-buy px-[18px] text-buy hover:border-accent hover:bg-accent hover:text-plate"
-        >{{ __('music.buy') }} · {{ $release->min_price }} kr</button>
+        @if ($buyable)
+            <button
+                type="button"
+                data-cart-add="release"
+                data-id="{{ $release->id }}"
+                data-amount="{{ $release->min_price }}"
+                class="lbl inline-flex h-[44px] cursor-pointer items-center rounded-pill border border-buy px-[18px] text-buy hover:border-accent hover:bg-accent hover:text-plate"
+            >{{ __('music.buy') }} · {{ $release->min_price }} kr</button>
+        @endif
     </div>
 </div>

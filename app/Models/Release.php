@@ -53,7 +53,7 @@ class Release extends Model implements HasMedia
 
     public function tracks(): HasMany
     {
-        return $this->hasMany(Track::class)->orderBy('position');
+        return $this->hasMany(Track::class)->orderBy('position')->chaperone();
     }
 
     /** Sales of the whole release; tracks bought one by one are on the tracks. */

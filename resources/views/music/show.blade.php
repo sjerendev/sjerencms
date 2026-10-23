@@ -87,49 +87,53 @@
                         @endif
                         <span>{{ $track->title }}</span>
                         <span class="text-right text-ink-dim">{{ $track->clock() }}</span>
-                        <button
-                            type="button"
-                            data-cart-add="track"
-                            data-id="{{ $track->id }}"
-                            data-amount="{{ $track->min_price }}"
-                            class="lbl inline-flex h-[40px] cursor-pointer items-center justify-center rounded-pill border border-buy text-buy hover:border-accent hover:bg-accent hover:text-plate"
-                        ><span class="lg:hidden">{{ $track->min_price }} kr</span><span class="hidden lg:inline">{{ __('music.buy') }} · {{ $track->min_price }} kr</span></button>
+                        @if ($track->isPurchasable())
+                            <button
+                                type="button"
+                                data-cart-add="track"
+                                data-id="{{ $track->id }}"
+                                data-amount="{{ $track->min_price }}"
+                                class="lbl inline-flex h-[40px] cursor-pointer items-center justify-center rounded-pill border border-buy text-buy hover:border-accent hover:bg-accent hover:text-plate"
+                            ><span class="lg:hidden">{{ $track->min_price }} kr</span><span class="hidden lg:inline">{{ __('music.buy') }} · {{ $track->min_price }} kr</span></button>
+                        @endif
                     </li>
                 @endforeach
             </ol>
 
-            {{-- Name your price. Not submitted: the cart (phase 4) checks the amount on the server. --}}
-            <form onsubmit="event.preventDefault()" class="-mx-[var(--gutter)] flex flex-col gap-[14px] border-y border-panel-line bg-panel px-[20px] py-[22px] text-[#edecea] lg:mx-0 lg:gap-[16px] lg:border lg:p-[28px]">
-                <div class="flex items-baseline justify-between">
-                    <span class="lbl">{{ __('music.buyAlbum') }}</span>
-                    <span class="lbl text-[rgba(237,236,234,0.66)]">{{ __('music.inWav', ['count' => $release->tracks->count()]) }}</span>
-                </div>
-                <div class="flex flex-col gap-[14px] lg:flex-row lg:items-stretch lg:gap-[12px]">
-                    <label class="flex grow items-center gap-[10px] border border-[rgba(237,236,234,0.55)] px-[16px] lg:px-[18px]">
-                        <span class="lbl whitespace-nowrap text-[rgba(237,236,234,0.66)]">
-                            <span class="lg:hidden">{{ __('music.atLeast', ['min' => $release->min_price]) }}</span>
-                            <span class="hidden lg:inline">{{ __('music.youChoose', ['min' => $release->min_price]) }}</span>
-                        </span>
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            min="{{ $release->min_price }}"
-                            value="{{ $release->min_price }}"
-                            aria-label="{{ __('music.amount') }}"
-                            data-amount-input
-                            class="min-w-0 grow border-0 bg-transparent py-[12px] text-right text-[24px] font-semibold text-[#edecea] lg:text-[28px]"
-                        >
-                        <span class="text-[18px] lg:text-[20px]">kr</span>
-                    </label>
-                    <button
-                        type="button"
-                        data-cart-add="release"
-                        data-id="{{ $release->id }}"
-                        data-amount="{{ $release->min_price }}"
-                        class="lbl flex h-[52px] cursor-pointer items-center justify-center rounded-pill bg-accent px-[28px] whitespace-nowrap text-plate lg:h-auto"
-                    >{{ __('music.addToCart') }}</button>
-                </div>
-            </form>
+            @if ($release->isPurchasable())
+                {{-- Name your price. Not submitted: the cart checks the amount on the server. --}}
+                <form onsubmit="event.preventDefault()" class="-mx-[var(--gutter)] flex flex-col gap-[14px] border-y border-panel-line bg-panel px-[20px] py-[22px] text-[#edecea] lg:mx-0 lg:gap-[16px] lg:border lg:p-[28px]">
+                    <div class="flex items-baseline justify-between">
+                        <span class="lbl">{{ __('music.buyAlbum') }}</span>
+                        <span class="lbl text-[rgba(237,236,234,0.66)]">{{ __('music.inWav', ['count' => $release->tracks->count()]) }}</span>
+                    </div>
+                    <div class="flex flex-col gap-[14px] lg:flex-row lg:items-stretch lg:gap-[12px]">
+                        <label class="flex grow items-center gap-[10px] border border-[rgba(237,236,234,0.55)] px-[16px] lg:px-[18px]">
+                            <span class="lbl whitespace-nowrap text-[rgba(237,236,234,0.66)]">
+                                <span class="lg:hidden">{{ __('music.atLeast', ['min' => $release->min_price]) }}</span>
+                                <span class="hidden lg:inline">{{ __('music.youChoose', ['min' => $release->min_price]) }}</span>
+                            </span>
+                            <input
+                                type="number"
+                                inputmode="numeric"
+                                min="{{ $release->min_price }}"
+                                value="{{ $release->min_price }}"
+                                aria-label="{{ __('music.amount') }}"
+                                data-amount-input
+                                class="min-w-0 grow border-0 bg-transparent py-[12px] text-right text-[24px] font-semibold text-[#edecea] lg:text-[28px]"
+                            >
+                            <span class="text-[18px] lg:text-[20px]">kr</span>
+                        </label>
+                        <button
+                            type="button"
+                            data-cart-add="release"
+                            data-id="{{ $release->id }}"
+                            data-amount="{{ $release->min_price }}"
+                            class="lbl flex h-[52px] cursor-pointer items-center justify-center rounded-pill bg-accent px-[28px] whitespace-nowrap text-plate lg:h-auto"
+                        >{{ __('music.addToCart') }}</button>
+                    </div>
+                </form>
+            @endif
 
             <x-play-data :releases="collect([$release])->merge($more)" />
 

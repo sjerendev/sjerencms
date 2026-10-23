@@ -1,10 +1,13 @@
 <?php
 
 use App\Models\Release;
+use App\Models\Track;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
+    Storage::fake('music');
     Release::factory()->create(['artist' => 'S.D.L.', 'title' => 'Vol. 1', 'released_on' => '2019-09-18', 'min_price' => 50]);
-    Release::factory()->create(['artist' => 'S.D.L.', 'title' => 'Past Voyages', 'released_on' => '2026-09-10', 'min_price' => 70]);
+    Release::factory()->has(Track::factory()->withWav())->create(['artist' => 'S.D.L.', 'title' => 'Past Voyages', 'released_on' => '2026-09-10', 'min_price' => 70]);
     Release::factory()->create(['artist' => 'Monokii', 'title' => 'Framtida Skuggor', 'released_on' => '2016-08-11']);
     Release::factory()->create(['artist' => 'Hemlig', 'title' => 'Utkastet', 'is_published' => false]);
 });

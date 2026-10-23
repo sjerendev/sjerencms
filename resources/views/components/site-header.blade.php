@@ -26,6 +26,9 @@
                     {{ __('nav.'.$item['key']) }}
                 </a>
             @endforeach
+            <button type="button" data-cart-open class="lbl cursor-pointer bg-transparent hover:text-accent">
+                {{ __('shop.cart') }} · <span data-cart-count>{{ app(\App\Shop\Cart::class)->count() }}</span>
+            </button>
         </nav>
 
         <div class="hidden items-center gap-[20px] lg:flex">
@@ -41,7 +44,12 @@
             @endif
         </div>
 
-        {{-- Mobile: native <details> instead of a menu with state. --}}
+        {{-- Mobile: the cart stays outside the menu, one tap away. --}}
+        <button type="button" data-cart-open class="lbl ml-auto cursor-pointer bg-transparent hover:text-accent lg:hidden">
+            {{ __('shop.cart') }} · <span data-cart-count>{{ app(\App\Shop\Cart::class)->count() }}</span>
+        </button>
+
+        {{-- Native <details> instead of a menu with state. --}}
         <details class="group relative lg:hidden">
             <summary
                 class="grid size-[44px] cursor-pointer list-none place-items-center rounded-pill bg-ink [&::-webkit-details-marker]:hidden"

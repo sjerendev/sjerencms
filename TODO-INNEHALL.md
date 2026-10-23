@@ -11,3 +11,6 @@ fyllas i med påhittad copy.
   (`lang/en/music.php`).
 - Musik: svensk text tagen ur ritningarna, Patrik granskar
   (`lang/sv/music.php`).
+- Korgen: `[Korgen är tom]` är platshållare (`lang/{sv,en}/shop.php`, ritningen
+  Korg visar ingen tom korg). Engelska etiketter översatta av Claude, Patrik
+  granskar. "Moms ingår." står inte i korgen förrän momsfrågan är besvarad.

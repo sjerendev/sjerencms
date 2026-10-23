@@ -85,6 +85,9 @@
 
   body { margin: 0; }
 
+  /* A modal dialog (the cart) does not stop the page behind it from scrolling. */
+  html:has(dialog[open]) { overflow: hidden; }
+
   /* Ligger i base — annars slår den text-utilities på länkar. */
   a { color: inherit; text-decoration: none; }
 

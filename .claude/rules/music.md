@@ -46,5 +46,10 @@
   - `player:state` `{release, track, playing, time, duration}`
   - `cart:add` `{type: 'release'|'track', id, amount}` from any
     `[data-cart-add]`; the album form sends the amount typed in
-    `[data-amount-input]`. Nothing listens yet — the cart in phase 4 does,
-    and the server checks the amount against `min_price`.
+    `[data-amount-input]`. `resources/js/cart.js` forwards it to the
+    `CartDrawer` Livewire component, and the server clamps the amount to
+    `min_price`..`Cart::MAX_AMOUNT`.
+  - Buy controls (`[data-cart-add]`) are rendered only when
+    `isPurchasable()` (a WAV on the track, on every track for an album); the
+    bar's button is hidden by player.js when the playing track's `buyable`
+    is false.

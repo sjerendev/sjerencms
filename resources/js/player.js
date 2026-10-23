@@ -4,8 +4,8 @@
 // plays, because that script is gone after the next navigation.
 //
 // Out: `player:state` {release, track, playing, time, duration} and
-// `cart:add` {type, id, amount}, both on document. The cart (phase 4)
-// listens for the second.
+// `cart:add` {type, id, amount}, both on document. cart.js listens for the
+// second.
 
 const PLAY = '<path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/>';
 const PAUSE = '<rect x="2" y="1" width="3.5" height="12" fill="currentColor"/><rect x="8.5" y="1" width="3.5" height="12" fill="currentColor"/>';
@@ -97,6 +97,7 @@ function render() {
     each('[data-player-root] [data-cart-add]', (el) => {
         el.dataset.id = track.id;
         el.dataset.amount = track.price;
+        el.hidden = !track.buyable; // No WAV yet, nothing to sell.
     });
 
     syncPage(playing, time, duration);
