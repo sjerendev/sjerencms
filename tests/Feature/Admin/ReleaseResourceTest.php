@@ -3,9 +3,12 @@
 use App\Filament\Resources\Releases\Pages\CreateRelease;
 use App\Filament\Resources\Releases\Pages\EditRelease;
 use App\Filament\Resources\Releases\RelationManagers\TracksRelationManager;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Release;
 use App\Models\Track;
 use App\Models\User;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\Testing\TestAction;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -92,4 +95,20 @@ it('takes full-length WAV masters, not just Livewire\'s 12 MB default', function
     // A 30-minute 16-bit/44.1 kHz stereo WAV is about 320 MB.
     expect(config('livewire.temporary_file_upload.rules'))->toContain('max:1048576')
         ->and(config('livewire.temporary_file_upload.max_upload_time'))->toBeGreaterThanOrEqual(30);
+});
+
+it('hides the delete buttons for a sold release and track', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $sold = Release::factory()->has(Track::factory(), 'tracks')->create();
+    $free = Release::factory()->has(Track::factory(), 'tracks')->create();
+    OrderItem::factory()->for(Order::factory())->create(['purchasable_type' => Track::class, 'purchasable_id' => $sold->tracks[0]->id]);
+
+    Livewire::test(EditRelease::class, ['record' => $sold->getKey()])
+        ->assertActionHidden(DeleteAction::class);
+    Livewire::test(EditRelease::class, ['record' => $free->getKey()])
+        ->assertActionVisible(DeleteAction::class);
+    Livewire::test(TracksRelationManager::class, ['ownerRecord' => $sold, 'pageClass' => EditRelease::class])
+        ->assertActionHidden(TestAction::make('delete')->table($sold->tracks[0]));
+    Livewire::test(TracksRelationManager::class, ['ownerRecord' => $free, 'pageClass' => EditRelease::class])
+        ->assertActionVisible(TestAction::make('delete')->table($free->tracks[0]));
 });

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -29,6 +30,12 @@ class Track extends Model implements HasMedia
         ];
     }
 
+    protected static function booted(): void
+    {
+        // A sold track keeps its WAV for the buyer. Unpublish it instead.
+        static::deleting(fn (Track $track) => $track->isSold() ? false : null);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('preview')->singleFile()->useDisk('public');
@@ -38,6 +45,22 @@ class Track extends Model implements HasMedia
     public function release(): BelongsTo
     {
         return $this->belongsTo(Release::class);
+    }
+
+    public function sales(): MorphMany
+    {
+        return $this->morphMany(OrderItem::class, 'purchasable');
+    }
+
+    public function isSold(): bool
+    {
+        return $this->sales()->exists();
+    }
+
+    /** The release is published and there is a WAV to hand over. */
+    public function isPurchasable(): bool
+    {
+        return $this->release->is_published && $this->hasMedia('wav');
     }
 
     /** `m:ss`, or `h:mm:ss` from an hour. */

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
@@ -32,9 +33,17 @@ class Release extends Model implements HasMedia
 
     protected static function booted(): void
     {
+        // A sold release keeps its tracks, or the buyer loses the WAV. This runs
+        // first: returning false stops the delete before any track goes.
         // The foreign key would cascade past the tracks' own deleting event,
         // where medialibrary removes their preview and WAV files.
-        static::deleting(fn (Release $release) => $release->tracks->each->delete());
+        static::deleting(function (Release $release) {
+            if ($release->isSold()) {
+                return false;
+            }
+
+            $release->tracks->each->delete();
+        });
     }
 
     public function registerMediaCollections(): void
@@ -45,6 +54,29 @@ class Release extends Model implements HasMedia
     public function tracks(): HasMany
     {
         return $this->hasMany(Track::class)->orderBy('position');
+    }
+
+    /** Sales of the whole release; tracks bought one by one are on the tracks. */
+    public function sales(): MorphMany
+    {
+        return $this->morphMany(OrderItem::class, 'purchasable');
+    }
+
+    /** Bought as an album, or any of its tracks was bought. */
+    public function isSold(): bool
+    {
+        return $this->sales()->exists()
+            || OrderItem::where('purchasable_type', Track::class)
+                ->whereIn('purchasable_id', $this->tracks()->reorder()->select('tracks.id'))
+                ->exists();
+    }
+
+    /** Published, with tracks, and every track has a WAV to hand over. */
+    public function isPurchasable(): bool
+    {
+        return $this->is_published
+            && $this->tracks->isNotEmpty()
+            && $this->tracks->every(fn (Track $track) => $track->hasMedia('wav'));
     }
 
     public function getRouteKeyName(): string
@@ -100,6 +132,7 @@ class Release extends Model implements HasMedia
                 'clock' => $track->clock(),
                 'price' => $track->min_price,
                 'preview' => $track->previewUrl(),
+                'buyable' => $track->setRelation('release', $this)->isPurchasable(),
             ])
             ->values();
 

@@ -100,7 +100,8 @@ class TracksRelationManager extends RelationManager
             ])
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->hidden(fn (Track $record) => $record->isSold()),
             ]);
     }
 }

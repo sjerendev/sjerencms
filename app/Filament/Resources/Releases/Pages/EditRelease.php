@@ -13,7 +13,9 @@ class EditRelease extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            // Sold releases cannot be deleted (the model refuses too); unpublish them.
+            DeleteAction::make()
+                ->hidden(fn ($record) => $record->isSold()),
         ];
     }
 }
