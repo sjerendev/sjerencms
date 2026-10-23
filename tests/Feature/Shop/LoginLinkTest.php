@@ -6,6 +6,8 @@ use App\Models\Track;
 use App\Models\User;
 use App\Shop\Cart;
 use App\Shop\LoginLinks;
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Http\Middleware\TrustHosts;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Livewire\Livewire;
@@ -126,9 +128,17 @@ it('shows the account header to a buyer', function () {
         ->assertSee('aria-current="page"', false)->assertDontSee('Logga in');
 });
 
-it('offers the login link in the header and the checkout', function () {
-    $this->get('/se/logga-in')->assertOk()->assertSee('Skicka inloggningslänk')
-        ->assertSee('href="'.url('/se/logga-in').'"', false);
+it('links the header to the login page for a guest and to Mina köp for a buyer', function () {
+    // /se/musik, because the login page itself prints that href in its alternates and locale switch.
+    $header = fn () => preg_match('#<header.*?</header>#s', $this->get('/se/musik')->assertOk()->getContent(), $m) ? $m[0] : '';
+
+    expect($header())->toMatch('#<a[^>]+href="'.preg_quote(url('/se/logga-in'), '#').'"[^>]*wire:navigate[^>]*>\s*Logga in#')
+        ->not->toContain('Mina köp');
+
+    $this->actingAs(User::factory()->create());
+
+    expect($header())->toMatch('#<a[^>]+href="'.preg_quote(url('/se/mina-kop'), '#').'"[^>]*>\s*Mina köp#')
+        ->not->toContain('Logga in');
 });
 
 it('logs out', function () {
@@ -140,10 +150,22 @@ it('links the checkout to the login page', function () {
     $track = Track::factory()->withWav()->create();
     app(Cart::class)->add('track', $track->id, 35);
 
-    $this->get('/se/kassa')->assertSee('Har du handlat förut? Logga in')
-        ->assertSee('href="'.url('/se/logga-in').'"', false);
+    expect($this->get('/se/kassa')->assertOk()->getContent())
+        ->toMatch('#<a[^>]+href="'.preg_quote(url('/se/logga-in'), '#').'"[^>]*wire:navigate[^>]*>\s*Har du handlat förut\? Logga in#');
 });
 
 it('treats a new user as not an admin', function () {
     expect((new User)->is_admin)->toBeFalse()->and((new User)->canAccessPanel(Filament\Facades\Filament::getPanel('admin')))->toBeFalse();
+});
+
+it('pins the host of login links to APP_URL', function () {
+    // TrustHosts skips itself locally and in unit tests, so check what it is configured with.
+    expect(app(Kernel::class)->hasMiddleware(TrustHosts::class))->toBeTrue();
+
+    config(['app.url' => 'https://sjerencms.test']);
+    $pattern = app(TrustHosts::class)->hosts()[0];
+
+    expect(preg_match("#{$pattern}#i", 'sjerencms.test'))->toBe(1)
+        ->and(preg_match("#{$pattern}#i", 'evil.example'))->toBe(0)
+        ->and(preg_match("#{$pattern}#i", 'sjerencms.test.evil.example'))->toBe(0);
 });
