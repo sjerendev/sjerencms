@@ -14,6 +14,7 @@ class GeneralSettings extends Settings
 	public ?string $facebook_url;
 	public ?string $instagram_url;
 	public ?string $linkedin_url;
+	public ?string $youtube_url = null;
 	public ?string $logo;
 	public string $navigation_type = 'normal';
 	public bool $show_contact_in_menu = false;
