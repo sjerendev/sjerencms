@@ -18,6 +18,7 @@
 <body class="font-sans">
     <x-site-header />
     <main>{{ $slot }}</main>
+    <x-site-footer />
     @livewireScripts
 </body>
 </html>
