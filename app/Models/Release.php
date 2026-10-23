@@ -30,6 +30,13 @@ class Release extends Model implements HasMedia
         ];
     }
 
+    protected static function booted(): void
+    {
+        // The foreign key would cascade past the tracks' own deleting event,
+        // where medialibrary removes their preview and WAV files.
+        static::deleting(fn (Release $release) => $release->tracks->each->delete());
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('cover')->singleFile()->useDisk('public');

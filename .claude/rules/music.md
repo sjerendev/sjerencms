@@ -14,6 +14,12 @@
   `php artisan db:seed --class=MusicSeeder`.
 - Admin: `ReleaseResource` (ids in URLs, the public site routes on slug) with
   `TracksRelationManager` for tracks, preview and WAV.
+- Uploads up to 1 GB (`config/livewire.php`, `maxSize` on the fields) and
+  saved as a stream, not read into memory. The host's PHP
+  `upload_max_filesize` and `post_max_size` must allow the same: locally
+  they are 20M/25M, so a real WAV only goes up once they are raised.
+- Deleting a release deletes its tracks through Eloquent, so medialibrary
+  removes their preview and WAV files (the foreign key alone would not).
 - Routes in the `{locale}` group, before `{slug}`: `music.index`
   (`/se/musik`, `?alias=<slug>`, unknown alias shows everything) and
   `music.show` (`/se/musik/{release:slug}`, 404 for drafts).

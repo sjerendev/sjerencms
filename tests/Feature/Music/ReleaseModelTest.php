@@ -44,3 +44,18 @@ it('keeps the wav on the private music disk', function () {
         ->and(config('filesystems.disks.music.root'))->toBe(storage_path('app/music'))
         ->and(config('filesystems.disks.music'))->not->toHaveKey('url');
 });
+
+it('removes the tracks and their audio when a release is deleted', function () {
+    Storage::fake('public');
+    Storage::fake('music');
+    $track = Track::factory()->create();
+    $track->addMedia(UploadedFile::fake()->create('p.mp3', 10, 'audio/mpeg'))->toMediaCollection('preview');
+    $track->addMedia(UploadedFile::fake()->create('m.wav', 10, 'audio/wav'))->toMediaCollection('wav');
+    $preview = $track->getFirstMedia('preview')->getPathRelativeToRoot();
+
+    $track->release->delete();
+
+    expect(Track::count())->toBe(0)
+        ->and(\Spatie\MediaLibrary\MediaCollections\Models\Media::count())->toBe(0);
+    Storage::disk('public')->assertMissing($preview);
+});

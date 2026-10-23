@@ -59,3 +59,37 @@ it('renders the edit page with the tracks table', function () {
 
     $this->get("/admin/releases/{$release->id}/edit")->assertOk()->assertSee($release->tracks[0]->title);
 });
+
+it('rejects a duplicate position and a missing or negative track price as form errors', function () {
+    $this->actingAs(User::factory()->create());
+    $release = Release::factory()->create();
+    $release->tracks()->create(['position' => 1, 'title' => 'A', 'duration_seconds' => 60]);
+    Release::factory()->create()->tracks()->create(['position' => 2, 'title' => 'Other release', 'duration_seconds' => 60]);
+
+    $manager = fn () => Livewire::test(TracksRelationManager::class, ['ownerRecord' => $release, 'pageClass' => EditRelease::class]);
+
+    $manager()->callAction(TestAction::make('create')->table(), ['position' => 1, 'title' => 'B', 'duration_seconds' => 60, 'min_price' => null])
+        ->assertHasFormErrors(['position' => 'unique', 'min_price' => 'required']);
+
+    $manager()->callAction(TestAction::make('create')->table(), ['position' => 2, 'title' => 'C', 'duration_seconds' => 0, 'min_price' => -1])
+        ->assertHasFormErrors(['min_price', 'duration_seconds'])
+        ->assertHasNoFormErrors(['position']);
+});
+
+it('keeps its own position when a track is edited', function () {
+    $this->actingAs(User::factory()->create());
+    $release = Release::factory()->create();
+    $track = $release->tracks()->create(['position' => 1, 'title' => 'A', 'duration_seconds' => 60]);
+
+    Livewire::test(TracksRelationManager::class, ['ownerRecord' => $release, 'pageClass' => EditRelease::class])
+        ->callAction(TestAction::make('edit')->table($track), ['title' => 'A2'])
+        ->assertHasNoFormErrors();
+
+    expect($track->fresh()->title)->toBe('A2');
+});
+
+it('takes full-length WAV masters, not just Livewire\'s 12 MB default', function () {
+    // A 30-minute 16-bit/44.1 kHz stereo WAV is about 320 MB.
+    expect(config('livewire.temporary_file_upload.rules'))->toContain('max:1048576')
+        ->and(config('livewire.temporary_file_upload.max_upload_time'))->toBeGreaterThanOrEqual(30);
+});
