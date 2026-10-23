@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<title>Musik – alla släpp, mörkt</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+.light { --paper: #EDECEA; --ink: #0F1413; --dim: rgba(15,20,19,0.62); --dimmer: rgba(15,20,19,0.55); --hair: rgba(15,20,19,0.13); --hair-strong: #0F1413; --soft: rgba(15,20,19,0.045); --sound: #0F1413; --bar: #0F1413; --bar-sound: #FC6F5D; --buy: #0F1413; --panel: #0F1413; --panel-line: rgba(237,236,234,0.55); --sun-bg: #0F1413; --sun-fg: #EDECEA; --moon-bg: transparent; --moon-fg: rgba(15,20,19,0.55); --tog-line: rgba(15,20,19,0.2); --scrim: rgba(15,20,19,0.5); }
+.dark { --paper: #0F1413; --ink: #EDECEA; --dim: rgba(237,236,234,0.66); --dimmer: rgba(237,236,234,0.55); --hair: rgba(237,236,234,0.15); --hair-strong: rgba(237,236,234,0.55); --soft: rgba(237,236,234,0.05); --sound: #61F2C2; --bar: #171D1C; --bar-sound: #61F2C2; --buy: #FC6F5D; --panel: #1A2120; --panel-line: rgba(237,236,234,0.3); --sun-bg: transparent; --sun-fg: rgba(237,236,234,0.55); --moon-bg: #EDECEA; --moon-fg: #0F1413; --tog-line: rgba(237,236,234,0.25); --scrim: rgba(0,0,0,0.6); }
+a { color: var(--ink); text-decoration: none; }
+a:hover { color: #FC6F5D; }
+.lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+.dim { color: var(--dim); }
+.dimmer { color: var(--dimmer); }
+.tog { width: 30px; height: 30px; border-radius: 999px; border: 0; display: flex; align-items: center; justify-content: center; padding: 0; }
+.play { width: 44px; height: 44px; flex-shrink: 0; border-radius: 999px; border: 1px solid var(--sound); background: transparent; color: var(--sound); display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; }
+.buy { display: inline-flex; align-items: center; height: 44px; border: 1px solid var(--buy); color: var(--buy); border-radius: 999px; padding: 0 18px; }
+.buy:hover { background: #FC6F5D; border-color: #FC6F5D; color: #0F1413; }
+</style>
+</helmet>
+
+<div class="{{theme}}" style="width: 1440px; background: var(--paper); color: var(--ink); position: relative; padding-bottom: 140px">
+
+  <!-- header, as on the live site plus Musik, Logga in and Korg -->
+  <header style="padding: 0 60px">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 30px 0 26px 0; border-bottom: 1px solid var(--hair-strong)">
+      <a href="#" aria-label="Patrik Sjerén, startsidan" style="display: flex; color: var(--ink)"><svg viewBox="0 354.7 611.6 82.9" width="196" height="27" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M137.1,375.7h-24.1c-1.4,0-2.6,1.200-2.6,2.6v35.6c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-15.2h21.5c6.2,0,11.3-5.1,11.3-11.3v-.4c0-6.2-5.1-11.3-11.3-11.3h0ZM143.2,387.4c0,3.4-2.7,6.1-6.1,6.1h-21.5v-12.6h21.5c3.4,0,6.1,2.7,6.1,6.1v.4Z"></path><path d="M165.2,375.7c-5.8,0-10.6,4.7-10.6,10.6v27.7c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-15.2h27.6v15.2c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-27.7c0-5.8-4.7-10.600-10.6-10.6h-17ZM159.9,393.5v-7.3c0-2.9,2.4-5.3,5.3-5.3h17c2.9,0,5.3,2.4,5.3,5.3v7.3h-27.6Z"></path><path d="M232.7,375.7h-32.8c-1.4,0-2.6,1.2-2.6,2.6s1.2,2.6,2.6,2.6h13.8v33c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-33h13.7c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6Z"></path><path d="M278.9,387.1c0-6.2-5.1-11.3-11.3-11.3h-24.1c-1.4,0-2.6,1.2-2.6,2.6v35.6c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-15.2h19.9c4.2,0,7.7,3.4,7.7,7.7v7.5c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-7.5c0-4-1.8-7.5-4.6-9.9,2.8-2.1,4.6-5.4,4.6-9.1v-.4ZM246.1,381h21.5c3.4,0,6.1,2.7,6.1,6.1v.4c0,3.4-2.7,6.1-6.1,6.1h-21.5v-12.6Z"></path><path d="M289.5,375.7c-1.4,0-2.6,1.2-2.6,2.6v35.6c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-35.6c0-1.4-1.2-2.6-2.6-2.6Z"></path><path d="M338.8,378.4c0-1.4-1.2-2.6-2.6-2.6s-2.6,1.2-2.6,2.6v9.1c0,3.3-2.7,6.1-6,6.1h-21.5v-15.2c0-1.4-1.2-2.6-2.6-2.6s-2.6,1.2-2.6,2.6v35.6c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-15.2h21.5c3.3,0,6,2.7,6,6.1v9.1c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-9.1c0-3.5-1.6-6.6-4.1-8.7,2.5-2.1,4.1-5.2,4.1-8.7v-9.1Z"></path><path d="M399.9,393.5h-15.4c-3.4,0-6.1-2.7-6.1-6.1v-.4c0-3.4,2.7-6.1,6.1-6.1h24.1c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6h-24.1c-6.2,0-11.3,5.1-11.3,11.3v.4c0,6.2,5.1,11.3,11.3,11.3h15.4c3.4,0,6.1,2.7,6.1,6.1v.4c0,3.4-2.7,6.1-6.1,6.1h-24.2c-1.4,0-2.6,1.2-2.6,2.6s1.2,2.6,2.6,2.6h24.2c6.2,0,11.3-5.1,11.3-11.3v-.4c0-6.2-5.1-11.3-11.3-11.3Z"></path><path d="M429,375.7c-1.4,0-2.6,1.2-2.6,2.6v26.9c0,3.4-2.7,6.1-6.1,6.1h-2.4c-1.4,0-2.6,1.2-2.6,2.6s1.2,2.6,2.6,2.6h2.4c6.2,0,11.3-5.1,11.3-11.3v-26.9c0-1.4-1.2-2.6-2.6-2.6Z"></path><path d="M474.9,411.3h-24.1c-3.4,0-6.1-2.7-6.1-6.1v-6.5h22.2c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6h-22.2v-6.5c0-3.4,2.7-6.1,6.1-6.1h24.1c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6h-24.1c-6.2,0-11.3,5.1-11.3,11.3v18.2c0,6.2,5.1,11.3,11.3,11.3h24.1c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6h0Z"></path><path d="M521.9,387.1c0-6.2-5.1-11.3-11.3-11.3h-24.1c-1.4,0-2.6,1.2-2.6,2.6v35.6c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-15.2h19.9c4.2,0,7.7,3.4,7.7,7.7v7.5c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-7.5c0-4-1.8-7.5-4.6-9.9,2.8-2.1,4.6-5.4,4.6-9.1v-.4ZM489,381h21.5c3.4,0,6.1,2.7,6.1,6.1v.4c0,3.4-2.7,6.1-6.1,6.1h-21.5v-12.6Z"></path><path d="M564.7,411.3h-24.1c-3.4,0-6.1-2.7-6.1-6.1v-6.5h22.2c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6h-22.2v-6.5c0-3.4,2.7-6.1,6.1-6.1h24.1c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6h-24.1c-6.2,0-11.3,5.1-11.3,11.3v18.2c0,6.2,5.1,11.3,11.3,11.3h24.1c1.4,0,2.6-1.2,2.6-2.6s-1.2-2.6-2.6-2.6h0ZM547.1,372.4c.4.2.8.3,1.2.3,1,0,1.9-.5,2.4-1.5l4.9-9.9c.6-1.3.1-2.9-1.2-3.5-1.3-.6-2.9-.1-3.5,1.2l-4.9,9.9c-.6,1.3-.1,2.9,1.2,3.5Z"></path><path d="M609,375.7c-1.4,0-2.6,1.2-2.6,2.6v28.9l-28.2-30.6c-.7-.8-1.9-1.1-2.9-.7-1,.4-1.7,1.4-1.7,2.5v35.5c0,1.4,1.2,2.6,2.6,2.6s2.6-1.2,2.6-2.6v-28.9l28.2,30.6c.7.8,1.9,1.1,2.9.7,1-.4,1.7-1.4,1.7-2.5v-35.5c0-1.4-1.2-2.6-2.6-2.6Z"></path><path d="M66.2,395.9l8.4-8.4,8.4,8.4-8.4,8.4c-2.8-2.8-5.6-5.6-8.4-8.4ZM33.1,429l16.5-16.5c-6.6-6.6-14.7-14.7-16.5-16.5h0c0,0,16.5-16.6,16.5-16.6l-8.2-8.2-24.7,24.7c5.5,5.5,10.9,10.9,16.4,16.4l-8.4,8.4c-8.2-8.2-16.4-16.4-24.6-24.6H0c0-.1,33.1-33.2,33.1-33.2l.2-.2,1.3-1.3.6-.6,3.4-3.4.5-.5.5-.5.5-.5.4-.4.4-.4.4-.4h.1c1.3,1.4,2.6,2.7,3.9,4l4.3,4.3,8.2,8.2,8.4,8.4-8.4,8.4h0l-8.2,8.2c6.6,6.6,14.8,14.8,16.6,16.5h0c0,0-8.3,8.4-8.3,8.4l-8.3,8.3-3.9,3.9c-1.4,1.4-2.9,2.9-4.3,4.3l-8.4-8.4Z"></path></svg></a>
+      <nav style="display: flex; align-items: center; gap: 44px">
+        <a href="#" class="lbl">Projekt</a>
+        <a href="#" class="lbl">Om mig</a>
+        <a href="OmslagMork.dc.html" class="lbl" style="border-bottom: 1px solid var(--ink); padding-bottom: 2px">Musik</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 22px">
+        <a href="LoggaInMork.dc.html" class="lbl">Logga in</a>
+        <a href="KorgMork.dc.html" class="lbl">Korg · {{cart}}</a>
+        <span class="lbl">SV <span class="dimmer">/ EN</span></span>
+        <div role="group" aria-label="Läge" style="display: flex; gap: 2px; padding: 4px; border: 1px solid var(--tog-line); border-radius: 999px">
+          <button class="tog" aria-label="Ljust läge" style="background: var(--sun-bg); color: var(--sun-fg)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></button>
+          <button class="tog" aria-label="Mörkt läge" style="background: var(--moon-bg); color: var(--moon-fg)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"></path></svg></button>
+        </div>
+        <a href="#" class="lbl" style="display: flex; align-items: center; gap: 9px; background: var(--ink); color: var(--paper); border-radius: 999px; padding: 15px 24px">Boka ett samtal <span style="font-size: 13px">↗</span></a>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; padding-top: 18px">
+      <span class="lbl dim">Portfolio '26 — Malmö, Sverige</span>
+      <span class="lbl dim" style="display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #1A8F4C; display: block"></span>Tillgänglig för uppdrag / anställning</span>
+    </div>
+  </header>
+
+  <!-- page head: the aliases double as filter -->
+  <div style="padding: 76px 60px 0 60px; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 60px; align-items: end">
+    <h1 style="margin: 0; font-size: 108px; line-height: 0.95; letter-spacing: -0.038em; font-weight: 600">Sju alias<br>och mitt<br>eget namn</h1>
+    <nav aria-label="Filtrera på alias" style="display: flex; flex-direction: column">
+      <sc-for list="{{index}}" as="a" hint-placeholder-count="9">
+        <a href="#" style="display: flex; justify-content: space-between; padding: 11px 0; border-top: 1px solid var(--hair); font-size: 17px; font-weight: {{a.weight}}"><span>{{a.name}}</span><span class="lbl dimmer">{{a.n}}</span></a>
+      </sc-for>
+    </nav>
+  </div>
+
+  <!-- 01 every release, newest first -->
+  <div style="padding: 96px 60px 0 60px">
+    <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--hair-strong)">
+      <span class="lbl">01</span>
+      <span style="width: 26px; height: 1px; background: var(--ink); display: block"></span>
+      <span class="lbl">Alla släpp</span>
+      <span style="flex-grow: 1"></span>
+      <span class="lbl dimmer">Nyast först</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 56px 32px; margin-top: 32px">
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="22">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <a href="SlappMork.dc.html"><img src="{{r.img}}" alt="Omslaget till {{r.title}}" style="width: 100%; aspect-ratio: 1; object-fit: cover; display: block"></a>
+          <span class="lbl dimmer" style="padding-top: 4px">{{r.alias}}</span>
+          <a href="SlappMork.dc.html" style="font-size: 22px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 500">{{r.title}}</a>
+          <span class="dim" style="font-size: 14px">{{r.year}} · {{r.len}}</span>
+          <div style="display: flex; gap: 10px; align-items: center; padding-top: 4px">
+            <button class="play" aria-label="Förlyssna {{r.title}}"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"></path></svg></button>
+            <a href="KorgMork.dc.html" class="lbl buy">Köp · {{r.price}} kr</a>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- player bar: MP3 preview -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: var(--bar); color: #EDECEA; border-top: 1px solid var(--hair); display: grid; grid-template-columns: 56px 300px minmax(0, 1fr) 90px 180px; gap: 24px; align-items: center; padding: 0 60px">
+    <button aria-label="Pausa" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: var(--bar-sound); color: #0F1413; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" fill="currentColor"></rect><rect x="8.5" y="1" width="3.5" height="12" fill="currentColor"></rect></svg></button>
+    <div style="display: flex; align-items: center; gap: 14px">
+      <img src="/_blob/56be5860d25234cb275444d512854ef4" alt="" style="width: 44px; height: 44px; object-fit: cover; display: block">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 15px; font-weight: 600">Big Dripper</span>
+        <span class="lbl" style="color: rgba(237,236,234,0.62)">S.D.L. · Past Voyages</span>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; height: 28px">
+      <svg width="36%" height="28" viewBox="0 0 300 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 Q 7.5 3 15 14 T 30 14 T 45 14 T 60 14 T 75 14 T 90 14 T 105 14 T 120 14 T 135 14 T 150 14 T 165 14 T 180 14 T 195 14 T 210 14 T 225 14 T 240 14 T 255 14 T 270 14 T 285 14 T 300 14" fill="none" stroke="var(--bar-sound)" stroke-width="1.6"></path></svg>
+      <span style="flex-grow: 1; height: 1px; background: rgba(237,236,234,0.3); display: block"></span>
+    </div>
+    <span class="lbl" style="color: rgba(237,236,234,0.75); text-align: right">3:12 / 8:44</span>
+    <a href="KorgMork.dc.html" class="lbl" style="color: #EDECEA; border: 1px solid rgba(237,236,234,0.55); border-radius: 999px; padding: 12px 18px; text-align: center">Köp spåret · 20 kr</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"$preview":{"width":1440,"height":4300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = [
+      ["S.D.L.", "Past Voyages", "2026", "4 spår", 70, "56be5860d25234cb275444d512854ef4"],
+      ["S.D.L.", "Vol. 1", "2019", "4 spår", 50, "3da23a504ed598bf8315caaec44def8c"],
+      ["S.D.L.", "Vol. 2: Ascend from the Mind", "2019", "1 spår", 30, "caafffc7f0901359254d399d4f7bc23b"],
+      ["S.D.L.", "Vol. 3", "2019", "4 spår", 45, "b6356424226b7bf35a5df1fa9097d09f"],
+      ["S.D.L.", "Space Traveller Remixes", "2019", "3 spår", 50, "1a483e80aad9d4e6aa78f87646dadd1e"],
+      ["Trax Beyond Subconcious", "II", "2019", "3 spår", 50, "a69776b0562d3c7e42ec8b2f9eb499c0"],
+      ["Disturbed Genitals", "Vol. 1", "2019", "3 spår", 45, "2c1f25e1301c101567adeee4ac3f12a0"],
+      ["Disturbed Genitals", "Vol. 2", "2019", "3 spår", 45, "32dff8ffd6f9c5ca6960b4e0ed0698f3"],
+      ["Acid Asylum", "Untitled", "2019", "3 spår", 45, "99fd7b70bcc53d6e4bead0da2c10f92b"],
+      ["Weird Genetics", "Voyage EP", "2019", "3 spår", 45, "42e03f3b1f148ad2e85d8100299da1c6"],
+      ["Patrik Sjerén", "From the Vault", "2019", "27 spår", 200, "ce62050ca34d4898eebd386c8107c752"],
+      ["Olika alias", "The Early Years", "2019", "12 spår", 80, "6fa3e9e8fd601b431af8f37c88ab1b64"],
+      ["Monokii", "Framtida Skuggor", "2016", "3 spår", 30, "5a7c219e735ed408f5f6af2c52cc8429"],
+      ["S.D.L.", "03(", "2016", "5 spår", 45, "82cbfe6c9c40d64f3ebcd6f11e8fe7b2"],
+      ["Trax Beyond Subconcious", "Haxx EP", "2016", "4 spår", 35, "cf1728d24c053a85441129dab0f40422"],
+      ["Patrik Sjerén", "Clusters #1", "2016", "5 spår", 40, "84f3966a6aea870cd61a9fa766428c4e"],
+      ["Weird Genetics", "Voyage (pat's revisit edit)", "2016", "1 spår", 10, "5a2a238602b0a353eb236d191cbfca20"],
+      ["Patrik Sjerén", "Tracks from the Past", "2015", "13 spår", 100, "ac32158f697806cd25ad3505d1100ffb"],
+      ["Patrik Sjerén", "Analogue Sessions #1", "1995", "4 spår", 35, "c2cd3bee8772935f14d7da0b08cf2bea"],
+      ["Patrik Sjerén", "X Volume 1 (UWR Blue)", "1995", "3 spår", 35, "0438d95674612348c0523c22cd6ed075"],
+      ["DJ Wise", "Bounced EP (UWR)", "1995", "4 spår", 35, "f61d0dd03ac335fcd1aa0e0f6ae6adc5"],
+      ["Trax Beyond Subconcious", "Ambient Acid Cut Outs #1", "1994", "10 spår", 80, "9d226bc82923736c902e44dc668003f4"]
+    ];
+    const idx = [["Alla", "22"], ["S.D.L.", "6"], ["Patrik Sjerén", "5"], ["Trax Beyond Subconcious", "3"], ["Disturbed Genitals", "2"], ["Weird Genetics", "2"], ["Acid Asylum", "1"], ["DJ Wise", "1"], ["Monokii", "1"]];
+    return {
+      theme: (this.props.dark ?? true) ? "dark" : "light",
+      cart: 0,
+      index: idx.map((a, i) => ({ name: a[0], n: a[1], weight: i === 0 ? 600 : 400 })),
+      rows: R.map((r) => ({ alias: r[0], title: r[1], year: r[2], len: r[3], price: r[4], img: "/_blob/" + r[5] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

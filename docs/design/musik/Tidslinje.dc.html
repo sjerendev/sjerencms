@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<title>Musik – tidslinje</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #0F1413; text-decoration: none; }
+a:hover { color: #FC6F5D; }
+.lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+.dim { color: rgba(15,20,19,0.62); }
+.dimmer { color: rgba(15,20,19,0.55); }
+.tl { display: grid; grid-template-columns: 150px 40px minmax(0, 1fr) 150px; }
+</style>
+</helmet>
+
+<div style="width: 1440px; background: #EDECEA; color: #0F1413; position: relative; padding-bottom: 140px">
+
+  <!-- header -->
+  <div style="padding: 0 60px">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 26px 0 16px 0; border-bottom: 1px solid #0F1413">
+      <div style="display: flex; align-items: center; gap: 11px">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0F1413" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12Z"></path><path d="M12 8.2 15.8 12 12 15.8 8.2 12Z"></path></svg>
+        <span class="lbl" style="font-weight: 800; letter-spacing: 0.1em">Patrik Sjerén</span>
+      </div>
+      <nav style="display: flex; align-items: center; gap: 36px">
+        <a href="#" class="lbl">Projekt</a>
+        <a href="#" class="lbl">Om mig</a>
+        <a href="#" class="lbl" style="border-bottom: 1px solid #0F1413; padding-bottom: 2px">Musik</a>
+        <a href="#" class="lbl">Playground</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 20px">
+        <span class="lbl">SV <span class="dimmer">/ EN</span></span>
+        <a href="#" class="lbl" style="display: flex; align-items: center; gap: 7px; background: #0F1413; color: #EDECEA; border-radius: 999px; padding: 11px 20px">Boka ett samtal <span style="font-size: 12px">↗</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- head -->
+  <div style="padding: 76px 60px 0 60px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 60px; align-items: end">
+    <h1 style="margin: 0; font-size: 108px; line-height: 0.95; letter-spacing: -0.038em; font-weight: 600">1994 <span style="color: #FC6F5D">→</span> 2026</h1>
+    <p style="margin: 0; font-size: 16px; line-height: 1.6" class="dim">[En mening som knyter musiken till tidslinjen på Om mig. Samma linje, samma mintprickar.]</p>
+  </div>
+
+  <!-- 01 timeline -->
+  <div style="padding: 88px 60px 0 60px">
+    <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid #0F1413">
+      <span class="lbl">01</span>
+      <span style="width: 26px; height: 1px; background: #0F1413; display: block"></span>
+      <span class="lbl">Släpp per år</span>
+      <span style="flex-grow: 1"></span>
+      <span class="lbl dimmer">Mint = ljud, som på Om mig</span>
+    </div>
+
+    <sc-for list="{{years}}" as="y" hint-placeholder-count="6">
+      <div class="tl">
+        <div style="padding-top: 34px; font-size: 56px; line-height: 1; letter-spacing: -0.032em; font-weight: 600">{{y.year}}</div>
+        <div style="position: relative; display: flex; justify-content: center">
+          <span style="position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(15,20,19,0.25); display: block"></span>
+          <span style="position: relative; margin-top: 50px; width: 13px; height: 13px; border-radius: 999px; background: #61F2C2; border: 1px solid #0F1413; display: block"></span>
+        </div>
+        <div style="padding: 40px 0 48px 24px; display: flex; flex-wrap: wrap; gap: 28px 22px">
+          <sc-for list="{{y.items}}" as="r" hint-placeholder-count="4">
+            <a href="Slapp.dc.html" style="display: flex; flex-direction: column; gap: 9px; width: 156px">
+              <img src="{{r.img}}" alt="" style="width: 156px; height: 156px; object-fit: cover; display: block">
+              <span class="lbl dimmer">{{r.alias}}</span>
+              <span style="font-size: 16px; line-height: 1.25; font-weight: 600; letter-spacing: -0.01em">{{r.title}}</span>
+            </a>
+          </sc-for>
+        </div>
+        <div style="padding-top: 46px; text-align: right" class="lbl dim">{{y.count}}</div>
+      </div>
+      <sc-if value="{{y.gapAfter}}" hint-placeholder-val="{{false}}">
+        <div class="tl" style="height: 120px">
+          <span></span>
+          <div style="display: flex; justify-content: center"><span style="width: 1px; height: 100%; background-image: linear-gradient(rgba(15,20,19,0.35) 50%, transparent 50%); background-size: 1px 8px; display: block"></span></div>
+          <div style="padding-left: 24px; display: flex; align-items: center; gap: 18px">
+            <span class="lbl dimmer">1996–2014</span>
+            <span class="dim" style="font-size: 16px">[Vad hände de här åren? En mening, eller låt luckan stå tom.]</span>
+          </div>
+          <span></span>
+        </div>
+      </sc-if>
+    </sc-for>
+  </div>
+
+  <!-- player bar -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: #0F1413; color: #EDECEA; display: grid; grid-template-columns: 56px 300px minmax(0, 1fr) 90px 160px; gap: 24px; align-items: center; padding: 0 60px">
+    <button aria-label="Pausa" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: #FC6F5D; color: #0F1413; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" fill="currentColor"></rect><rect x="8.5" y="1" width="3.5" height="12" fill="currentColor"></rect></svg></button>
+    <div style="display: flex; align-items: center; gap: 14px">
+      <img src="/_blob/9d226bc82923736c902e44dc668003f4" alt="" style="width: 44px; height: 44px; object-fit: cover; display: block">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 15px; font-weight: 600">The Dove</span>
+        <span class="lbl" style="color: rgba(237,236,234,0.62)">Trax Beyond Subconcious · 1994</span>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; height: 28px">
+      <svg width="22%" height="28" viewBox="0 0 300 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 Q 7.5 3 15 14 T 30 14 T 45 14 T 60 14 T 75 14 T 90 14 T 105 14 T 120 14 T 135 14 T 150 14 T 165 14 T 180 14 T 195 14 T 210 14 T 225 14 T 240 14 T 255 14 T 270 14 T 285 14 T 300 14" fill="none" stroke="#FC6F5D" stroke-width="1.6"></path></svg>
+      <span style="flex-grow: 1; height: 1px; background: rgba(237,236,234,0.3); display: block"></span>
+    </div>
+    <span class="lbl" style="color: rgba(237,236,234,0.75); text-align: right">2:01 / 9:04</span>
+    <a href="Korg.dc.html" class="lbl" style="color: #EDECEA; border: 1px solid rgba(237,236,234,0.55); border-radius: 999px; padding: 12px 18px; text-align: center">Köp · 80 kr</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const b = (id) => "/_blob/" + id;
+    const r = (alias, title, id) => ({ alias, title, img: b(id) });
+    const yr = (year, items, gapAfter) => ({ year, items, count: items.length + " släpp", gapAfter: !!gapAfter });
+    return {
+      years: [
+        yr("2026", [r("S.D.L.", "Past Voyages", "56be5860d25234cb275444d512854ef4")]),
+        yr("2019", [
+          r("S.D.L.", "Vol. 1", "3da23a504ed598bf8315caaec44def8c"),
+          r("S.D.L.", "Vol. 2: Ascend from the Mind", "caafffc7f0901359254d399d4f7bc23b"),
+          r("S.D.L.", "Vol. 3", "b6356424226b7bf35a5df1fa9097d09f"),
+          r("S.D.L.", "Space Traveller Remixes", "1a483e80aad9d4e6aa78f87646dadd1e"),
+          r("Trax Beyond Subconcious", "II", "a69776b0562d3c7e42ec8b2f9eb499c0"),
+          r("Disturbed Genitals", "Vol. 1", "2c1f25e1301c101567adeee4ac3f12a0"),
+          r("Disturbed Genitals", "Vol. 2", "32dff8ffd6f9c5ca6960b4e0ed0698f3"),
+          r("Acid Asylum", "Untitled", "99fd7b70bcc53d6e4bead0da2c10f92b"),
+          r("Weird Genetics", "Voyage EP", "42e03f3b1f148ad2e85d8100299da1c6"),
+          r("Patrik Sjerén", "From the Vault", "ce62050ca34d4898eebd386c8107c752"),
+          r("Olika alias", "The Early Years", "6fa3e9e8fd601b431af8f37c88ab1b64")
+        ]),
+        yr("2016", [
+          r("Monokii", "Framtida Skuggor", "5a7c219e735ed408f5f6af2c52cc8429"),
+          r("S.D.L.", "03(", "82cbfe6c9c40d64f3ebcd6f11e8fe7b2"),
+          r("Trax Beyond Subconcious", "Haxx EP", "cf1728d24c053a85441129dab0f40422"),
+          r("Patrik Sjerén", "Clusters #1", "84f3966a6aea870cd61a9fa766428c4e"),
+          r("Weird Genetics", "Voyage (pat's revisit edit)", "5a2a238602b0a353eb236d191cbfca20")
+        ]),
+        yr("2015", [r("Patrik Sjerén", "Tracks from the Past", "ac32158f697806cd25ad3505d1100ffb")], true),
+        yr("1995", [
+          r("Patrik Sjerén", "Analogue Sessions #1", "c2cd3bee8772935f14d7da0b08cf2bea"),
+          r("Patrik Sjerén", "X Volume 1 (UWR Blue)", "0438d95674612348c0523c22cd6ed075"),
+          r("DJ Wise", "Bounced EP (UWR)", "f61d0dd03ac335fcd1aa0e0f6ae6adc5")
+        ]),
+        yr("1994", [r("Trax Beyond Subconcious", "Ambient Acid Cut Outs #1", "9d226bc82923736c902e44dc668003f4")])
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

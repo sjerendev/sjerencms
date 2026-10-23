@@ -1,0 +1,214 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-22T23:10:00+02:00"
+  },
+  "title": "Musik – layoutskisser",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Omslag.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 4300,
+      "title": "Alla släpp, ljust"
+    },
+    "OmslagMork.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 4300,
+      "title": "Alla släpp, mörkt"
+    },
+    "Slapp.dc.html": {
+      "x": 0,
+      "y": 4720,
+      "w": 1440,
+      "h": 2300,
+      "title": "Släpp, ljust"
+    },
+    "SlappMork.dc.html": {
+      "x": 1520,
+      "y": 4720,
+      "w": 1440,
+      "h": 2300,
+      "title": "Släpp, mörkt"
+    },
+    "SlappMobil.dc.html": {
+      "x": 3040,
+      "y": 4720,
+      "w": 390,
+      "h": 2050,
+      "title": "Släpp mobil, ljust"
+    },
+    "SlappMobilMork.dc.html": {
+      "x": 3510,
+      "y": 4720,
+      "w": 390,
+      "h": 2050,
+      "title": "Släpp mobil, mörkt"
+    },
+    "Korg.dc.html": {
+      "x": 0,
+      "y": 7440,
+      "w": 1440,
+      "h": 1050,
+      "title": "Varukorg, ljust"
+    },
+    "KorgMork.dc.html": {
+      "x": 1520,
+      "y": 7440,
+      "w": 1440,
+      "h": 1050,
+      "title": "Varukorg, mörkt"
+    },
+    "Kassa.dc.html": {
+      "x": 3040,
+      "y": 7440,
+      "w": 1440,
+      "h": 1300,
+      "title": "Kassa, ljust"
+    },
+    "KassaMork.dc.html": {
+      "x": 4560,
+      "y": 7440,
+      "w": 1440,
+      "h": 1300,
+      "title": "Kassa, mörkt"
+    },
+    "Tack.dc.html": {
+      "x": 6080,
+      "y": 7440,
+      "w": 1440,
+      "h": 1050,
+      "title": "Tack + WAV, ljust"
+    },
+    "TackMork.dc.html": {
+      "x": 7600,
+      "y": 7440,
+      "w": 1440,
+      "h": 1050,
+      "title": "Tack + WAV, mörkt"
+    },
+    "LoggaIn.dc.html": {
+      "x": 0,
+      "y": 9160,
+      "w": 1440,
+      "h": 900,
+      "title": "Logga in, ljust"
+    },
+    "LoggaInMork.dc.html": {
+      "x": 1520,
+      "y": 9160,
+      "w": 1440,
+      "h": 900,
+      "title": "Logga in, mörkt"
+    },
+    "MinaKop.dc.html": {
+      "x": 3040,
+      "y": 9160,
+      "w": 1440,
+      "h": 1350,
+      "title": "Mina köp, ljust"
+    },
+    "MinaKopMork.dc.html": {
+      "x": 4560,
+      "y": 9160,
+      "w": 1440,
+      "h": 1350,
+      "title": "Mina köp, mörkt"
+    },
+    "Main.dc.html": {
+      "x": 0,
+      "y": 10930,
+      "w": 1440,
+      "h": 3900,
+      "title": "Bortvald A · Register"
+    },
+    "Tidslinje.dc.html": {
+      "x": 1520,
+      "y": 10930,
+      "w": 1440,
+      "h": 3200,
+      "title": "Bortvald C · Tidslinje"
+    }
+  },
+  "order": [
+    "Omslag.dc.html",
+    "OmslagMork.dc.html",
+    "Slapp.dc.html",
+    "SlappMork.dc.html",
+    "SlappMobil.dc.html",
+    "SlappMobilMork.dc.html",
+    "Korg.dc.html",
+    "KorgMork.dc.html",
+    "Kassa.dc.html",
+    "KassaMork.dc.html",
+    "Tack.dc.html",
+    "TackMork.dc.html",
+    "LoggaIn.dc.html",
+    "LoggaInMork.dc.html",
+    "MinaKop.dc.html",
+    "MinaKopMork.dc.html",
+    "Main.dc.html",
+    "Tidslinje.dc.html"
+  ],
+  "notes": {
+    "row1": {
+      "x": 0,
+      "y": -300,
+      "text": "Musik · alla släpp",
+      "kind": "title1",
+      "maxW": 2960
+    },
+    "row2": {
+      "x": 0,
+      "y": 4420,
+      "text": "Ett släpp och spelaren",
+      "kind": "title1",
+      "maxW": 3900
+    },
+    "row3": {
+      "x": 0,
+      "y": 7140,
+      "text": "Köpflödet",
+      "kind": "title1",
+      "maxW": 9040
+    },
+    "row4": {
+      "x": 0,
+      "y": 8860,
+      "text": "Konto",
+      "kind": "title1",
+      "maxW": 6000
+    },
+    "row5": {
+      "x": 0,
+      "y": 10630,
+      "text": "Bortvalda",
+      "kind": "title1",
+      "maxW": 2960
+    },
+    "server": {
+      "x": 9120,
+      "y": 7440,
+      "w": 420,
+      "text": "Butik, konto och admin körs i en separat backend (förslag: Laravel + Filament på hostup). Next-sajten förblir statisk och hämtar katalogen vid build. Inloggning med länk i mejlet, inget lösenord.",
+      "fill": "orange",
+      "size": "m"
+    },
+    "player": {
+      "x": 3980,
+      "y": 4720,
+      "w": 380,
+      "text": "Förlyssning är MP3, köp och nedladdning är WAV. Spelaren ligger i en list längst ner och följer med mellan sidorna.",
+      "fill": "teal",
+      "size": "m"
+    }
+  },
+  "designSystems": []
+}

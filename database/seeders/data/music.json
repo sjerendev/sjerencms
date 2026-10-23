@@ -1,0 +1,776 @@
+[
+ {
+  "path": "/album/s-d-l-past-voyages",
+  "type": "album",
+  "id": 1165520344,
+  "artist": "S.D.L.",
+  "title": "S.D.L. - Past Voyages",
+  "date": "10 Sep 2026 00:00:00 GMT",
+  "min": 70.0,
+  "art": 1978160483,
+  "tracks": [
+   [
+    "Big Dripper",
+    524
+   ],
+   [
+    "Deep Down",
+    621
+   ],
+   [
+    "Saience",
+    467
+   ],
+   [
+    "The Worm",
+    352
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/1026c2143e249c2c4e62244fe4060206/mp3-128/3013325714?p=0&ts=1792789329&t=7bc93ce196711974b55d44218f232d12d2ae8c20&token=1792789329_8"
+ },
+ {
+  "path": "/album/s-d-l-vol-1",
+  "type": "album",
+  "id": 1936850128,
+  "artist": "S​.​D​.​L.",
+  "title": "S.D.L. - VOL. 1",
+  "date": "18 Sep 2019 00:00:00 GMT",
+  "min": 50.0,
+  "art": 484311329,
+  "tracks": [
+   [
+    "Space Traveller",
+    357
+   ],
+   [
+    "Acidhead",
+    412
+   ],
+   [
+    "This Aint no 303",
+    388
+   ],
+   [
+    "Wobbley",
+    421
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/1c26fab03caeb7ba9eb44cd511df33c4/mp3-128/3290217623?p=0&ts=1792789330&t=c8879062ac899c31c57a7b3e18cdad6c066ec987&token=1792789330_e"
+ },
+ {
+  "path": "/album/s-d-l-vol-2-ascend-from-the-mind",
+  "type": "album",
+  "id": 3516009064,
+  "artist": "S​.​D​.​L.",
+  "title": "S.D.L. - Vol. 2 - Ascend from the Mind",
+  "date": "29 Sep 2019 00:00:00 GMT",
+  "min": 30.0,
+  "art": 3288892896,
+  "tracks": [
+   [
+    "A1 - Ascend from the Mind",
+    838
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/3e4db95521974491bbc1f76fedaf3ac2/mp3-128/858099061?p=0&ts=1792789331&t=ccb5817fdc82253caf84ff00ebc5389885a1cc18&token=1792789331_ad"
+ },
+ {
+  "path": "/album/s-d-l-vol-3",
+  "type": "album",
+  "id": 1452486495,
+  "artist": "S​.​D​.​L.",
+  "title": "S.D.L. - Vol. 3",
+  "date": "29 Sep 2019 00:00:00 GMT",
+  "min": 45.0,
+  "art": 2807849883,
+  "tracks": [
+   [
+    "A1 - Debugged",
+    375
+   ],
+   [
+    "A2 - Jumping Java",
+    406
+   ],
+   [
+    "AA1 - Acid Dreams",
+    521
+   ],
+   [
+    "AA2 - Fuel",
+    359
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/e927a72eb19c27d5d97b3c267321933b/mp3-128/639575655?p=0&ts=1792789332&t=f1e51a5f321e9b450691e0b272478d6cfba62f3e&token=1792789332_91"
+ },
+ {
+  "path": "/album/s-d-l-space-traveller-remixes",
+  "type": "album",
+  "id": 3815330772,
+  "artist": "S​.​D​.​L.",
+  "title": "S.D.L. - Space Traveller Remixes",
+  "date": "18 Sep 2019 00:00:00 GMT",
+  "min": 50.0,
+  "art": 1632256139,
+  "tracks": [
+   [
+    "Space Traveller Remix 1",
+    557
+   ],
+   [
+    "Space Traveller Remix 2",
+    526
+   ],
+   [
+    "Space Traveller Remix 3",
+    727
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/d4fc9c23a9c13649ff1125b3b6e260ce/mp3-128/3977588760?p=0&ts=1792789333&t=84716e812fd34f587294b9bdff0c395ba3461c22&token=1792789333_5"
+ },
+ {
+  "path": "/album/trax-beyond-subconcious-ii",
+  "type": "album",
+  "id": 1529717524,
+  "artist": "Trax Beyond Subconcious",
+  "title": "Trax Beyond Subconcious - II",
+  "date": "18 Sep 2019 00:00:00 GMT",
+  "min": 50.0,
+  "art": 83423270,
+  "tracks": [
+   [
+    "Oceanic",
+    408
+   ],
+   [
+    "Terrenal",
+    395
+   ],
+   [
+    "The Peep",
+    318
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/2a27cbe0514dfd17f3dc074ebb614493/mp3-128/967034148?p=0&ts=1792789334&t=0c20ad6a45dbbb494ceacb11edf82e2f351c4a66&token=1792789334_eb"
+ },
+ {
+  "path": "/album/trax-beyond-subconcious-ambient-acid-cut-outs-1",
+  "type": "album",
+  "id": 4088876948,
+  "artist": "Trax Beyond Subconcious",
+  "title": "Trax Beyond Subconcious - Ambient Acid Cut Outs #1",
+  "date": "20 May 1994 00:00:00 GMT",
+  "min": 80.0,
+  "art": 1777050726,
+  "tracks": [
+   [
+    "The Dove",
+    544
+   ],
+   [
+    "Acid Burn",
+    1074
+   ],
+   [
+    "Alkalia",
+    677
+   ],
+   [
+    "Indicate",
+    658
+   ],
+   [
+    "Sunblossom",
+    659
+   ],
+   [
+    "Untitled Bonus",
+    479
+   ],
+   [
+    "Violate",
+    660
+   ],
+   [
+    "Woodworker",
+    369
+   ],
+   [
+    "Ice",
+    699
+   ],
+   [
+    "Dangerzone",
+    477
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/83ec111d1f4adf52e5b3d09c9638c795/mp3-128/558213698?p=0&ts=1792789335&t=50a8b62196426a5dc643bfcd7d4c6962b9fe00af&token=1792789335_4c"
+ },
+ {
+  "path": "/album/disturbed-genitals-vol-1",
+  "type": "album",
+  "id": 3098878666,
+  "artist": "Disturbed Genitals",
+  "title": "Disturbed Genitals - Vol 1",
+  "date": "29 Sep 2019 00:00:00 GMT",
+  "min": 45.0,
+  "art": 235541442,
+  "tracks": [
+   [
+    "1. Perfect & Slided",
+    518
+   ],
+   [
+    "2. Let the Bass Talk",
+    431
+   ],
+   [
+    "3. 2nd Dimension",
+    409
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/208f157c78c7726433221b67c1f28489/mp3-128/504027606?p=0&ts=1792789336&t=0ecc0f0a97d00e90bbe12fe1a68b567a0f298615&token=1792789336_06"
+ },
+ {
+  "path": "/album/disturbed-genitals-vol-2",
+  "type": "album",
+  "id": 1601390283,
+  "artist": "Disturbed Genitals",
+  "title": "Disturbed Genitals - Vol. 2",
+  "date": "29 Sep 2019 00:00:00 GMT",
+  "min": 45.0,
+  "art": 3121026678,
+  "tracks": [
+   [
+    "A1  - Progeon",
+    573
+   ],
+   [
+    "B1 - Let's Work",
+    422
+   ],
+   [
+    "B2 - Sequel",
+    440
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/fb9f30b33c68e852809d52e59eb4ec1c/mp3-128/616589326?p=0&ts=1792789336&t=ddde4bc98cb9fe18f3727872444f3671cc8aa3b2&token=1792789336_f7"
+ },
+ {
+  "path": "/album/acid-asylum-untitled",
+  "type": "album",
+  "id": 1281383467,
+  "artist": "Acid Asylum",
+  "title": "Acid Asylum - Untitled",
+  "date": "29 Sep 2019 00:00:00 GMT",
+  "min": 45.0,
+  "art": 2261152849,
+  "tracks": [
+   [
+    "A1 - Loco Luna",
+    455
+   ],
+   [
+    "B1 - Acid Sick",
+    295
+   ],
+   [
+    "B2 - Tecpoint",
+    542
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/6f27d7957c418b5ff539c441c21a42cb/mp3-128/539196455?p=0&ts=1792789337&t=2c39f4b181e3297d8a177affabf10eff728b9e35&token=1792789337_63"
+ },
+ {
+  "path": "/album/analogue-sessions-1",
+  "type": "album",
+  "id": 2954128589,
+  "artist": "Patrik Sjeren - Analogue Sessions #1",
+  "title": "Analogue Sessions 1",
+  "date": "01 Dec 1995 00:00:00 GMT",
+  "min": 35.0,
+  "art": 2703513956,
+  "tracks": [
+   [
+    "Untitled 1",
+    322
+   ],
+   [
+    "Untitled 2",
+    337
+   ],
+   [
+    "Untitled 3",
+    361
+   ],
+   [
+    "Untitled 4 - Bonus",
+    307
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/5df66245a72ce1506ea4c9f21af739a8/mp3-128/1247995900?p=0&ts=1792789338&t=13c1c8c7fb63e16d4ebf03405918ce942d4fad39&token=1792789338_9"
+ },
+ {
+  "path": "/album/weird-genetics-voyage-ep",
+  "type": "album",
+  "id": 522599640,
+  "artist": "Patrik Sjeren",
+  "title": "Weird Genetics - Voyage EP",
+  "date": "29 Sep 2019 00:00:00 GMT",
+  "min": 45.0,
+  "art": 1181096232,
+  "tracks": [
+   [
+    "Voyage",
+    537
+   ],
+   [
+    "Invisible Source",
+    423
+   ],
+   [
+    "New Wave",
+    394
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/fd7ab8c083210a15c224d51f1780856e/mp3-128/1318889127?p=0&ts=1792789339&t=15e75f073a61b1c453449f951ec6e2444a6e58e9&token=1792789339_3"
+ },
+ {
+  "path": "/album/patrik-sjeren-x-volume-1-uwr-blue",
+  "type": "album",
+  "id": 2596669519,
+  "artist": "Patrik Sjeren",
+  "title": "Patrik Sjeren - X Volume 1 (UWR Blue)",
+  "date": "10 Jun 1995 00:00:00 GMT",
+  "min": 35.0,
+  "art": 2034219204,
+  "tracks": [
+   [
+    "X = 1",
+    389
+   ],
+   [
+    "X = 2",
+    330
+   ],
+   [
+    "X = 3",
+    320
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/4190aa29c56f4c399e53fc6f233afb70/mp3-128/286780064?p=0&ts=1792789340&t=57c98fa98b0849a1feff89a9b3a9f234195d52ed&token=1792789340_08"
+ },
+ {
+  "path": "/album/dj-wise-bounced-ep-uwr",
+  "type": "album",
+  "id": 2863639479,
+  "artist": "DJ Wise aka Patrik Sjeren",
+  "title": "DJ Wise - Bounced Ep (UWR)",
+  "date": "30 May 1995 00:00:00 GMT",
+  "min": 35.0,
+  "art": 2908147819,
+  "tracks": [
+   [
+    "Bounced",
+    339
+   ],
+   [
+    "Download",
+    319
+   ],
+   [
+    "Insane Mutha",
+    366
+   ],
+   [
+    "Sucker Deep",
+    380
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/2ae9491b1745fd7b5fe685ffe6b322e5/mp3-128/70940149?p=0&ts=1792789341&t=a2627e2fbde4c68def6da2ae8d73935bd2764f9f&token=1792789341_b6f"
+ },
+ {
+  "path": "/album/patrik-sjeren-tracks-from-the-past",
+  "type": "album",
+  "id": 1638092869,
+  "artist": "Patrik Sjeren",
+  "title": "Patrik Sjeren - Tracks from the past",
+  "date": "31 Dec 2015 00:00:00 GMT",
+  "min": 100.0,
+  "art": 3673802547,
+  "tracks": [
+   [
+    "Disturbed Genitals - How's Electro",
+    400
+   ],
+   [
+    "Disturbed Genitals - Perfect & Slided",
+    540
+   ],
+   [
+    "Disturbed Genitals - Philthy Beats",
+    396
+   ],
+   [
+    "Joe Durell - What a Bang",
+    337
+   ],
+   [
+    "Joe Durell - Got a Get",
+    326
+   ],
+   [
+    "Joe Durell - F----n shit",
+    317
+   ],
+   [
+    "Pat's Craze - Crave",
+    300
+   ],
+   [
+    "Pat's Craze - Get a Grip",
+    298
+   ],
+   [
+    "Trashed Funk - Get It",
+    355
+   ],
+   [
+    "Trashed Funk - Lunarc",
+    314
+   ],
+   [
+    "Trashed Funk - Outer Limit",
+    317
+   ],
+   [
+    "Trashed Funk - Superfly",
+    348
+   ],
+   [
+    "Trashed Funk - Growth",
+    338
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/7be02788065372577c8d99e05faf0297/mp3-128/820983042?p=0&ts=1792789341&t=b54ba20419a1a18da5a17c92081545031da763c3&token=1792789341_a4"
+ },
+ {
+  "path": "/album/from-the-vault",
+  "type": "album",
+  "id": 1091494081,
+  "artist": "Patrik Sjeren",
+  "title": "From the Vault",
+  "date": "29 Sep 2019 13:00:55 GMT",
+  "min": 200.0,
+  "art": 900085083,
+  "tracks": [
+   [
+    "Acid 1",
+    552
+   ],
+   [
+    "Acid 2",
+    424
+   ],
+   [
+    "Acid 3",
+    403
+   ],
+   [
+    "Acid 4",
+    355
+   ],
+   [
+    "Acid 5",
+    383
+   ],
+   [
+    "Gotta Funk Mix 1",
+    364
+   ],
+   [
+    "Gotta Funk Mix 2",
+    346
+   ],
+   [
+    "Gotta Funk Mix 3",
+    423
+   ],
+   [
+    "Gotta Funk Mix 4",
+    461
+   ],
+   [
+    "Gotta Funk Mix 5",
+    394
+   ],
+   [
+    "Groove Me",
+    343
+   ],
+   [
+    "Insane Mutha (Wise Mix)",
+    395
+   ],
+   [
+    "Never Be",
+    311
+   ],
+   [
+    "Bee",
+    283
+   ],
+   [
+    "Confusion",
+    339
+   ],
+   [
+    "Da Drive",
+    344
+   ],
+   [
+    "On the Up",
+    254
+   ],
+   [
+    "Primitive",
+    355
+   ],
+   [
+    "Stole My Spot",
+    401
+   ],
+   [
+    "Hardtrance1",
+    478
+   ],
+   [
+    "Hardtrance2",
+    473
+   ],
+   [
+    "Hardtrance3",
+    418
+   ],
+   [
+    "Hardcore1",
+    280
+   ],
+   [
+    "Hardcore2",
+    695
+   ],
+   [
+    "Untitled 1",
+    355
+   ],
+   [
+    "Untitled 2",
+    340
+   ],
+   [
+    "Untitled 3",
+    470
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/b99c618024346a88240091357c1bd839/mp3-128/12973411?p=0&ts=1792789342&t=b2abc600590315fa47ff8961ae81cc56a26d0a3d&token=1792789342_ae7"
+ },
+ {
+  "path": "/album/monokii-framtida-skuggor",
+  "type": "album",
+  "id": 3229108834,
+  "artist": "Patrik Sjeren / Monokii",
+  "title": "Monokii - Framtida Skuggor",
+  "date": "11 Aug 2016 00:00:00 GMT",
+  "min": 30.0,
+  "art": 1733813927,
+  "tracks": [
+   [
+    "Framtida Skuggor",
+    490
+   ],
+   [
+    "Ignorerade Sommardagar",
+    473
+   ],
+   [
+    "Bortom det Undermedvetna",
+    505
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/81252eddfdbad360e51dbbf303749b11/mp3-128/217044109?p=0&ts=1792789343&t=e1aed89518a5056b64be5de4e01a513b6c5dd1c9&token=1792789343_1a"
+ },
+ {
+  "path": "/album/s-d-l-03",
+  "type": "album",
+  "id": 833733738,
+  "artist": "S​.​D​.​L.",
+  "title": "S.D.L. - 03(",
+  "date": "15 Aug 2016 00:00:00 GMT",
+  "min": 45.0,
+  "art": 2427714057,
+  "tracks": [
+   [
+    "03(1",
+    414
+   ],
+   [
+    "03(2",
+    425
+   ],
+   [
+    "03(3",
+    520
+   ],
+   [
+    "03(4",
+    462
+   ],
+   [
+    "03(5",
+    585
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/98abe287b8a83cc2f8090b94f0abed32/mp3-128/3964099843?p=0&ts=1792789344&t=7a715494d05e81fca946d6009b9124d106a829e0&token=1792789344_a"
+ },
+ {
+  "path": "/album/trax-beyond-subconcious-haxx-ep",
+  "type": "album",
+  "id": 377763973,
+  "artist": "Patrik Sjeren",
+  "title": "Trax Beyond Subconcious - Haxx Ep",
+  "date": "10 Aug 2016 22:16:10 GMT",
+  "min": 35.0,
+  "art": 4293665658,
+  "tracks": [
+   [
+    "Haxx",
+    446
+   ],
+   [
+    "Hayat",
+    631
+   ],
+   [
+    "Hrrrrrrå",
+    472
+   ],
+   [
+    "Haon",
+    480
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/18519d41eaf788133a00db198558dbea/mp3-128/1592895383?p=0&ts=1792789345&t=7387360a1a082973a1055fb63e1d831733458211&token=1792789345_a"
+ },
+ {
+  "path": "/album/patrik-sjeren-clusters-1",
+  "type": "album",
+  "id": 1014557904,
+  "artist": "Patrik Sjeren",
+  "title": "Patrik Sjeren - Clusters #1",
+  "date": "11 Aug 2016 00:00:00 GMT",
+  "min": 40.0,
+  "art": 676724679,
+  "tracks": [
+   [
+    "1st Cluster",
+    370
+   ],
+   [
+    "2nd Cluster",
+    502
+   ],
+   [
+    "3rd Cluster",
+    513
+   ],
+   [
+    "4th Cluster",
+    403
+   ],
+   [
+    "6th Cluster",
+    371
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/8f72cecdce02c818e9a3fc2e68f68811/mp3-128/3256593363?p=0&ts=1792789346&t=7a40ba74a8d4d07f244096d10eac5c8b31c8a156&token=1792789346_2"
+ },
+ {
+  "path": "/track/weird-genetics-voyage-pats-revisit-edit",
+  "type": "track",
+  "id": 3494194317,
+  "artist": "Patrik Sjeren",
+  "title": "Weird Genetics - Voyage (pat's revisit edit)",
+  "date": "10 Aug 2016 07:47:55 GMT",
+  "min": 10.0,
+  "art": 1784625568,
+  "tracks": [
+   [
+    "Weird Genetics - Voyage (pat's revisit edit)",
+    501
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/48094f31d5790b4c2c55968f786746f9/mp3-128/3494194317?p=0&ts=1792789347&t=ec71ccfc686d5b9b621f86b1619c7f0826c49991&token=1792789347_5"
+ },
+ {
+  "path": "/album/the-early-years",
+  "type": "album",
+  "id": 1637031054,
+  "artist": "Various aliases",
+  "title": "The Early Years",
+  "date": "03 Oct 2019 14:35:57 GMT",
+  "min": 80.0,
+  "art": 1070236483,
+  "tracks": [
+   [
+    "Syntatex",
+    267
+   ],
+   [
+    "Stop Pollution",
+    399
+   ],
+   [
+    "Subtilize",
+    632
+   ],
+   [
+    "Robo TKS",
+    333
+   ],
+   [
+    "Quintessentials",
+    369
+   ],
+   [
+    "Perception",
+    300
+   ],
+   [
+    "Override",
+    339
+   ],
+   [
+    "No Xenophobia",
+    384
+   ],
+   [
+    "Headhunter",
+    332
+   ],
+   [
+    "Flying Mushrooms",
+    297
+   ],
+   [
+    "Disintegration",
+    354
+   ],
+   [
+    "Braindamage",
+    245
+   ]
+  ],
+  "mp3sample": "https://t4.bcbits.com/stream/ec2d446f22d5e9fce8c8580430de23c4/mp3-128/4036311670?p=0&ts=1792789348&t=70c0daf3a26894e5a3d220cb9e6485392d9193ec&token=1792789348_1"
+ }
+]
