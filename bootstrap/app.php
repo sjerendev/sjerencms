@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Login links are built from the request host: only APP_URL and its subdomains may be it.
         $middleware->trustHosts();
+        // Stripe posts here; the webhook's signature is its authentication.
+        $middleware->validateCsrfTokens(except: ['stripe/webhook']);
         // /admin has Filament's own login. The shop's guarded routes sit under {locale}.
         $middleware->redirectGuestsTo(fn (Request $request) => route('shop.login', ['locale' => $request->route('locale')]));
     })

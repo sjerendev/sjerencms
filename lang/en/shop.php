@@ -43,4 +43,8 @@ return [
     'mailSubject' => '[EN] [Din inloggningslänk]',
     'mailBody' => '[EN] [Tryck på knappen för att logga in och se dina köp.]',
     'mailButton' => '[EN] [Logga in]',
+    'receiptSubject' => '[EN] [Kvitto: order :number]',
+    'receiptBody' => '[EN] [Tack för ditt köp. Här är ditt kvitto.]',
+    'receiptDownload' => 'Download',
+    'receiptLink' => 'Receipt ↗',
 ];

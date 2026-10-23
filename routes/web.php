@@ -9,10 +9,13 @@ use App\Http\Controllers\ShowMusic;
 use App\Http\Controllers\ShowPage;
 use App\Http\Controllers\ShowRelease;
 use App\Http\Controllers\ShowThanks;
+use App\Http\Controllers\StripeWebhook;
 use App\Http\Middleware\SetLocaleFromPrefix;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/se');
+// Called by Stripe, so outside the locale group and without CSRF (bootstrap/app.php).
+Route::post('stripe/webhook', StripeWebhook::class)->name('stripe.webhook');
 Route::permanentRedirect('en/about-me', '/en/om-mig');
 Route::permanentRedirect('en/projects', '/en/projekt');
 // Decision 9: targets that never existed go to the home page.
