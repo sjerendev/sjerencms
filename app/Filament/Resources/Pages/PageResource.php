@@ -1,15 +1,25 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Pages;
 
-use App\Filament\Resources\PageResource\Pages;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Pages\Pages\ListPages;
+use App\Filament\Resources\Pages\Pages\CreatePage;
+use App\Filament\Resources\Pages\Pages\EditPage;
 use App\Models\Page;
 use App\Filament\Forms\Components\BaseContentSection;
 use App\Filament\Forms\Components\ContentBlocksSection;
 use App\Filament\Forms\Components\HeroSection;
 use App\Filament\Forms\Components\PageSettingsSection;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,27 +27,27 @@ use Filament\Tables\Table;
 class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make(2)
+        return $schema
+            ->components([
+                Grid::make(2)
                     ->schema([
-                        Forms\Components\Group::make()
+                        Group::make()
                             ->schema([
                                 BaseContentSection::make(),
                             ])
                             ->columnSpan(1),
-                        Forms\Components\Group::make()
+                        Group::make()
                             ->schema([
                                 PageSettingsSection::make(),
                             ])
                             ->columnSpan(1),
                     ])
                     ->columnSpan('full'),
-                Forms\Components\Group::make()
+                Group::make()
                     ->schema([
                         HeroSection::make(),
                         ContentBlocksSection::make(),
@@ -66,7 +76,7 @@ class PageResource extends Resource
                     ');
             })
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable()
                     ->formatStateUsing(function ($record) {
                         if ($record->parent_id) {
@@ -75,7 +85,7 @@ class PageResource extends Resource
                         return $record->title;
                     })
                     ->html(),
-                Tables\Columns\TextColumn::make('language')
+                TextColumn::make('language')
                     ->label('Language')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'sv' => 'Svenska',
@@ -88,21 +98,21 @@ class PageResource extends Resource
                         'en' => 'success',
                         default => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('sort_order')
+                TextColumn::make('sort_order')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('parent.title')
+                TextColumn::make('parent.title')
                     ->label('Parent Page')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('is_published')
+                IconColumn::make('is_published')
                     ->boolean(),
-                Tables\Columns\IconColumn::make('is_homepage')
+                IconColumn::make('is_homepage')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('language')
+                SelectFilter::make('language')
                     ->label('Language')
                     ->options([
                         'sv' => 'Svenska',
@@ -116,12 +126,12 @@ class PageResource extends Resource
                         return $query;
                     }),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -129,9 +139,9 @@ class PageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPages::route('/'),
-            'create' => Pages\CreatePage::route('/create'),
-            'edit' => Pages\EditPage::route('/{record}/edit'),
+            'index' => ListPages::route('/'),
+            'create' => CreatePage::route('/create'),
+            'edit' => EditPage::route('/{record}/edit'),
         ];
     }
 }

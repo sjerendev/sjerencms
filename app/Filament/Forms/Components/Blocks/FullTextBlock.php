@@ -2,18 +2,20 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\MarkdownEditor;
 
 class FullTextBlock extends Block
 {
-    public static function make(string $name = 'full_text'): static
+    public static function make(?string $name = 'full_text'): static
     {
         return parent::make($name)
             ->label('Full Width Text')
             ->schema([
-                Forms\Components\Grid::make()
+                Grid::make()
                     ->schema([
                         MarkdownEditor::make('text')
                             ->required()
@@ -30,7 +32,7 @@ class FullTextBlock extends Block
                                 'table',
                             ]),
                     ]),
-                Forms\Components\TextInput::make('section_class')
+                TextInput::make('section_class')
                     ->label('Section Class Name')
                     ->placeholder('Add custom CSS classes'),
             ]);

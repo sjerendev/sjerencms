@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\PageResource\Pages;
+namespace App\Filament\Resources\Pages\Pages;
 
-use App\Filament\Resources\PageResource;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\Pages\PageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
@@ -15,11 +17,11 @@ class EditPage extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('save')
+            Action::make('save')
                 ->label('Save Page')
                 ->color('success')
                 ->action('save'),
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->after(fn () => Notification::make()
                     ->title('Page deleted successfully')
                     ->success()

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use App\Models\Page;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,11 +19,11 @@ class LatestPages extends TableWidget
         return $table
             ->query(Page::latest()->limit(5))
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('is_published')
+                IconColumn::make('is_published')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
             ]);

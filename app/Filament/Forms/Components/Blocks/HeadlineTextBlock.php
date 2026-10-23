@@ -2,18 +2,21 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\MarkdownEditor;
 
 class HeadlineTextBlock extends Block
 {
-    public static function make(string $name = 'headline_text'): static
+    public static function make(?string $name = 'headline_text'): static
     {
         return parent::make($name)
             ->label('Headline and Text')
             ->schema([
-                Forms\Components\Select::make('container_type')
+                Select::make('container_type')
                     ->label('Container Type')
                     ->options([
                         'container' => 'Container',
@@ -21,9 +24,9 @@ class HeadlineTextBlock extends Block
                     ])
                     ->default('container')
                     ->required(),
-                Forms\Components\Grid::make()
+                Grid::make()
                     ->schema([
-                        Forms\Components\TextInput::make('headline')
+                        TextInput::make('headline')
                             ->required(),
                         MarkdownEditor::make('text')
                             ->required()
@@ -40,7 +43,7 @@ class HeadlineTextBlock extends Block
                                 'table',
                             ]),
                     ]),
-                Forms\Components\TextInput::make('section_class')
+                TextInput::make('section_class')
                     ->label('Section Class Name')
                     ->placeholder('Add custom CSS classes'),
             ]);

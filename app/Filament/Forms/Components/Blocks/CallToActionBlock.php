@@ -2,30 +2,36 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms;
 use Filament\Forms\Components\Builder\Block;
 
 class CallToActionBlock extends Block
 {
-    public static function make(string $name = 'call_to_action'): static
+    public static function make(?string $name = 'call_to_action'): static
     {
         return parent::make($name)
             ->label('Call to Action')
             ->schema([
-                Forms\Components\TextInput::make('headline')
+                TextInput::make('headline')
                     ->label('Headline')
                     ->required(),
-                Forms\Components\MarkdownEditor::make('text')
+                MarkdownEditor::make('text')
                     ->label('Text Content')
                     ->required(),
-                Forms\Components\TextInput::make('button_text')
+                TextInput::make('button_text')
                     ->label('Button Text')
                     ->required(),
-                Forms\Components\TextInput::make('button_url')
+                TextInput::make('button_url')
                     ->label('Button URL')
                     ->placeholder('/om-kalibr')
                     ->required(),
-                Forms\Components\Select::make('text_alignment')
+                Select::make('text_alignment')
                     ->label('Text Alignment')
                     ->options([
                         'left' => 'Left',
@@ -33,10 +39,10 @@ class CallToActionBlock extends Block
                         'right' => 'Right',
                     ])
                     ->default('center'),
-                Forms\Components\ColorPicker::make('text_color')
+                ColorPicker::make('text_color')
                     ->label('Text Color')
                     ->default('#000000'),
-                Forms\Components\Select::make('background_type')
+                Select::make('background_type')
                     ->label('Background Type')
                     ->options([
                         'color' => 'Color',
@@ -44,17 +50,17 @@ class CallToActionBlock extends Block
                     ])
                     ->default('color')
                     ->reactive(),
-                Forms\Components\ColorPicker::make('background_color')
+                ColorPicker::make('background_color')
                     ->label('Background Color')
-                    ->visible(fn (Forms\Get $get) => $get('background_type') === 'color')
+                    ->visible(fn (Get $get) => $get('background_type') === 'color')
                     ->default('#ffffff'),
-                Forms\Components\FileUpload::make('background_image')
+                FileUpload::make('background_image')
                     ->label('Background Image')
                     ->image()
                     ->disk('public')
                     ->directory('cta-backgrounds')
-                    ->visible(fn (Forms\Get $get) => $get('background_type') === 'image'),
-                Forms\Components\TextInput::make('section_class')
+                    ->visible(fn (Get $get) => $get('background_type') === 'image'),
+                TextInput::make('section_class')
                     ->label('Section Class Name')
                     ->placeholder('Add custom CSS classes'),
             ]);

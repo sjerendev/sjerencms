@@ -2,8 +2,13 @@
 
 namespace App\Filament\Forms\Components;
 
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 use Closure;
@@ -14,14 +19,14 @@ class BaseContentSection extends Section
     {
         return parent::make($heading)
             ->schema([
-                Forms\Components\TextInput::make('title')
+                TextInput::make('title')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn(string $state, Forms\Set $set) => $set('slug', Str::slug($state))),
-                Forms\Components\TextInput::make('slug')
+                    ->afterStateUpdated(fn(string $state, Set $set) => $set('slug', Str::slug($state))),
+                TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true),
-                Forms\Components\Select::make('language')
+                Select::make('language')
                     ->label('Language')
                     ->options([
                         'sv' => 'Svenska',
@@ -29,13 +34,13 @@ class BaseContentSection extends Section
                     ])
                     ->default('sv')
                     ->required(),
-                Forms\Components\Toggle::make('is_published')
+                Toggle::make('is_published')
                     ->default(false),
-                Forms\Components\TextInput::make('meta_title')
+                TextInput::make('meta_title')
                     ->label('Meta Title')
                     ->placeholder('Leave empty to use page title')
                     ->maxLength(60),
-                Forms\Components\Textarea::make('meta_description')
+                Textarea::make('meta_description')
                     ->label('Meta Description')
                     ->placeholder('Brief description for search engines')
                     ->maxLength(160)

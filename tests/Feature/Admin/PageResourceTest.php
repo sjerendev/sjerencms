@@ -1,6 +1,6 @@
 <?php
 
-use App\Filament\Resources\PageResource\Pages\CreatePage;
+use App\Filament\Resources\Pages\Pages\CreatePage;
 use App\Models\Page;
 use App\Models\User;
 use Livewire\Livewire;

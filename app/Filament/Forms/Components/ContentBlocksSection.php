@@ -2,6 +2,8 @@
 
 namespace App\Filament\Forms\Components;
 
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Builder;
 use App\Filament\Forms\Components\Blocks\CallToActionBlock;
 use App\Filament\Forms\Components\Blocks\FaqAccordionBlock;
 use App\Filament\Forms\Components\Blocks\FullTextBlock;
@@ -12,7 +14,6 @@ use App\Filament\Forms\Components\Blocks\ServiceCardsBlock;
 use App\Filament\Forms\Components\Blocks\TickerBlock;
 use App\Filament\Forms\Components\Blocks\StaggerTextBlock;
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Illuminate\Contracts\Support\Htmlable;
 use Closure;
 
@@ -22,7 +23,7 @@ class ContentBlocksSection extends Section
     {
         return parent::make($heading)
             ->schema([
-                Forms\Components\Builder::make('content')
+                Builder::make('content')
                     ->blocks([
                         ImageTextBlock::make(),
                         FullTextBlock::make(),
