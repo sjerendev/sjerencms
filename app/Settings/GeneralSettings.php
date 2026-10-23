@@ -23,6 +23,8 @@ class GeneralSettings extends Settings
 	public ?string $menu_contact_info = null;
 	public ?string $head_code_snippets = null;
 	public ?string $footer_code_snippets = null;
+	public int $download_limit = 5;
+	public int $login_link_minutes = 15;
 
 	public static function group(): string
 	{

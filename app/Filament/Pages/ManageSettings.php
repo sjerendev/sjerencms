@@ -103,6 +103,20 @@ class ManageSettings extends SettingsPage
 						->columnSpanFull(),
 				]),
 
+			Section::make('Shop')
+				->schema([
+					TextInput::make('download_limit')
+						->integer()
+						->minValue(1)
+						->required()
+						->helperText('Downloads per purchase'),
+					TextInput::make('login_link_minutes')
+						->integer()
+						->minValue(1)
+						->required()
+						->helperText('Minutes a login link is valid'),
+				]),
+
 			Section::make('Custom Code')
 				->description('Add custom code snippets that will be inserted in the head tag and footer of your website')
 				->schema([

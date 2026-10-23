@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 
 it('saves general settings', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
 
     Livewire::test(ManageSettings::class)
         ->fillForm([
@@ -28,9 +28,29 @@ it('saves general settings', function () {
 });
 
 it('stores the logo on the public disk', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
 
     $logo = Livewire::test(ManageSettings::class)->instance()->form->getComponent('logo');
 
     expect($logo->getDiskName())->toBe('public');
+});
+
+it('has default shop limits', function () {
+    $settings = app(GeneralSettings::class);
+
+    expect($settings->download_limit)->toBe(5)
+        ->and($settings->login_link_minutes)->toBe(15);
+});
+
+it('saves the shop limits', function () {
+    $this->actingAs(User::factory()->admin()->create());
+
+    Livewire::test(ManageSettings::class)
+        ->fillForm(['download_limit' => 3, 'login_link_minutes' => 30])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $settings = app(GeneralSettings::class)->refresh();
+    expect($settings->download_limit)->toBe(3)
+        ->and($settings->login_link_minutes)->toBe(30);
 });

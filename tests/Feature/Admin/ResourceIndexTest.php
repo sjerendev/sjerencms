@@ -6,7 +6,7 @@ use App\Models\User;
 use Livewire\Livewire;
 
 it('renders every resource index', function (string $url) {
-    $this->actingAs(User::factory()->create())->get($url)->assertOk();
+    $this->actingAs(User::factory()->admin()->create())->get($url)->assertOk();
 })->with([
     '/admin/pages',
     '/admin/releases',
@@ -14,7 +14,7 @@ it('renders every resource index', function (string $url) {
 ]);
 
 it('searches the page list', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
     Page::create(['title' => 'Om mig', 'slug' => 'om-mig', 'language' => 'sv']);
     Page::create(['title' => 'Kontakt', 'slug' => 'kontakt', 'language' => 'sv']);
 

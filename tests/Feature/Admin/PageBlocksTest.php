@@ -32,7 +32,7 @@ beforeEach(function () {
         Storage::disk('public')->put($file, 'x');
     }
 
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
     $this->page = Page::create(['title' => 'All', 'slug' => 'all', 'language' => 'sv', 'content' => everyBlock()]);
 });
 

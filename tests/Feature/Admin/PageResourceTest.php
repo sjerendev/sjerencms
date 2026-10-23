@@ -6,7 +6,7 @@ use App\Models\User;
 use Livewire\Livewire;
 
 it('saves a page with a headline_text block and reopens it', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
 
     Livewire::test(CreatePage::class)
         ->fillForm([

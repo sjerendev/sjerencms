@@ -13,7 +13,7 @@ use Livewire\Livewire;
 
 it('creates a release with a cover', function () {
     Storage::fake('public');
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
 
     Livewire::test(CreateRelease::class)
         ->fillForm([
@@ -27,7 +27,7 @@ it('creates a release with a cover', function () {
 });
 
 it('rejects a minimum price below zero and a duplicate slug', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
     Release::factory()->create(['slug' => 'taken']);
 
     Livewire::test(CreateRelease::class)
@@ -38,7 +38,7 @@ it('rejects a minimum price below zero and a duplicate slug', function () {
 it('adds a track with preview and wav from the release page', function () {
     Storage::fake('public');
     Storage::fake('music');
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
     $release = Release::factory()->create();
 
     Livewire::test(TracksRelationManager::class, ['ownerRecord' => $release, 'pageClass' => EditRelease::class])
@@ -54,14 +54,14 @@ it('adds a track with preview and wav from the release page', function () {
 });
 
 it('renders the edit page with the tracks table', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
     $release = Release::factory()->has(Track::factory(), 'tracks')->create();
 
     $this->get("/admin/releases/{$release->id}/edit")->assertOk()->assertSee($release->tracks[0]->title);
 });
 
 it('rejects a duplicate position and a missing or negative track price as form errors', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
     $release = Release::factory()->create();
     $release->tracks()->create(['position' => 1, 'title' => 'A', 'duration_seconds' => 60]);
     Release::factory()->create()->tracks()->create(['position' => 2, 'title' => 'Other release', 'duration_seconds' => 60]);
@@ -77,7 +77,7 @@ it('rejects a duplicate position and a missing or negative track price as form e
 });
 
 it('keeps its own position when a track is edited', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->admin()->create());
     $release = Release::factory()->create();
     $track = $release->tracks()->create(['position' => 1, 'title' => 'A', 'duration_seconds' => 60]);
 
