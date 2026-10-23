@@ -6,8 +6,8 @@
   `Release::aliases()` builds the filter from distinct `artist` values.
 - Disks: covers (`cover`) and MP3 previews (`preview`) on `public`; WAV
   masters (`wav`) on `music`, `storage/app/music`, private, no URL. A WAV
-  must never get a public URL — downloads come in phase 4 through an
-  authorised route.
+  must never get a public URL — downloads go through the authorised
+  `download` route (see `shop.md`).
 - `MusicSeeder` loads the 22 Bandcamp releases from
   `database/seeders/data/music.json`, with names from `music-names.json` and
   covers from `covers/`, no audio. Idempotent:

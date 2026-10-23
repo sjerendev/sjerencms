@@ -35,3 +35,11 @@ fyllas i med påhittad copy.
   visar inga av tillstånden. "Spår", "Album" och "köpt :date" är ur
   MinaKop-ritningen. Engelska etiketter översatta av Claude, meningarna är
   `[EN] …` med svensk text.
+- Butiken: villkor och integritetspolicy finns inte (öppen fråga 3); samtycket
+  i kassan är platshållare tills de finns och länkar ingenstans.
+- Butiken: "Moms ingår." och "Varav moms" visas inte förrän momsfrågan
+  (öppen fråga 1) är besvarad; `STRIPE_TAX` är av tills Stripe har en
+  registrerad adress.
+- Butiken: nedladdningsgräns (5) och länkens giltighet (15 min) är
+  ritningarnas `[5]` och `[15]`; Patrik sätter de riktiga under Shop i
+  inställningarna i Filament.

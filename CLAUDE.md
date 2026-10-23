@@ -71,7 +71,9 @@ a shared host (hostup): no Node process, no long-running queue worker.
 - `.claude/rules/site.md`: routing, layout, UI text, `wire:navigate`, theme
   and motion.
 - `.claude/rules/music.md`: releases and tracks, the disks, the music routes
-  and the player's events, which the shop (phase 4) listens to.
+  and the player's events, which the shop listens to.
+- `.claude/rules/shop.md`: cart, checkout, Stripe webhook, login links,
+  downloads, settings and local Stripe testing.
 
 ### Checking in the Browser
 
