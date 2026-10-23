@@ -8,6 +8,8 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use RuntimeException;
+use Throwable;
 use ZipArchive;
 
 #[Signature('music:build-zips')]
@@ -21,6 +23,8 @@ class BuildReleaseZips extends Command
                 && $release->tracks->every(fn (Track $track) => $track->getFirstMedia('wav')),
         );
 
+        $failed = false;
+
         foreach ($releases as $release) {
             $fingerprint = sha1($release->tracks->map(
                 fn (Track $track) => "{$track->id}:{$track->getFirstMedia('wav')->id}:{$track->position}:{$track->title}",
@@ -30,11 +34,18 @@ class BuildReleaseZips extends Command
                 continue;
             }
 
-            $this->build($release, $fingerprint);
-            $this->line("Built {$release->slug}.zip");
+            // One broken release (say a WAV row whose file is gone) must not block the others.
+            try {
+                $this->build($release, $fingerprint);
+                $this->line("Built {$release->slug}.zip");
+            } catch (Throwable $e) {
+                report($e);
+                $this->error("Failed {$release->slug}: {$e->getMessage()}");
+                $failed = true;
+            }
         }
 
-        return self::SUCCESS;
+        return $failed ? self::FAILURE : self::SUCCESS;
     }
 
     private function build(Release $release, string $fingerprint): void
@@ -44,22 +55,33 @@ class BuildReleaseZips extends Command
         $tmp = "{$dir}/release-{$release->id}.zip";
         File::delete($tmp);
 
-        $zip = new ZipArchive;
-        $zip->open($tmp, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        try {
+            $zip = new ZipArchive;
+            if ($zip->open($tmp, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+                throw new RuntimeException("Cannot open {$tmp}");
+            }
 
-        foreach ($release->tracks as $track) {
-            $name = sprintf('%02d %s.wav', $track->position, preg_replace('#[/\\\\:*?"<>|]#', '-', $track->title));
-            // ponytail: reads WAVs by local path; a remote disk (R2) needs a temp copy first.
-            $zip->addFile($track->getFirstMedia('wav')->getPath(), $name);
-            $zip->setCompressionName($name, ZipArchive::CM_STORE);
+            foreach ($release->tracks as $track) {
+                $name = sprintf('%02d %s.wav', $track->position, preg_replace('#[/\\\\:*?"<>|]#', '-', $track->title));
+                // ponytail: reads WAVs by local path; a remote disk (R2) needs a temp copy first.
+                if (! $zip->addFile($track->getFirstMedia('wav')->getPath(), $name)) {
+                    throw new RuntimeException("Cannot add {$name}");
+                }
+                $zip->setCompressionName($name, ZipArchive::CM_STORE);
+            }
+
+            if (! $zip->close()) {
+                throw new RuntimeException("Cannot write {$tmp}");
+            }
+
+            // addMedia moves the temp file onto the music disk.
+            $release->addMedia($tmp)
+                ->usingFileName("{$release->slug}.zip")
+                ->withCustomProperties(['fingerprint' => $fingerprint])
+                ->toMediaCollection('zip');
+        } finally {
+            // Nothing partial lingers: after a success the file has moved, after a failure it goes here.
+            File::delete($tmp);
         }
-
-        $zip->close();
-
-        // addMedia moves the temp file onto the music disk.
-        $release->addMedia($tmp)
-            ->usingFileName("{$release->slug}.zip")
-            ->withCustomProperties(['fingerprint' => $fingerprint])
-            ->toMediaCollection('zip');
     }
 }

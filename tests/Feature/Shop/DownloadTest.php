@@ -82,3 +82,12 @@ it('answers 404 and counts nothing while the zip is missing', function () {
 
     expect($this->releaseItem->fresh()->download_count)->toBe(0);
 });
+
+it('answers 404 and counts nothing when the file is gone from the disk', function () {
+    $wav = $this->release->tracks->first()->getFirstMedia('wav');
+    Storage::disk('music')->delete($wav->getPathRelativeToRoot());
+
+    $this->actingAs($this->buyer)->get(route('download', $this->trackItem))->assertNotFound();
+
+    expect($this->trackItem->fresh()->download_count)->toBe(0);
+});

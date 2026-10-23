@@ -26,7 +26,8 @@ class DownloadPurchase
         );
 
         $file = $item->file();
-        abort_if($file === null, 404);
+        // The row can outlive the file; that must not cost the buyer a download.
+        abort_if($file === null || ! Storage::disk($file->disk)->exists($file->getPathRelativeToRoot()), 404);
 
         // One atomic UPDATE: two parallel requests cannot both take the last download.
         $counted = OrderItem::whereKey($item->id)
