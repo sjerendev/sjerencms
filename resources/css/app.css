@@ -1,1 +1,151 @@
 @import "tailwindcss";
+@import "@fontsource-variable/archivo";
+
+/* --------------------------------------------------------------------------
+   Tokens. Ljust är standard, mörkt sätts via [data-theme="dark"] på <html>.
+   Porterad från sjeren-2026 src/app/globals.css, se DESIGN.md där.
+   -------------------------------------------------------------------------- */
+:root {
+  --paper: #edecea;
+  --ink: #111820;
+  --ink-dim: rgba(17, 24, 32, 0.55);
+  --ink-dimmer: rgba(17, 24, 32, 0.4);
+  --hair: rgba(17, 24, 32, 0.13);
+  --hair-mid: rgba(17, 24, 32, 0.22);
+  --hair-strong: #111820;
+  --accent: #fc6f5d;
+  --mint: #61f2c2;
+  --open: #1a8f4c; /* statusprick: tillgänglig. Mint är ljudspåret, inte status. */
+  /* Vågens mellanlager går i samma färg som hero-rubrikens andra rad, helt
+     utan opacitet. Pekar på --ink så de aldrig kan glida isär: mörkt läge
+     ger vit linje av sig själv. */
+  --wave-mid: var(--ink);
+  --plate: #111820; /* bakplatta bakom projektbilder */
+  --gutter: 60px;
+}
+
+[data-theme="dark"] {
+  --paper: #111820;
+  --ink: #edecea;
+  --ink-dim: rgba(237, 236, 234, 0.6);
+  --ink-dimmer: rgba(237, 236, 234, 0.42);
+  --hair: rgba(237, 236, 234, 0.15);
+  --hair-mid: rgba(237, 236, 234, 0.28);
+  --hair-strong: rgba(237, 236, 234, 0.55);
+  --open: #3ddc84; /* ljusare mot mörkt papper — mörkgrönt syns inte där */
+  --plate: #000000;
+}
+
+@media (max-width: 760px) {
+  :root { --gutter: 20px; }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-dim: var(--ink-dim);
+  --color-ink-dimmer: var(--ink-dimmer);
+  --color-hair: var(--hair);
+  --color-hair-mid: var(--hair-mid);
+  --color-hair-strong: var(--hair-strong);
+  --color-accent: var(--accent);
+  --color-mint: var(--mint);
+  --color-open: var(--open);
+  --color-plate: var(--plate);
+  --font-sans: "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
+  --radius-pill: 999px;
+}
+
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body { margin: 0; }
+
+  /* Ligger i base — annars slår den text-utilities på länkar. */
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--accent); color: var(--paper); }
+}
+
+@layer components {
+  /* Vågen under länkarna. Se `WaveUnderline.tsx` för hur den sätts ihop. */
+  .wave-link {
+    position: relative;
+  }
+
+  .wave-clip {
+    position: absolute;
+    inset-inline: 0;
+    bottom: -6px;
+    height: 12px;
+    overflow: hidden;
+    pointer-events: none;
+    /* Remsan täcker hårlinjen vid hover. Att tona ut `border-color` går inte:
+       Tailwinds border-utility ligger i utilities-lagret och vinner över
+       components oavsett specificitet. */
+    background: transparent;
+    transition: background 0.35s;
+  }
+
+  .wave-clip svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    /* Fast bredd, inte procent: annars blir vågen tätare ju smalare länken är.
+       600px = två varv, och translateX(-50%) flyttar exakt ett. */
+    width: 600px;
+    height: 12px;
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+
+  .wave-clip path { fill: none; stroke-linecap: round; }
+  .wave-coral path { stroke: var(--accent); stroke-width: 1.4; }
+  .wave-grey path { stroke: var(--ink-dimmer); stroke-width: 1; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .wave-coral { animation: wave-roll 3.2s linear infinite; }
+    .wave-grey { animation: wave-roll 4.6s linear infinite reverse; }
+
+    .wave-link:hover .wave-clip { background: var(--paper); }
+    .wave-link:hover .wave-clip svg { opacity: 1; }
+  }
+
+  /* Utan rörelse blir det en vanlig hårlinje — en frusen våg säger ingenting. */
+  @media (prefers-reduced-motion: reduce) {
+    .wave-clip { display: none; }
+  }
+
+  @keyframes wave-roll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Sidmarginalen. Används överallt istället för max-width — sidan andas med fönstret. */
+  .gut { padding-inline: var(--gutter); }
+
+  /* Etiketten. Sektionsnamn, metadata, nav, knappar, årtal. */
+  .lbl {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 760px) {
+    .lbl { font-size: 10px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

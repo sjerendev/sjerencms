@@ -10,7 +10,9 @@
     @foreach ($alternates as $language => $href)
         <link rel="alternate" hreflang="{{ $language }}" href="{{ $href }}">
     @endforeach
-    @vite(['resources/css/app.css'])
+    {{-- Runs while the HTML is parsed, before first paint, so dark mode never flashes light. From ThemeScript.tsx. --}}
+    <script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){}})()</script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
 <body class="font-sans">
