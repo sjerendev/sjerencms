@@ -1,7 +1,7 @@
 {{-- One release in the grid on Omslag.dc.html. --}}
 @props(['release'])
 @php
-    $href = url('/'.request()->route('locale').'/musik/'.$release->slug);
+    $href = route('music.show', ['release' => $release]);
     $tracks = $release->tracks_count ?? $release->tracks()->count();
 @endphp
 <div class="flex flex-col gap-[12px]">
