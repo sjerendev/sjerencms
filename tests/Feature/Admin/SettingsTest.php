@@ -26,3 +26,11 @@ it('saves general settings', function () {
     $stored = DB::table('settings')->where('group', 'general')->where('name', 'youtube_url')->value('payload');
     expect(json_decode($stored))->toBe('https://youtube.com/@x');
 });
+
+it('stores the logo on the public disk', function () {
+    $this->actingAs(User::factory()->create());
+
+    $logo = Livewire::test(ManageSettings::class)->instance()->form->getComponent('logo');
+
+    expect($logo->getDiskName())->toBe('public');
+});

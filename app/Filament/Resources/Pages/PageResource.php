@@ -77,7 +77,8 @@ class PageResource extends Resource
             })
             ->columns([
                 TextColumn::make('title')
-                    ->searchable()
+                    // Qualified because the table query self-joins pages as parent_pages.
+                    ->searchable(['pages.title'])
                     ->formatStateUsing(function ($record) {
                         if ($record->parent_id) {
                             return '<div style="margin-left: 20px;">' . e($record->title) . '</div>';

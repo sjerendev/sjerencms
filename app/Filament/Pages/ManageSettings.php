@@ -50,6 +50,8 @@ class ManageSettings extends SettingsPage
 				->schema([
 					FileUpload::make('logo')
 						->image()
+						->disk('public')
+						->visibility('public')
 						->directory('branding'),
 				]),
 
