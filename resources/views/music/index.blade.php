@@ -22,5 +22,6 @@
                 <x-release-card :release="$release" />
             @endforeach
         </div>
+        <x-play-data :releases="$releases" />
     </section>
 </x-layouts.site>

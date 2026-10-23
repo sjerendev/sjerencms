@@ -29,4 +29,7 @@ return [
     'addToCart' => 'Add to cart',
     'moreFrom' => 'More from :alias',
     'allCount' => 'All :count releases →',
+    'buyTrack' => 'Buy the track',
+    'pausePlayer' => 'Pause',
+    'playPlayer' => 'Play',
 ];

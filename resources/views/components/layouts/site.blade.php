@@ -19,6 +19,10 @@
     <x-site-header :alternates="$alternates" />
     <main>{{ $slot }}</main>
     <x-site-footer />
+    {{-- Kept across wire:navigate, so the preview keeps playing between pages. --}}
+    @persist('player')
+        <x-player-bar />
+    @endpersist
     @livewireScripts
 </body>
 </html>

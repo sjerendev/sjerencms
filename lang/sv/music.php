@@ -29,4 +29,7 @@ return [
     'addToCart' => 'Lägg i korgen',
     'moreFrom' => 'Mer från :alias',
     'allCount' => 'Alla :count släpp →',
+    'buyTrack' => 'Köp spåret',
+    'pausePlayer' => 'Pausa',
+    'playPlayer' => 'Spela',
 ];

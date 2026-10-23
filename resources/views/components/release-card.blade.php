@@ -2,7 +2,8 @@
 @props(['release'])
 @php
     $href = route('music.show', ['release' => $release]);
-    $tracks = $release->tracks_count ?? $release->tracks()->count();
+    $tracks = $release->tracks->count();
+    $playable = $release->playlist() !== null;
 @endphp
 <div class="flex flex-col gap-[12px]">
     <a href="{{ $href }}" wire:navigate>
@@ -16,12 +17,9 @@
     <a href="{{ $href }}" wire:navigate class="text-[18px] leading-[1.15] font-medium tracking-[-0.02em] hover:text-accent lg:text-[22px]">{{ $release->title }}</a>
     <span class="text-[14px] text-ink-dim">{{ $release->released_on->year }} · {{ trans_choice('music.tracks', $tracks) }}</span>
     <div class="flex items-center gap-[10px] pt-[4px]">
-        <button
-            type="button"
-            data-play-release="{{ $release->slug }}"
-            aria-label="{{ __('music.play', ['title' => $release->title]) }}"
-            class="flex size-[44px] shrink-0 cursor-pointer items-center justify-center rounded-pill border border-sound text-sound"
-        ><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/></svg></button>
+        @if ($playable)
+            <x-play-button :release="$release" class="size-[44px] border border-sound text-sound" />
+        @endif
         <button
             type="button"
             data-cart-add="release"

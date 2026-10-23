@@ -12,11 +12,11 @@ class ShowRelease
     {
         abort_unless($release->is_published, 404);
 
-        $release->load('tracks');
+        $release->load('media', 'tracks.media');
 
         return view('music.show', [
             'release' => $release,
-            'more' => Release::published()->newest()
+            'more' => Release::published()->newest()->with('media', 'tracks.media')
                 ->where('artist', $release->artist)
                 ->whereKeyNot($release->getKey())
                 ->limit(4)

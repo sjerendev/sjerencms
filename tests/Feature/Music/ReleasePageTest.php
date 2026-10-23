@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Release;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     $this->release = Release::factory()->create(['artist' => 'S.D.L.', 'title' => 'Past Voyages', 'slug' => 's-d-l-past-voyages', 'released_on' => '2026-09-10', 'min_price' => 70]);
@@ -10,6 +12,10 @@ beforeEach(function () {
 });
 
 it('shows the release with meta, tracks and the album form', function () {
+    // The scrubber is a player control, so it needs a track with a preview.
+    Storage::fake('public');
+    $this->release->tracks[0]->addMedia(UploadedFile::fake()->create('p.mp3', 10, 'audio/mpeg'))->toMediaCollection('preview');
+
     $this->get('/se/musik/s-d-l-past-voyages')->assertOk()
         ->assertSee('Past Voyages')->assertSee('10 sep 2026')->assertSee('32 min')->assertSee('WAV')
         ->assertSee('8:44')->assertSee('10:21')->assertSee('Köp · 20 kr')

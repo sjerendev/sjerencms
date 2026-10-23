@@ -1,6 +1,8 @@
 {{-- Slapp.dc.html from lg, SlappMobil.dc.html below. --}}
 @php
+    $playlist = $release->playlist();
     $first = $release->tracks->first();
+    $line = __('music.trackLine', ['n' => ':n', 'time' => ':time']);
 @endphp
 <x-layouts.site :title="$title" :description="$description" :alternates="$alternates">
     <div class="gut pt-[12px] lg:pt-[36px]">
@@ -37,53 +39,52 @@
                 @endforeach
             </dl>
 
-            @if ($first)
+            @if ($playlist)
                 {{-- The whole album as one line, one segment per track, width = duration. --}}
-                <div class="hidden flex-col gap-[12px] lg:flex">
+                <div data-scrub-for="{{ $release->slug }}" data-line="{{ $line }}" class="hidden flex-col gap-[12px] lg:flex">
                     <div class="flex items-center gap-[18px]">
-                        <button
-                            type="button"
-                            data-play-release="{{ $release->slug }}"
-                            aria-label="{{ __('music.play', ['title' => $release->title]) }}"
-                            class="flex size-[64px] shrink-0 cursor-pointer items-center justify-center rounded-pill bg-bar-sound text-plate"
-                        ><svg width="18" height="18" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/></svg></button>
+                        <x-play-button :release="$release" :icon="18" class="size-[64px] bg-bar-sound text-plate" />
                         <div class="flex flex-col gap-[4px]">
                             <span data-scrub-title class="text-[20px] font-semibold tracking-[-0.01em]">{{ $first->title }}</span>
-                            <span data-scrub-line class="lbl text-ink-dim">{{ __('music.trackLine', ['n' => 1, 'time' => '0:00 / '.$first->clock()]) }}</span>
+                            <span data-scrub-line class="lbl text-ink-dim">{{ __('music.trackLine', ['n' => $first->position, 'time' => '0:00 / '.$first->clock()]) }}</span>
                         </div>
                     </div>
-                    <div data-scrub class="flex h-[30px] items-center gap-[4px]">
+                    <div data-scrub="{{ $release->slug }}" class="flex h-[30px] items-center gap-[4px]">
                         @foreach ($release->tracks as $track)
-                            <div data-scrub-track="{{ $track->id }}" style="flex: {{ $track->duration_seconds }} 1 0" class="relative flex h-[30px] cursor-pointer items-center">
+                            <div data-scrub-track="{{ $track->id }}" style="flex: {{ $track->duration_seconds }} 1 0" @class(['relative flex h-[30px] items-center', 'cursor-pointer' => $track->previewUrl()])>
                                 <span class="block h-[2px] w-full bg-hair"></span>
-                                <span data-scrub-progress class="absolute inset-y-0 left-0 block w-0 overflow-hidden"></span>
+                                <span data-scrub-progress style="width: 0%" class="absolute inset-y-0 left-0 flex items-center overflow-hidden bg-paper">
+                                    <svg width="100%" height="30" viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M0 15 Q 6 3 12 15 T 24 15 T 36 15 T 48 15 T 60 15 T 72 15 T 84 15 T 96 15 T 108 15 T 120 15 T 132 15 T 144 15 T 156 15 T 168 15 T 180 15 T 192 15 T 200 15" fill="none" stroke="var(--bar-sound)" stroke-width="1.8"/></svg>
+                                </span>
                             </div>
                         @endforeach
                     </div>
                 </div>
 
                 <div class="flex items-center gap-[14px] lg:hidden">
-                    <button
-                        type="button"
-                        data-play-release="{{ $release->slug }}"
-                        aria-label="{{ __('music.play', ['title' => $release->title]) }}"
-                        class="flex size-[56px] shrink-0 cursor-pointer items-center justify-center rounded-pill bg-bar-sound text-plate"
-                    ><svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/></svg></button>
+                    <x-play-button :release="$release" :icon="16" class="size-[56px] bg-bar-sound text-plate" />
                     <span class="lbl">{{ __('music.playAll') }}</span>
                 </div>
             @endif
 
             <ol class="m-0 list-none p-0">
                 @foreach ($release->tracks as $track)
-                    <li class="grid min-h-[52px] grid-cols-[28px_minmax(0,1fr)_44px_72px] items-center gap-[10px] border-t border-hair text-[16px] last:border-b lg:grid-cols-[44px_36px_minmax(0,1fr)_70px_130px] lg:gap-[16px] lg:py-[14px] lg:text-[17px]">
+                    <li class="data-current:text-bar-sound grid min-h-[52px] grid-cols-[28px_minmax(0,1fr)_44px_72px] items-center gap-[10px] border-t border-hair text-[16px] last:border-b lg:grid-cols-[44px_36px_minmax(0,1fr)_70px_130px] lg:gap-[16px] lg:py-[14px] lg:text-[17px]">
                         <span class="lbl text-ink-dimmer">{{ sprintf('%02d', $track->position) }}</span>
-                        <button
-                            type="button"
-                            data-play-track="{{ $track->id }}"
-                            data-release="{{ $release->slug }}"
-                            aria-label="{{ __('music.play', ['title' => $track->title]) }}"
-                            class="hidden size-[36px] cursor-pointer items-center justify-center rounded-pill border border-sound text-sound lg:flex"
-                        ><svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/></svg></button>
+                        @if ($track->previewUrl())
+                            <button
+                                type="button"
+                                data-play-track="{{ $track->id }}"
+                                data-release="{{ $release->slug }}"
+                                data-label-play="{{ __('music.play', ['title' => $track->title]) }}"
+                                data-label-pause="{{ __('music.pause', ['title' => $track->title]) }}"
+                                aria-label="{{ __('music.play', ['title' => $track->title]) }}"
+                                aria-pressed="false"
+                                class="hidden size-[36px] cursor-pointer items-center justify-center rounded-pill border border-sound text-sound lg:flex"
+                            ><svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/></svg></button>
+                        @else
+                            <span class="hidden lg:block"></span>
+                        @endif
                         <span>{{ $track->title }}</span>
                         <span class="text-right text-ink-dim">{{ $track->clock() }}</span>
                         <button
@@ -129,6 +130,8 @@
                     >{{ __('music.addToCart') }}</button>
                 </div>
             </form>
+
+            <x-play-data :releases="collect([$release])->merge($more)" />
 
             @if (filled($release->description))
                 <p class="m-0 max-w-[62ch] text-[16px] leading-[1.65] whitespace-pre-line text-ink-dim">{{ $release->description }}</p>

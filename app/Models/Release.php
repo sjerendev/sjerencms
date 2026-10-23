@@ -76,6 +76,37 @@ class Release extends Model implements HasMedia
     }
 
     /**
+     * What the player needs to queue this release: only tracks with a preview.
+     * Null when nothing can be played, and then no play control is rendered.
+     *
+     * @return array{slug: string, alias: string, title: string, cover: ?string, url: string, tracks: list<array<string, mixed>>}|null
+     */
+    public function playlist(): ?array
+    {
+        $tracks = $this->tracks
+            ->filter(fn (Track $track) => $track->previewUrl())
+            ->map(fn (Track $track) => [
+                'id' => $track->id,
+                'position' => $track->position,
+                'title' => $track->title,
+                'seconds' => $track->duration_seconds,
+                'clock' => $track->clock(),
+                'price' => $track->min_price,
+                'preview' => $track->previewUrl(),
+            ])
+            ->values();
+
+        return $tracks->isEmpty() ? null : [
+            'slug' => $this->slug,
+            'alias' => $this->artist,
+            'title' => $this->title,
+            'cover' => $this->coverUrl(),
+            'url' => route('music.show', ['release' => $this]),
+            'tracks' => $tracks->all(),
+        ];
+    }
+
+    /**
      * The aliases of published releases, most releases first.
      *
      * @return Collection<int, array{slug: string, name: string, count: int}>

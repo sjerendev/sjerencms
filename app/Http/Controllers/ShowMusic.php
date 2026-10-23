@@ -15,7 +15,7 @@ class ShowMusic
         // An unknown or outdated alias shows everything instead of an empty page.
         $active = $aliases->firstWhere('slug', $request->query('alias'));
 
-        $releases = Release::published()->newest()->withCount('tracks')
+        $releases = Release::published()->newest()->with('media', 'tracks.media')
             ->when($active, fn ($query) => $query->where('artist', $active['name']))
             ->get();
 

@@ -169,3 +169,9 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Spelarlisten ligger över sidans botten. Utanför lagren, annars vinner
+   footerns pb-utility. 120px täcker både listen (80px) och minispelaren. */
+html[data-player="on"] footer {
+  padding-bottom: 120px;
+}
