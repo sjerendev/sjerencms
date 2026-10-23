@@ -19,7 +19,6 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\LatestPages;
-use App\Filament\Widgets\LatestPosts;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -45,7 +44,6 @@ class AdminPanelProvider extends PanelProvider
 				Widgets\AccountWidget::class,
 				StatsOverview::class,
 				LatestPages::class,
-				LatestPosts::class,
 			])
 			->middleware([
 				EncryptCookies::class,
