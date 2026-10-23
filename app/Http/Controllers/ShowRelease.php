@@ -24,9 +24,7 @@ class ShowRelease
             'total' => Release::published()->count(),
             'title' => "{$release->title} — Patrik Sjerén",
             'description' => $release->description ?: __('meta.description'),
-            'alternates' => collect(SetLocaleFromPrefix::LOCALES)
-                ->mapWithKeys(fn ($language, $prefix) => [$language => url("/{$prefix}/musik/{$release->slug}")])
-                ->all(),
+            'alternates' => SetLocaleFromPrefix::alternates("musik/{$release->slug}"),
         ]);
     }
 }

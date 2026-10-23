@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ShowCheckout;
 use App\Http\Controllers\ShowMusic;
 use App\Http\Controllers\ShowPage;
 use App\Http\Controllers\ShowRelease;
+use App\Http\Controllers\ShowThanks;
 use App\Http\Middleware\SetLocaleFromPrefix;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +21,7 @@ Route::prefix('{locale}')->whereIn('locale', array_keys(SetLocaleFromPrefix::LOC
         // Before {slug}, or the page router takes /musik.
         Route::get('musik', ShowMusic::class)->name('music.index');
         Route::get('musik/{release:slug}', ShowRelease::class)->name('music.show');
-        // Placeholder so the cart can link here; Task 4 replaces it with the checkout.
-        Route::get('kassa', fn () => abort(404))->name('shop.checkout');
+        Route::get('kassa', ShowCheckout::class)->name('shop.checkout');
+        Route::get('kassa/tack/{order}', ShowThanks::class)->name('shop.thanks');
         Route::get('{slug}', ShowPage::class)->where('slug', '[a-z0-9-]+')->name('page.show');
     });

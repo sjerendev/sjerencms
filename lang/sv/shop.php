@@ -1,6 +1,6 @@
 <?php
 
-// Text from the cart artboard (docs/design/musik/Korg.dc.html), see TODO-INNEHALL.md.
+// Text from the cart and checkout artboards (docs/design/musik/Korg and Kassa), see TODO-INNEHALL.md.
 return [
     'cart' => 'Korg',
     'close' => 'Stäng korgen',
@@ -14,4 +14,23 @@ return [
     'tracks' => ':count spår',
     'albums' => ':count album',
     'empty' => '[Korgen är tom]',
+    'checkout' => 'Kassa',
+    'backToCart' => 'Tillbaka till korgen',
+    'email' => 'E-post',
+    'emailPlaceholder' => 'namn@exempel.se',
+    'emailHelp' => 'Ditt konto skapas med den här adressen. Där finns dina köp, och du loggar in med en länk i stället för lösenord.',
+    'payment' => 'Betalning',
+    'paymentHelp' => 'Du skickas vidare och betalar där. Inga kortuppgifter passerar den här sajten.',
+    'yourOrder' => 'Din order',
+    'trackBy' => 'Spår · :artist',
+    'albumBy' => 'Album · :artist',
+    'toPay' => 'Att betala',
+    'pay' => 'Betala :amount kr',
+    'wav' => 'Nedladdning i WAV',
+    'consent' => '[Samtycke: leveransen börjar direkt och ångerrätten upphör]',
+    'consentRequired' => '[Du måste godkänna för att gå vidare]',
+    'emailInvalid' => '[Ange en giltig e-postadress]',
+    'payFailed' => '[Betalningen kunde inte startas. Försök igen.]',
+    'belowMinimum' => '[Summan måste vara minst 3 kr]',
+    'thanks' => 'Tack',
 ];

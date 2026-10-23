@@ -28,12 +28,18 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    'stripe' => [
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        // Stripe Tax needs a registered origin address in the dashboard; off until then.
+        'tax' => (bool) env('STRIPE_TAX', false),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
 
 ];

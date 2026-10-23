@@ -26,9 +26,7 @@ class ShowMusic
             'releases' => $releases,
             'title' => __('music.title'),
             'description' => __('meta.description'),
-            'alternates' => collect(SetLocaleFromPrefix::LOCALES)
-                ->mapWithKeys(fn ($language, $prefix) => [$language => url("/{$prefix}/musik")])
-                ->all(),
+            'alternates' => SetLocaleFromPrefix::alternates('musik'),
         ]);
     }
 }

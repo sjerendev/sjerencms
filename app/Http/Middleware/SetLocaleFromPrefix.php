@@ -24,4 +24,22 @@ class SetLocaleFromPrefix
 
         return $next($request);
     }
+
+    /** The URL prefix for a language code: `sv` gives `se`. */
+    public static function prefix(string $language): string
+    {
+        return array_flip(self::LOCALES)[$language];
+    }
+
+    /**
+     * The hreflang map for a path under the locale prefix: language => URL.
+     *
+     * @return array<string, string>
+     */
+    public static function alternates(string $path): array
+    {
+        return collect(self::LOCALES)
+            ->mapWithKeys(fn ($language, $prefix) => [$language => url("/{$prefix}/{$path}")])
+            ->all();
+    }
 }
