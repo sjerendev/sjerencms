@@ -392,6 +392,11 @@ git commit -m "Add orders and decide what can be bought"
   - `resources/views/components/site-header.blade.php`
   - `resources/views/music/show.blade.php` (buy buttons only when `isPurchasable()`)
   - `lang/{sv,en}/nav.php`
+  - `app/Providers/AppServiceProvider.php` (persistent middleware)
+  - Any test in `tests/Feature/Music` that asserts a buy button on a factory
+    track. Today's grep finds none for `data-cart-add`, `data-amount-input`
+    or the buy labels. Grep again before you start, and give every hit
+    `withWav()`.
 - Test: `tests/Feature/Shop/CartTest.php`, `tests/Feature/Shop/CartDrawerTest.php`
 
 **Interfaces:**
@@ -488,6 +493,18 @@ Expected: FAIL with "Class App\Shop\Cart not found".
     and "Fortsätt lyssna". "Fortsätt lyssna" is a `<form method="dialog">`
     button, so it closes the dialog without JS.
   - Leave out "Moms ingår." (decision 1).
+- **Locale on Livewire updates.** Livewire's update requests go to its own
+  endpoint, outside `{locale}`. Without a fix, `SetLocaleFromPrefix` doesn't
+  run there:
+  - `route('shop.checkout')` throws on the missing `locale`.
+  - `app()->getLocale()` falls back to `sv`.
+
+  Fix it once, in `AppServiceProvider::boot()`:
+  `Livewire::addPersistentMiddleware([SetLocaleFromPrefix::class])`. This
+  covers every component in this phase. If the browser check in Step 5
+  shows the middleware does not get the original `locale` parameter, the
+  ruling is to compute the URLs and the language in `mount()` and keep them
+  in `#[Locked]` properties.
 - **`cart.js`:**
   - Forwards `document`'s `cart:add` to
     `Livewire.dispatch('cart-add', e.detail)`.
@@ -544,6 +561,12 @@ Then check, on `/se/musik/s-d-l-past-voyages`:
    "Korg · 1" and the music keeps playing.
 5. Dark mode and 390 px width: screenshots of the drawer, with no
    horizontal scroll.
+6. On `/en/musik/s-d-l-past-voyages`, after an add, the drawer reads
+   "Cart". Check that
+   `eval document.querySelector('[data-cart-dialog] a[href*="kassa"]').getAttribute('href')`
+   starts with `http://sjerencms.test/en/kassa`. This is the only check
+   that proves the persistent middleware works, because `Livewire::test`
+   skips HTTP middleware.
 
 - [ ] **Step 6: Commit**
 
@@ -622,6 +645,11 @@ it('creates an unpaid order and sends the buyer to Stripe', function () {
 });
 
 it('requires a valid email and consent', function () { /* both errors, Order::count() === 0 */ });
+
+it('keeps an English buyer English', function () {
+    app()->setLocale('en'); URL::defaults(['locale' => 'en']);
+    // … pay() → order.locale === 'en'; payload success_url contains '/en/kassa/tack/', locale 'en'
+});
 
 it('charges only what can still be bought', function () { /* two lines, unpublish one release before pay → total = remaining line */ });
 
@@ -984,9 +1012,12 @@ Expected: FAIL with a 404 on `/stripe/webhook`.
      `currency === 'sek'`. Otherwise log a warning and return 200.
   2. In one transaction, run
      `Order::whereKey()->where('status', Unpaid)->update([...])`. If no row
-     changed, it is a duplicate: return 200. Otherwise `firstOrCreate` the
-     user on the lowercased email with `name` = email and
-     `password = Str::random(40)`, and save `user_id`.
+     changed, it is a duplicate: return 200. Otherwise find the user with
+     `whereRaw('lower(email) = ?', [$email])`, or create one with
+     `name` = email and `password = Str::random(40)`, and save `user_id`.
+     Don't use `firstOrCreate(['email' => …])`: SQLite compares
+     case-sensitively and MySQL doesn't. `LoginForm` looks the user up the
+     same way.
   3. After the commit, in a `try` that logs on failure:
      - store `receipt_url`,
      - send `OrderPaid` in `order.locale`, with the login link
