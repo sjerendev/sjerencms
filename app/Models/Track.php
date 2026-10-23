@@ -52,9 +52,10 @@ class Track extends Model implements HasMedia
         return $this->morphMany(OrderItem::class, 'purchasable');
     }
 
+    /** Bought on its own, or with the whole album. */
     public function isSold(): bool
     {
-        return $this->sales()->exists();
+        return $this->sales()->exists() || $this->release->sales()->exists();
     }
 
     /** The release is published and there is a WAV to hand over. */

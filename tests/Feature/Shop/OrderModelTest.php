@@ -92,3 +92,22 @@ it('marks tracks without a WAV as not buyable in the playlist', function () {
 
     expect($tracks[0]['buyable'])->toBeFalse()->and($tracks[1]['buyable'])->toBeTrue();
 });
+
+it('refuses to delete a track of an album that was sold as a whole', function () {
+    $release = Release::factory()->has(Track::factory()->withWav())->create();
+    OrderItem::factory()->for(Order::factory())->create(['purchasable_type' => Release::class, 'purchasable_id' => $release->id]);
+    $track = $release->tracks[0];
+
+    expect($track->isSold())->toBeTrue()
+        ->and($track->delete())->toBeFalse()
+        ->and(Track::find($track->id))->not->toBeNull();
+});
+
+it('refuses to delete a release that was sold as an album', function () {
+    $album = Release::factory()->has(Track::factory()->withWav())->create();
+    OrderItem::factory()->for(Order::factory())->create(['purchasable_type' => Release::class, 'purchasable_id' => $album->id]);
+
+    expect($album->delete())->toBeFalse()
+        ->and(Release::find($album->id))->not->toBeNull()
+        ->and(Track::where('release_id', $album->id)->count())->toBe(1);
+});
