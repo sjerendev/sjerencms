@@ -989,8 +989,9 @@ Expected: FAIL with a 404 on `/stripe/webhook`.
      `password = Str::random(40)`, and save `user_id`.
   3. After the commit, in a `try` that logs on failure:
      - store `receipt_url`,
-     - send `OrderPaid` in `order.locale`, with the login link only when
-       the user is not an admin.
+     - send `OrderPaid` in `order.locale`, with the login link
+       (`LoginLinks::url($user, $order->locale)`) only when the user is not
+       an admin. The test asserts that the link contains `/se/logga-in/`.
 - **Mail:** the lines, the total, a "Ladda ner" button to the login link,
   and the receipt link. Every text is a placeholder, for example
   `[Kvitto: order :number]`.
