@@ -97,7 +97,7 @@ a shared host (hostup): no Node process, no long-running queue worker.
 Run behaviour checks with `agent-browser` against Valet:
 `http://sjerencms.test` (this app) and `http://sjeren-2026.test` (the old
 Next site, the visual reference). Local pages come from
-`php artisan db:seed --class=SitePagesSeeder` (adds or updates only). Pair
+`php artisan db:seed --class=SitePagesSeeder` (adds missing pages, never overwrites admin edits). Pair
 every screenshot with an `eval` value, give `screenshot` an absolute path
 outside the repo, and run `git status` afterwards.
 

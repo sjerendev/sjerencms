@@ -1,7 +1,8 @@
-{{-- Port of LocaleSwitch.tsx. Slugs are the same in both languages, so only the prefix changes. --}}
+{{-- Port of LocaleSwitch.tsx. A language the page exists in links to the same page there
+     (the alternates); one it does not links to that language's home page instead of a 404. --}}
+@props(['alternates' => []])
 @php
     $active = request()->route('locale');
-    $rest = implode('/', array_slice(request()->segments(), 1));
     $labels = ['se' => 'SV', 'en' => 'EN'];
 @endphp
 <span class="lbl flex items-center gap-[6px]">
@@ -11,9 +12,9 @@
                 <span class="text-ink-dimmer">/</span>
             @endunless
             <a
-                href="{{ url(rtrim("/{$prefix}/{$rest}", '/')) }}"
+                href="{{ $alternates[$language] ?? url("/{$prefix}") }}"
                 wire:navigate
-                hreflang="{{ $language }}"
+                @isset($alternates[$language]) hreflang="{{ $language }}" @endisset
                 @if ($prefix === $active) aria-current="true" @else class="text-ink-dimmer hover:text-accent" @endif
             >{{ $labels[$prefix] }}</a>
         </span>

@@ -7,7 +7,8 @@ use Illuminate\Database\Seeder;
 
 /**
  * The home page, /om-mig and /projekt in both languages, so the site has
- * something to navigate between. Run on its own, it only adds or updates:
+ * something to navigate between. Run on its own, it only adds pages that are
+ * missing and never overwrites edits made in the admin:
  *
  *     php artisan db:seed --class=SitePagesSeeder
  *
@@ -50,7 +51,7 @@ class SitePagesSeeder extends Seeder
 
         foreach ($pages as $language => $bySlug) {
             foreach ($bySlug as $slug => $attributes) {
-                Page::updateOrCreate(
+                Page::firstOrCreate(
                     ['slug' => $slug, 'language' => $language],
                     $attributes + ['is_published' => true, 'is_homepage' => false, 'content' => []],
                 );

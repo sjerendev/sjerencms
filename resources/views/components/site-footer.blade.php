@@ -23,7 +23,7 @@
                     class="wave-link flex justify-between border-b border-hair-mid py-[15px] text-[17px] hover:text-accent"
                     @if (str_starts_with($href, 'http')) target="_blank" rel="noreferrer" @endif
                 >
-                    {{ __('footer.'.$key) }} <span aria-hidden="true">↗</span>
+                    {{ $key === 'email' ? $settings->email : __('footer.'.$key) }} <span aria-hidden="true">↗</span>
                     <x-wave-underline />
                 </a>
             @endforeach

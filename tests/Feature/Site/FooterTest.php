@@ -43,3 +43,12 @@ it('renders the section head with and without aside', function () {
         ->toContain('>01<')->toContain('w-[26px]')->toMatch('#<h2[^>]*>\s*Utvalda case#')->toContain('Tre av 16');
     expect(Blade::render('<x-section-head number="03" label="Tjänster" />'))->not->toContain('ml-auto');
 });
+
+it('labels the email row with the address it links to', function () {
+    $settings = app(GeneralSettings::class);
+    $settings->email = 'ny@example.com';
+    $settings->save();
+
+    $this->get('/se')->assertSee('href="mailto:ny@example.com"', false)
+        ->assertDontSee('patrik.sjeren@gmail.com');
+});

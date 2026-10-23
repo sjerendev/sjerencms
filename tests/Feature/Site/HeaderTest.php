@@ -39,3 +39,12 @@ it('hides the call to action when no email is set', function () {
 
     $this->get('/se/om-mig')->assertDontSee('mailto:', false);
 });
+
+it('points the language switch at the home page when the page has no translation', function () {
+    Page::factory()->create(['slug' => 'bara-svenska']);
+    Page::factory()->homepage()->english()->create();
+
+    expect($this->get('/se/bara-svenska')->getContent())
+        ->not->toContain('href="'.url('/en/bara-svenska').'"')
+        ->toMatch('#<a[^>]+href="'.preg_quote(url('/en'), '#').'"[^>]*>\\s*EN#');
+});

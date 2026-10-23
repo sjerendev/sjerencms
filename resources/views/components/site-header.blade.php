@@ -1,4 +1,5 @@
 {{-- Port of Header.tsx. --}}
+@props(['alternates' => []])
 @php
     $email = app(\App\Settings\GeneralSettings::class)->email;
     $nav = [
@@ -22,7 +23,7 @@
         </nav>
 
         <div class="hidden items-center gap-[20px] lg:flex">
-            <x-locale-switch />
+            <x-locale-switch :alternates="$alternates" />
             <x-theme-toggle />
             @if ($email)
                 <a
@@ -52,7 +53,7 @@
                     </a>
                 @endforeach
                 <div class="flex items-center justify-between border-t border-hair pt-[16px]">
-                    <x-locale-switch />
+                    <x-locale-switch :alternates="$alternates" />
                     <x-theme-toggle />
                 </div>
                 @if ($email)

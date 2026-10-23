@@ -16,7 +16,7 @@
     @livewireStyles
 </head>
 <body class="font-sans">
-    <x-site-header />
+    <x-site-header :alternates="$alternates" />
     <main>{{ $slot }}</main>
     <x-site-footer />
     @livewireScripts
