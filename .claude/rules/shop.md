@@ -20,7 +20,8 @@ redirected to Stripe.
    the id on session `orders` and redirects to
    `StripeCheckout::start()`. `payload()` is built from the order alone and
    carries `client_reference_id`, `metadata.order_id`, the order's own locale
-   in the URLs and `automatic_tax` from `STRIPE_TAX`.
+   in the URLs, `automatic_tax` from `STRIPE_TAX` and
+   `adaptive_pricing.enabled = false` (the webhook only accepts SEK).
 3. **Webhook.** `StripeWebhook` is the only place an order becomes paid.
 4. **Tack.** `ShowThanks` + `OrderStatusPanel` poll until paid, then show the
    downloads and `receipt_url` (Stripe's own HTML receipt, via
@@ -49,13 +50,14 @@ POST), `shop.logout` (POST `logga-ut`) and `shop.account` (`mina-kop`).
 - Price and total are computed on the server; the browser's amounts are
   only a request.
 - **Webhook:** verified with `Webhook::constructEvent` (an empty
-  `STRIPE_WEBHOOK_SECRET` aborts 500). Handles
+  `STRIPE_WEBHOOK_SECRET` is `report()`ed and answers a bare 500). Handles
   `checkout.session.completed` (only `payment_status=paid`),
   `checkout.session.async_payment_succeeded` (PayPal and other delayed
   methods) and `charge.refunded`. The session must match the order
   (`stripe_session_id`, `amount_total === total * 100`, `sek`), otherwise the
-  order stays unpaid and a warning is logged. The unpaid→paid change is one
-  conditional `UPDATE`, so a repeated event does nothing. Answers 200 for
+  order stays unpaid and an error is logged (the buyer may have been
+  charged). The unpaid→paid change is one conditional `UPDATE`, so a
+  repeated event does nothing. Answers 200 for
   every handled outcome; a failed commit rolls back and answers 500 so
   Stripe retries. Receipt URL and mail failures are `report()`ed, never
   retried, and the order stays paid.
@@ -123,3 +125,22 @@ Stripe is never called. `StripeCheckout` is mocked; webhook tests sign real
 payloads and go through `Webhook::constructEvent`. Tests need WAVs on the
 `music` disk (`giveWavs()`, a global helper defined in `tests/Feature/Music/ReleasePageTest.php`) before anything is
 purchasable.
+
+## Before go-live (phase 6)
+
+- Migration `2026_10_26_000000_add_shop_columns_to_users_table` sets every
+  existing user to `is_admin = true`. Check the production `users` row count
+  first, or narrow the update to Patrik's account, before running migrate.
+- The new `orders` and `order_items` migrations collide with legacy tables of
+  the same names, as they did locally. Inspect the production legacy rows
+  before renaming. Locally the fix was renaming them to `legacy_*` and
+  dropping their old foreign-key names (MySQL keeps FK names on rename).
+- The cron entry for `schedule:run` must be live before albums are sold.
+  Without it every album says "förbereds".
+- The Stripe webhook endpoint host must be the `APP_URL` host or a subdomain
+  of it, or `trustHosts()` answers 400 and no order is ever paid.
+- Pick the payment methods in the Stripe dashboard; the sandbox currently
+  offers Klarna, Apple Pay and Link.
+- Clearing the WAV of a sold track in Filament leaves its buyers with a 404
+  or "förbereds". Replace the file, never clear it.
+- The receipt mail's button is the login link, valid for `login_link_minutes`.
