@@ -13,6 +13,7 @@ use App\Filament\Forms\Components\Blocks\StickyCarouselBlock;
 use App\Filament\Forms\Components\Blocks\ServiceCardsBlock;
 use App\Filament\Forms\Components\Blocks\TickerBlock;
 use App\Filament\Forms\Components\Blocks\StaggerTextBlock;
+use App\Filament\Forms\Components\Blocks\ColophonBlock;
 use Filament\Forms;
 use Illuminate\Contracts\Support\Htmlable;
 use Closure;
@@ -34,6 +35,7 @@ class ContentBlocksSection extends Section
                         ServiceCardsBlock::make(),
                         TickerBlock::make(),
                         StaggerTextBlock::make(),
+                        ColophonBlock::make(),
                     ])
                     ->collapsible(),
             ]);

@@ -22,6 +22,7 @@ function everyBlock(): array
         ['type' => 'service_cards', 'data' => ['section_title' => 'Services', 'cards' => [['icon' => 'gear', 'icon_color' => '#000000', 'title' => 'T', 'description' => 'D']]]],
         ['type' => 'ticker', 'data' => ['background_color' => '#ffffff', 'text_color' => '#000000', 'angle' => 0, 'direction' => 'left-to-right', 'words' => ['a', 'b']]],
         ['type' => 'stagger_text', 'data' => ['text_row_1' => 'Stagger', 'color_row_1' => '#000000']],
+        ['type' => 'colophon', 'data' => ['label' => 'Verktyg', 'tools' => 'Figma · Laravel']],
     ];
 }
 
@@ -37,7 +38,7 @@ beforeEach(function () {
 
 it('renders the edit page with every block', function () {
     $this->get("/admin/pages/{$this->page->id}/edit")->assertOk()
-        ->assertSee(['Headline', 'Call to action', 'Questions', 'Services', 'Stagger']);
+        ->assertSee(['Headline', 'Call to action', 'Questions', 'Services', 'Stagger', 'Verktyg']);
 });
 
 it('saves the edit page with every block in order', function () {
