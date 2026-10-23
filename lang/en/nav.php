@@ -10,4 +10,6 @@ return [
     'themeLight' => 'Light mode',
     'themeDark' => 'Dark mode',
     'menu' => 'Menu',
+    'login' => 'Log in',
+    'account' => 'My purchases',
 ];

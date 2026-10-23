@@ -8,6 +8,10 @@
         ['href' => route('music.index'), 'key' => 'music', 'active' => request()->routeIs('music.*')],
         // Playground is not in the new design yet, see sjeren-2026 TODO-INNEHALL.md.
     ];
+    // Last, so on desktop it sits next to the cart as in the drawings.
+    $nav[] = auth()->check()
+        ? ['href' => route('shop.account'), 'key' => 'account', 'active' => request()->routeIs('shop.account')]
+        : ['href' => route('shop.login'), 'key' => 'login', 'active' => false];
 @endphp
 <header class="gut">
     <div class="flex items-center justify-between gap-6 border-b border-hair-strong pt-[18px] pb-[13px] md:pt-[26px] md:pb-[16px]">

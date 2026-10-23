@@ -10,4 +10,6 @@ return [
     'themeLight' => 'Ljust läge',
     'themeDark' => 'Mörkt läge',
     'menu' => 'Meny',
+    'login' => 'Logga in',
+    'account' => 'Mina köp',
 ];

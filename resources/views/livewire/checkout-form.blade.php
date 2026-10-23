@@ -21,6 +21,7 @@
                     <p id="email-error" role="alert" class="m-0 border-l-2 border-accent pl-[12px] text-[14px] leading-[1.5]">{{ $message }}</p>
                 @enderror
                 <span class="text-[14px] leading-[1.5] text-ink-dim">{{ __('shop.emailHelp') }}</span>
+                <a href="{{ route('shop.login') }}" wire:navigate class="lbl text-ink-dim hover:text-accent">{{ __('shop.boughtBefore') }} {{ __('nav.login') }}</a>
             </div>
         </div>
 

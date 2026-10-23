@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\ConfirmLogin;
+use App\Http\Controllers\Logout;
+use App\Http\Controllers\ShowAccount;
 use App\Http\Controllers\ShowCheckout;
+use App\Http\Controllers\ShowLogin;
 use App\Http\Controllers\ShowMusic;
 use App\Http\Controllers\ShowPage;
 use App\Http\Controllers\ShowRelease;
@@ -23,5 +27,9 @@ Route::prefix('{locale}')->whereIn('locale', array_keys(SetLocaleFromPrefix::LOC
         Route::get('musik/{release:slug}', ShowRelease::class)->name('music.show');
         Route::get('kassa', ShowCheckout::class)->name('shop.checkout');
         Route::get('kassa/tack/{order}', ShowThanks::class)->name('shop.thanks');
+        Route::get('logga-in', ShowLogin::class)->name('shop.login');
+        Route::match(['get', 'post'], 'logga-in/{user}', ConfirmLogin::class)->name('shop.login.confirm');
+        Route::post('logga-ut', Logout::class)->name('shop.logout');
+        Route::get('mina-kop', ShowAccount::class)->middleware('auth')->name('shop.account');
         Route::get('{slug}', ShowPage::class)->where('slug', '[a-z0-9-]+')->name('page.show');
     });

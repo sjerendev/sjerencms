@@ -15,6 +15,9 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    /** A new user holds false in memory too, not null until it is reloaded. */
+    protected $attributes = ['is_admin' => false];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -61,6 +64,6 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return (bool) $this->is_admin;
+        return $this->is_admin;
     }
 }

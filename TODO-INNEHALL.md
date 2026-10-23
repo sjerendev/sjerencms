@@ -21,3 +21,8 @@ fyllas i med påhittad copy.
   inte visar några fel (`lang/{sv,en}/shop.php`). Engelska etiketter
   översatta av Claude, Patrik granskar. "Varav moms" och ritningens steg
   "Land" saknas tills momsfrågan är besvarad.
+- Inloggning: `[Länken gäller inte längre. Skicka en ny.]` och mejlets ämne,
+  text och knapp (`[Din inloggningslänk]`, `[Tryck på knappen…]`,
+  `[Logga in]`) är platshållare (`lang/{sv,en}/shop.php`). Ritningen LoggaIn
+  visar varken felet eller mejlet. Engelska etiketter översatta av Claude,
+  Patrik granskar.
