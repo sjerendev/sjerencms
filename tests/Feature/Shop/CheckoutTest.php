@@ -159,3 +159,14 @@ it('maps languages to URL prefixes', function () {
 it('leaves the checkout when the drawer empties the cart', function () {
     Livewire::test(CheckoutForm::class)->dispatch('cart-updated', count: 0)->assertRedirect(route('music.index'));
 });
+
+it('shows an error instead of crashing when no Stripe key is set', function () {
+    config(['services.stripe.secret' => null]);
+    app(Cart::class)->add('track', $this->track->id, 35);
+
+    Livewire::test(CheckoutForm::class)->set('email', 'a@b.se')->set('consent', true)
+        ->call('pay')
+        ->assertHasErrors('pay')->assertNoRedirect();
+
+    expect(Order::sole()->status)->toBe(OrderStatus::Unpaid);
+});

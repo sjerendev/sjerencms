@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\ExceptionInterface;
 
 /**
  * Kassa.dc.html. pay() reads the cart again, so the amount charged is never
@@ -77,7 +77,7 @@ class CheckoutForm extends Component
 
         try {
             $this->redirect($stripe->start($order));
-        } catch (ApiErrorException $e) {
+        } catch (ExceptionInterface $e) {  // also thrown for a missing key, before any request
             report($e);
             $this->addError('pay', __('shop.payFailed'));
         }
