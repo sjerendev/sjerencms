@@ -111,3 +111,13 @@ it('puts the cart button with its count in the header', function () {
         ->toMatch('#data-cart-open[^>]*>\s*Korg · <span data-cart-count>1</span>#')
         ->toContain('data-cart-dialog')->toContain('wire:ignore.self');
 });
+
+it('removes by key and never by a path into an entry', function () {
+    app(Cart::class)->add('track', $this->track->id, 35);
+
+    Livewire::test(CartDrawer::class)->call('remove', "track:{$this->track->id}.id");
+
+    expect(session("cart.track:{$this->track->id}.id"))->toBe($this->track->id)
+        ->and(app(Cart::class)->count())->toBe(1);
+    $this->get('/se/musik')->assertOk();
+});

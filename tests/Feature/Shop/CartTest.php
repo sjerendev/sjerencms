@@ -107,3 +107,30 @@ it('drops a line whose item was deleted', function () {
 
     expect(app(Cart::class)->count())->toBe(0);
 });
+
+it('raises a stored amount when the minimum was raised after the add', function () {
+    $track = Track::factory()->withWav()->create(['min_price' => 20]);
+    app(Cart::class)->add('track', $track->id, 20);
+
+    $track->update(['min_price' => 50]);
+
+    expect(app(Cart::class)->total())->toBe(50)
+        ->and(app(Cart::class)->lines()->first()->amount)->toBe(50);
+});
+
+it('drops malformed entries from the session', function ($entry) {
+    $track = Track::factory()->withWav()->create();
+    app(Cart::class)->add('track', $track->id, 40);
+    session()->put('cart.broken', $entry);
+
+    expect(app(Cart::class)->lines())->toHaveCount(1)
+        ->and(array_keys(session('cart')))->toBe(["track:{$track->id}"]);
+})->with([
+    'missing id' => [['type' => 'track', 'amount' => 20]],
+    'missing amount' => [['type' => 'track', 'id' => 1]],
+    'missing type' => [['id' => 1, 'amount' => 20]],
+    'unknown type' => [['type' => 'user', 'id' => 1, 'amount' => 20]],
+    'id of the wrong type' => [['type' => 'track', 'id' => ['x'], 'amount' => 20]],
+    'amount of the wrong type' => [['type' => 'track', 'id' => 1, 'amount' => 'abc']],
+    'not an array' => ['track'],
+]);

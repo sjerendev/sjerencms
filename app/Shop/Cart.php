@@ -51,7 +51,10 @@ class Cart
 
     public function remove(string $key): void
     {
-        session()->forget("cart.{$key}");
+        // Top-level key only: forget("cart.{$key}") would read dots in the key as a path.
+        $cart = session('cart', []);
+        unset($cart[$key]);
+        session()->put('cart', $cart);
     }
 
     public function clear(): void
@@ -70,22 +73,29 @@ class Cart
             return collect();
         }
 
+        $entries = $stored->filter(fn (mixed $entry, mixed $key) => $this->isWellFormed($entry, $key));
+
         $items = collect(self::TYPES)->map(fn (string $class, string $type) => $class::query()
             ->with($type === 'track' ? ['media', 'release.media'] : ['media', 'tracks.media'])
-            ->findMany($stored->where('type', $type)->pluck('id')));
+            ->findMany($entries->where('type', $type)->pluck('id')));
 
-        $lines = $stored
+        $lines = $entries
             ->map(function (array $entry, string $key) use ($items) {
                 $item = $items[$entry['type']]->firstWhere('id', $entry['id']);
 
-                return $item?->isPurchasable() ? new CartLine($key, $item, $entry['amount']) : null;
+                // Clamped on read too: the minimum may have been raised since the add.
+                return $item?->isPurchasable() ? new CartLine($key, $item, $this->clamp($entry['amount'], $item->min_price)) : null;
             })
             ->filter()
             ->values();
 
-        // What can no longer be bought leaves the session too.
-        if ($lines->count() !== $stored->count()) {
-            session()->put('cart', $stored->only($lines->pluck('key'))->all());
+        // What is malformed or can no longer be bought leaves the session too.
+        $kept = $lines->mapWithKeys(fn (CartLine $line) => [
+            $line->key => [...$entries[$line->key], 'amount' => $line->amount],
+        ])->all();
+
+        if ($kept !== $stored->all()) {
+            session()->put('cart', $kept);
         }
 
         return $lines;
@@ -99,6 +109,16 @@ class Cart
     public function count(): int
     {
         return $this->lines()->count();
+    }
+
+    /** What add() stores: `track:12` => ['type' => 'track', 'id' => 12, 'amount' => 20]. */
+    private function isWellFormed(mixed $entry, mixed $key): bool
+    {
+        return is_array($entry)
+            && is_string($entry['type'] ?? null) && isset(self::TYPES[$entry['type']])
+            && is_int($entry['id'] ?? null)
+            && is_int($entry['amount'] ?? null)
+            && $key === "{$entry['type']}:{$entry['id']}";
     }
 
     private function put(string $key, array $entry): void

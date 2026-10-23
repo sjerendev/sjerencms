@@ -11,6 +11,15 @@ document.addEventListener('click', (event) => {
     if (event.target.closest('[data-cart-open]')) dialog()?.showModal();
 });
 
+// An open dialog would be cached with its `open` attribute and come back after
+// Back as a non-modal one (no backdrop). Close it when navigation starts, and
+// close one that was restored anyway.
+document.addEventListener('livewire:navigate', () => dialog()?.close());
+document.addEventListener('livewire:navigated', () => {
+    const d = dialog();
+    if (d?.open && !d.matches(':modal')) d.close();
+});
+
 // Livewire loads after the page's own scripts, so wait for it if it is not there yet.
 function listen() {
     Livewire.on('cart-open', () => {
