@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Exception\UnexpectedValueException;
 use Stripe\StripeObject;
@@ -28,8 +29,11 @@ class StripeWebhook extends Controller
     public function __invoke(Request $request): Response
     {
         $secret = (string) config('services.stripe.webhook_secret');
-        // An empty secret would let anyone sign an event.
-        abort_if($secret === '', 500, 'STRIPE_WEBHOOK_SECRET is not set.');
+        // An empty secret would let anyone sign an event. Report it (HttpExceptions are not), and keep the cause out of the response.
+        if ($secret === '') {
+            report(new RuntimeException('Stripe webhook secret is not configured.'));
+            abort(500);
+        }
 
         try {
             $event = Webhook::constructEvent($request->getContent(), (string) $request->header('Stripe-Signature'), $secret);
@@ -57,7 +61,13 @@ class StripeWebhook extends Controller
             || $order->stripe_session_id !== $session->id
             || $session->amount_total !== $order->total * 100
             || $session->currency !== 'sek') {
-            Log::warning('Stripe session does not match its order, left unpaid.', ['session' => $session->id, 'order' => $session->client_reference_id]);
+            // The buyer may have been charged: this must reach the error channel.
+            Log::error('Stripe session does not match its order, left unpaid.', [
+                'session' => $session->id,
+                'order' => $session->client_reference_id,
+                'amount' => $session->amount_total,
+                'currency' => $session->currency,
+            ]);
 
             return;
         }

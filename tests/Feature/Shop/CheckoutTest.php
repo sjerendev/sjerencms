@@ -139,6 +139,7 @@ it('builds the Stripe payload from the order', function () {
         ->and($payload['cancel_url'])->toEndWith('/se/kassa')
         ->and($payload['locale'])->toBe('sv')
         ->and($payload['automatic_tax'])->toBe(['enabled' => false])
+        ->and($payload['adaptive_pricing'])->toBe(['enabled' => false])
         ->and($payload)->not->toHaveKey('payment_method_types');
 });
 

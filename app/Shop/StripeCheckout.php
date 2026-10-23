@@ -37,6 +37,8 @@ class StripeCheckout
                 ],
             ])->all(),
             'automatic_tax' => ['enabled' => config('services.stripe.tax')],
+            // The webhook only accepts SEK; Adaptive Pricing would charge in the buyer's currency.
+            'adaptive_pricing' => ['enabled' => false],
             'metadata' => ['order_id' => (string) $order->id],
             'success_url' => route('shop.thanks', $locale + ['order' => $order->id]),
             'cancel_url' => route('shop.checkout', $locale),

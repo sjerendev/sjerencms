@@ -6,6 +6,8 @@ use App\Models\Order;
 use App\Models\Track;
 use App\Models\User;
 use App\Shop\StripeCheckout;
+use Illuminate\Support\Facades\Exceptions;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
@@ -53,7 +55,13 @@ it('rejects a request without a signature', function () {
 it('refuses everything while no webhook secret is configured', function () {
     config(['services.stripe.webhook_secret' => null]);
 
-    $this->call('POST', '/stripe/webhook', server: ['HTTP_STRIPE_SIGNATURE' => 't=1,v1=x'], content: '{}')->assertStatus(500);
+    Exceptions::fake();
+
+    $this->call('POST', '/stripe/webhook', server: ['HTTP_STRIPE_SIGNATURE' => 't=1,v1=x', 'HTTP_ACCEPT' => 'application/json'], content: '{}')
+        ->assertStatus(500)
+        ->assertDontSee('STRIPE_WEBHOOK_SECRET');
+
+    Exceptions::assertReported(fn (RuntimeException $e) => str_contains($e->getMessage(), 'webhook secret'));
 });
 
 it('marks the order paid, creates the buyer and mails the receipt', function () {
@@ -88,11 +96,16 @@ it('waits for a delayed payment', function () {
 });
 
 it('never pays an order whose amount, currency or session does not match', function ($overrides) {
+    Log::spy();
+
     stripeEvent('checkout.session.completed', checkoutSession($this->order, $overrides))->assertOk();
 
     expect($this->order->fresh()->status)->toBe(OrderStatus::Unpaid)
         ->and(User::count())->toBe(0);
     Mail::assertNothingSent();
+    // A buyer who was charged but not marked paid must reach the error channel.
+    Log::shouldHaveReceived('error')->once()->withArgs(fn ($message, $context) => $context['order'] === ($overrides['client_reference_id'] ?? (string) $this->order->id)
+        && isset($context['session'], $context['amount'], $context['currency']));
 })->with([[['amount_total' => 100]], [['currency' => 'eur']], [['id' => 'cs_other']], [['client_reference_id' => '999']]]);
 
 it('reuses an existing buyer whatever the case of the address', function () {
