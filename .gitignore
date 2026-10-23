@@ -25,6 +25,12 @@ yarn-error.log
 .beads
 .ralph-tui
 AGENTS.md
-CLAUDE.md
 bootstrap/ssr/
-docs/
+
+# Graphify cache
+graphify-out/
+.graphifyignore
+
+# Personal Claude Code config (not for team)
+.claude/
+.claude-flow/
