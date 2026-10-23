@@ -66,31 +66,12 @@ a shared host (hostup): no Node process, no long-running queue worker.
 - Model scopes: `->swedish()`, `->english()`, `->language($lang)`.
 - Public URLs use `/se/` and `/en/` prefixes (see the spec).
 
-### Public Site
+### Public Site and Music
 
-- `routes/web.php`: the old-site redirects (`/` → `/se`, `/en/about-me` and
-  friends), then `{locale}` (`se|en`) with `page.home` and `page.show`.
-  `SetLocaleFromPrefix` maps `se` → `sv` for the app locale and
-  `Page::$language`; admin stays English. URLs have no trailing slash, and
-  the old slash form still resolves.
-- `ShowPage` finds the published page, its title and description (falling
-  back to `lang/*/meta.php`) and hreflang alternates for the languages where
-  it exists.
-- UI text lives in `lang/{sv,en}/*.php`, copied 1:1 from sjeren-2026
-  `messages/*.json`. Never invent copy; missing text goes in
-  `TODO-INNEHALL.md`.
-- Layout: `components/layouts/site.blade.php` with `site-header`,
-  `site-footer`, `section-head`, `wordmark`, `wave-underline`,
-  `theme-toggle` and `locale-switch`. Classes and SVG data are ported from
-  sjeren-2026's components. Footer and header links come from
-  `GeneralSettings`.
-- Internal links use `wire:navigate`; the layout loads `@livewireScripts` and
-  Vite tags carry `data-navigate-track`.
-- JS has one entry, `resources/js/app.js`: `theme.js` (light/dark, set in
-  `<head>` before first paint and again on swap) and `motion.js`.
-  `defineMotion(name, init)` starts on every `livewire:navigated` for each
-  `[data-motion=name]`; the cleanup `init` returns runs on
-  `livewire:navigating`. `<html data-motion-active>` counts what runs.
+- `.claude/rules/site.md`: routing, layout, UI text, `wire:navigate`, theme
+  and motion.
+- `.claude/rules/music.md`: releases and tracks, the disks, the music routes
+  and the player's events, which the shop (phase 4) listens to.
 
 ### Checking in the Browser
 
@@ -100,6 +81,9 @@ Next site, the visual reference). Local pages come from
 `php artisan db:seed --class=SitePagesSeeder` (adds missing pages, never overwrites admin edits). Pair
 every screenshot with an `eval` value, give `screenshot` an absolute path
 outside the repo, and run `git status` afterwards.
+Music: `php artisan db:seed --class=MusicSeeder` gives releases without
+audio, so nothing plays until a preview is attached. Media URLs come from
+`APP_URL`, which must be `http://sjerencms.test` locally.
 
 ### Directory Structure Highlights
 
