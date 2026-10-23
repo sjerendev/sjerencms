@@ -49,6 +49,8 @@ class Release extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('cover')->singleFile()->useDisk('public');
+        // The album ZIP, built by music:build-zips; its `fingerprint` property says which WAVs it holds.
+        $this->addMediaCollection('zip')->singleFile()->useDisk('music');
     }
 
     public function tracks(): HasMany

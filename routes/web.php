@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConfirmLogin;
+use App\Http\Controllers\DownloadPurchase;
 use App\Http\Controllers\Logout;
 use App\Http\Controllers\ShowAccount;
 use App\Http\Controllers\ShowCheckout;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/se');
 // Called by Stripe, so outside the locale group and without CSRF (bootstrap/app.php).
 Route::post('stripe/webhook', StripeWebhook::class)->name('stripe.webhook');
+// Owner or paying browser only, and not under a locale prefix: the e-mail links to it.
+Route::get('download/{item}', DownloadPurchase::class)->name('download');
 Route::permanentRedirect('en/about-me', '/en/om-mig');
 Route::permanentRedirect('en/projects', '/en/projekt');
 // Decision 9: targets that never existed go to the home page.
