@@ -45,6 +45,15 @@ return [
             'throw' => false,
         ],
 
+        // WAV masters. Outside the web root, no URL: served only through an
+        // authorised route (spec, Begränsningar).
+        'music' => [
+            'driver' => 'local',
+            'root' => storage_path('app/music'),
+            'visibility' => 'private',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
