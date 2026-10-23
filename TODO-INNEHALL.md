@@ -30,3 +30,8 @@ fyllas i med påhittad copy.
   `[Tack för ditt köp. Här är ditt kvitto.]`, `[Ladda ner]`, `[Kvitto ↗]`) är
   platshållare (`lang/{sv,en}/shop.php`). Ritningen Tack visar inte mejlet.
   Engelska är `[EN] …` med svensk text, som inloggningsmejlet.
+- Tack och Mina köp: `[Betalningen behandlas]`, `[Förbereds]` (album utan zip)
+  och `[Inga köp än]` är platshållare (`lang/{sv,en}/shop.php`); ritningarna
+  visar inga av tillstånden. "Spår", "Album" och "köpt :date" är ur
+  MinaKop-ritningen. Engelska etiketter översatta av Claude, meningarna är
+  `[EN] …` med svensk text.
