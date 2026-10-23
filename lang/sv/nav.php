@@ -3,6 +3,7 @@
 return [
     'work' => 'Projekt',
     'about' => 'Om mig',
+    'music' => 'Musik',
     'playground' => 'Playground',
     'cta' => 'Boka ett samtal',
     'theme' => 'Byt läge',

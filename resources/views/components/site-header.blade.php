@@ -3,8 +3,9 @@
 @php
     $email = app(\App\Settings\GeneralSettings::class)->email;
     $nav = [
-        ['slug' => 'projekt', 'key' => 'work'],
-        ['slug' => 'om-mig', 'key' => 'about'],
+        ['href' => route('page.show', ['slug' => 'projekt']), 'key' => 'work', 'active' => request()->route('slug') === 'projekt'],
+        ['href' => route('page.show', ['slug' => 'om-mig']), 'key' => 'about', 'active' => request()->route('slug') === 'om-mig'],
+        ['href' => route('music.index'), 'key' => 'music', 'active' => request()->routeIs('music.*')],
         // Playground is not in the new design yet, see sjeren-2026 TODO-INNEHALL.md.
     ];
 @endphp
@@ -16,7 +17,12 @@
 
         <nav class="hidden items-center gap-[36px] lg:flex" aria-label="{{ __('nav.menu') }}">
             @foreach ($nav as $item)
-                <a href="{{ route('page.show', ['slug' => $item['slug']]) }}" wire:navigate class="lbl hover:text-accent">
+                <a
+                    href="{{ $item['href'] }}"
+                    wire:navigate
+                    @if ($item['active']) aria-current="page" @endif
+                    @class(['lbl hover:text-accent', 'border-b border-ink pb-[2px]' => $item['active']])
+                >
                     {{ __('nav.'.$item['key']) }}
                 </a>
             @endforeach
@@ -48,7 +54,7 @@
             </summary>
             <div class="absolute right-0 z-10 mt-[12px] flex w-[240px] flex-col gap-[18px] border border-hair-mid bg-paper p-[20px]">
                 @foreach ($nav as $item)
-                    <a href="{{ route('page.show', ['slug' => $item['slug']]) }}" wire:navigate class="lbl">
+                    <a href="{{ $item['href'] }}" wire:navigate @if ($item['active']) aria-current="page" @endif class="lbl">
                         {{ __('nav.'.$item['key']) }}
                     </a>
                 @endforeach

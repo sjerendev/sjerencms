@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShowMusic;
 use App\Http\Controllers\ShowPage;
 use App\Http\Middleware\SetLocaleFromPrefix;
 use Illuminate\Support\Facades\Route;
@@ -14,5 +15,7 @@ Route::permanentRedirect('en/reputation', '/en');
 Route::prefix('{locale}')->whereIn('locale', array_keys(SetLocaleFromPrefix::LOCALES))
     ->middleware(SetLocaleFromPrefix::class)->group(function () {
         Route::get('/', ShowPage::class)->name('page.home');
+        // Before {slug}, or the page router takes /musik.
+        Route::get('musik', ShowMusic::class)->name('music.index');
         Route::get('{slug}', ShowPage::class)->where('slug', '[a-z0-9-]+')->name('page.show');
     });

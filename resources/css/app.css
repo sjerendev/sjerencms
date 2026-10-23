@@ -21,6 +21,14 @@
      ger vit linje av sig själv. */
   --wave-mid: var(--ink);
   --plate: #111820; /* bakplatta bakom projektbilder */
+  /* Musiken: spelknappar, spelarlisten, köpknappar och albumformuläret.
+     Från musikritningarna, där #0F1413 blir sajtens #111820. */
+  --sound: var(--ink);
+  --bar: #111820;
+  --bar-sound: var(--accent);
+  --buy: var(--ink);
+  --panel: #111820;
+  --panel-line: rgba(237, 236, 234, 0.55);
   --gutter: 60px;
 }
 
@@ -34,6 +42,12 @@
   --hair-strong: rgba(237, 236, 234, 0.55);
   --open: #3ddc84; /* ljusare mot mörkt papper — mörkgrönt syns inte där */
   --plate: #000000;
+  --sound: #61f2c2;
+  --bar: #171d1c;
+  --bar-sound: #61f2c2;
+  --buy: var(--accent);
+  --panel: #1a2120;
+  --panel-line: rgba(237, 236, 234, 0.3);
 }
 
 @media (max-width: 760px) {
@@ -52,6 +66,12 @@
   --color-mint: var(--mint);
   --color-open: var(--open);
   --color-plate: var(--plate);
+  --color-sound: var(--sound);
+  --color-bar: var(--bar);
+  --color-bar-sound: var(--bar-sound);
+  --color-buy: var(--buy);
+  --color-panel: var(--panel);
+  --color-panel-line: var(--panel-line);
   --font-sans: "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
   --radius-pill: 999px;
 }

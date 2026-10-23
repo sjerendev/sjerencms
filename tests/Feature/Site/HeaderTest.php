@@ -48,3 +48,9 @@ it('points the language switch at the home page when the page has no translation
         ->not->toContain('href="'.url('/en/bara-svenska').'"')
         ->toMatch('#<a[^>]+href="'.preg_quote(url('/en'), '#').'"[^>]*>\\s*EN#');
 });
+
+it('links Musik and marks the current section', function () {
+    \App\Models\Release::factory()->create();
+    expect($this->get('/se/musik')->getContent())
+        ->toMatch('#<a[^>]+href="'.preg_quote(url('/se/musik'), '#').'"[^>]*wire:navigate[^>]*aria-current="page"#');
+});
