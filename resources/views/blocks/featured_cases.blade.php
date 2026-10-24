@@ -1,7 +1,10 @@
 {{-- Port of the 01 section in page.tsx, FeaturedCase.tsx and CaseImage.tsx. --}}
 @php
-    $projects = \App\Models\Project::chosen(array_column($data['projects'] ?? [], 'project_id'));
+    $ids = array_column($data['projects'] ?? [], 'project_id');
+    // Unlike the register, no projects chosen means no block at all.
+    $projects = $ids === [] ? collect() : \App\Models\Project::chosen($ids);
 @endphp
+@if ($projects->isNotEmpty())
 <section class="gut pt-[clamp(72px,10vw,116px)]">
     <x-section-head :number="$data['number'] ?? ''" :label="$data['label'] ?? ''" :aside="\App\Models\Project::withTotal($data['aside'] ?? null)" />
     <div class="mt-[8px] flex flex-col">
@@ -47,3 +50,4 @@
         @endforeach
     </div>
 </section>
+@endif

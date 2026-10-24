@@ -38,8 +38,14 @@ defineMotion('case-pin', (el) => {
         });
 
         // The player bar shortens the case (app.css), so the pin is measured again.
-        const observer = new MutationObserver(() => ScrollTrigger.refresh());
-        observer.observe(document.documentElement, { attributeFilter: ['data-player'] });
+        // player.js sets data-player on every play; refresh only when it changes.
+        const html = document.documentElement;
+        const observer = new MutationObserver((records) => {
+            if (records.some((record) => record.oldValue !== html.getAttribute('data-player'))) {
+                ScrollTrigger.refresh();
+            }
+        });
+        observer.observe(html, { attributeFilter: ['data-player'], attributeOldValue: true });
 
         // kill() reverts the pin and takes the .pin-spacer with it.
         return () => {

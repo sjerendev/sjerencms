@@ -34,7 +34,16 @@ it('counts only the cases it renders', function () {
     featuredPage([$a->id, $b->id, $c->id]);
     $c->delete();
 
-    $this->get('/se')->assertOk()->assertSee('02 / 02')->assertDontSee('/ 03');
+    $this->get('/se')->assertOk()->assertSee('02 / 02')->assertDontSee('/ 03')
+        ->assertSee('Tre av 2')->assertDontSee('src=""', false);
+});
+
+it('renders nothing when no projects are chosen', function () {
+    Project::factory()->count(2)->create();
+    featuredPage([]);
+
+    $this->get('/se')->assertOk()->assertDontSee('data-motion="case-pin"', false)
+        ->assertDontSee('Utvalda case')->assertDontSee('01 / ');
 });
 
 it('shows the meta row with the host link, or no link for a rebuilt site', function () {
