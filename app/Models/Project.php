@@ -104,10 +104,10 @@ class Project extends Model implements HasMedia
     public static function chosen(array $ids): Collection
     {
         if ($ids === []) {
-            return static::orderBy('position')->orderBy('id')->get();
+            return static::with('media')->orderBy('position')->orderBy('id')->get();
         }
 
-        return static::whereIn('id', $ids)->get()->sortBy(fn (self $project) => array_search($project->id, $ids))->values();
+        return static::with('media')->whereIn('id', $ids)->get()->sortBy(fn (self $project) => array_search($project->id, $ids))->values();
     }
 
     /** Fills the {total} placeholder in block copy with the number of projects. */

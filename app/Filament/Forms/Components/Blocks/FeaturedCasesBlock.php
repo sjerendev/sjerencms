@@ -19,7 +19,7 @@ class FeaturedCasesBlock extends Block
                 TextInput::make('aside')
                     ->helperText('{total} becomes the number of projects'),
                 ProjectPicker::make()
-                    ->helperText('A project with a full-page screenshot is pinned and scrolls inside its frame'),
+                    ->helperText('Empty hides the section. A project with a full-page screenshot is pinned and scrolls inside its frame'),
             ]);
     }
 }

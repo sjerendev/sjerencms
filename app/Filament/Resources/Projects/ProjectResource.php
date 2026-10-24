@@ -26,9 +26,6 @@ class ProjectResource extends Resource
     protected static ?string $model = Project::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-briefcase';
 
-    // The model routes on slug for the public site; the admin keeps ids.
-    protected static ?string $recordRouteKeyName = 'id';
-
     public static function form(Schema $schema): Schema
     {
         return $schema

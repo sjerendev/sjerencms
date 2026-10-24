@@ -4,6 +4,7 @@ namespace App\Filament\Forms\Components;
 
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -11,6 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Unique;
 use Closure;
 
 class BaseContentSection extends Section
@@ -22,10 +24,16 @@ class BaseContentSection extends Section
                 TextInput::make('title')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn(string $state, Set $set) => $set('slug', Str::slug($state))),
+                    // Only on create: a new slug on edit would move a live page.
+                    ->afterStateUpdated(function (string $operation, ?string $state, Set $set) {
+                        if ($operation === 'create') {
+                            $set('slug', Str::slug($state ?? ''));
+                        }
+                    }),
                 TextInput::make('slug')
                     ->required()
-                    ->unique(ignoreRecord: true),
+                    // Unique per language: every page exists in sv and en under the same slug.
+                    ->unique(ignoreRecord: true, modifyRuleUsing: fn (Unique $rule, Get $get) => $rule->where('language', $get('language'))),
                 Select::make('language')
                     ->label('Language')
                     ->options([

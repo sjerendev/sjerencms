@@ -22,6 +22,17 @@ class ProjectPicker
                     ->required()
                     ->searchable(),
             ])
+            // A pick of a deleted project fails the Select's `in` rule and would block
+            // the save, so it is dropped on load. Replaces the Repeater's own hook,
+            // hence the hydrateItems() call.
+            ->afterStateHydrated(function (Repeater $component): void {
+                $live = Project::pluck('id')->all();
+                $component->rawState(array_filter(
+                    $component->getRawState() ?? [],
+                    fn (array $item) => blank($item['project_id'] ?? null) || in_array($item['project_id'], $live),
+                ));
+                $component->hydrateItems();
+            })
             ->reorderable()
             ->defaultItems(0)
             ->addActionLabel('Add project');
