@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Middleware\SetLocaleFromPrefix;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -29,5 +30,8 @@ class AppServiceProvider extends ServiceProvider
         // Livewire posts to its own endpoint, outside {locale}. Without this the
         // language falls back to sv and route() lacks its `locale` parameter.
         Livewire::addPersistentMiddleware([SetLocaleFromPrefix::class]);
+
+        // <p @textMotion('intro_one')>: the block's motion settings for that text, or nothing.
+        Blade::directive('textMotion', fn (string $key) => "<?php echo \\App\\Support\\TextMotion::attributes((\$motion ?? [])[{$key}] ?? null); ?>");
     }
 }
