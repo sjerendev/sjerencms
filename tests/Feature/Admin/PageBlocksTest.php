@@ -28,6 +28,10 @@ function everyBlock(): array
         ['type' => 'register', 'data' => ['number' => '02', 'label' => 'Register', 'aside' => '{total} totalt', 'projects' => [['project_id' => Project::orderBy('id')->first()->id], ['project_id' => Project::orderByDesc('id')->first()->id]], 'all_label' => null]],
         ['type' => 'featured_cases', 'data' => ['number' => '01', 'label' => 'Utvalda case', 'aside' => 'Tre av {total}', 'projects' => [['project_id' => Project::orderBy('id')->first()->id]]]],
         ['type' => 'hero', 'data' => ['lead' => 'Jag levererar', 'phrases' => "UI/UX-design\nFrontend", 'intro_one' => 'Ett.', 'intro_two' => 'Två.', 'work_label' => 'Se arbetet', 'cv_label' => 'Ladda ner CV', 'cv_url' => '/files/Sjeren-Portfolio-cv-2024.pdf']],
+        ['type' => 'page_hero', 'data' => ['lines' => "Trettiosju år,\ntvå spår", 'text' => 'De {total} här.', 'size' => 'large']],
+        ['type' => 'profile', 'data' => ['number' => '01', 'label' => 'Profil', 'column_one' => "Först.\n\nSedan.", 'column_two' => 'Tredje.', 'stats' => [['value' => '25', 'label' => 'Years']]]],
+        ['type' => 'timeline', 'data' => ['number' => '02', 'label' => 'Experience', 'work_label' => 'Work', 'sound_label' => 'Sound', 'entries' => [['years' => '1989', 'title' => 'Ibiza', 'subtitle' => 'Trip', 'body' => 'Last.', 'tags' => ['Laravel'], 'track' => 'sound']]]],
+        ['type' => 'stack', 'data' => ['number' => '03', 'label' => 'Works with', 'groups' => [['label' => 'Design', 'items' => 'Figma · Penpot']]]],
     ];
 }
 
@@ -44,7 +48,7 @@ beforeEach(function () {
 
 it('renders the edit page with every block', function () {
     $this->get("/admin/pages/{$this->page->id}/edit")->assertOk()
-        ->assertSee(['Headline', 'Call to action', 'Six questions', 'Services', 'Stagger', 'Verktyg']);
+        ->assertSee(['Headline', 'Call to action', 'Six questions', 'Services', 'Stagger', 'Verktyg', 'Ibiza', 'Works with']);
 });
 
 it('saves the edit page with every block in order', function () {

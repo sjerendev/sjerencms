@@ -17,6 +17,10 @@ use App\Filament\Forms\Components\Blocks\ColophonBlock;
 use App\Filament\Forms\Components\Blocks\RegisterBlock;
 use App\Filament\Forms\Components\Blocks\FeaturedCasesBlock;
 use App\Filament\Forms\Components\Blocks\HeroBlock;
+use App\Filament\Forms\Components\Blocks\PageHeroBlock;
+use App\Filament\Forms\Components\Blocks\ProfileBlock;
+use App\Filament\Forms\Components\Blocks\TimelineBlock;
+use App\Filament\Forms\Components\Blocks\StackBlock;
 use Filament\Forms;
 use Illuminate\Contracts\Support\Htmlable;
 use Closure;
@@ -42,6 +46,10 @@ class ContentBlocksSection extends Section
                         RegisterBlock::make(),
                         FeaturedCasesBlock::make(),
                         HeroBlock::make(),
+                        PageHeroBlock::make(),
+                        ProfileBlock::make(),
+                        TimelineBlock::make(),
+                        StackBlock::make(),
                     ])
                     ->collapsible(),
             ]);
