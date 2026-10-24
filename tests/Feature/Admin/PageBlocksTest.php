@@ -26,6 +26,7 @@ function everyBlock(): array
         ['type' => 'colophon', 'data' => ['label' => 'Verktyg', 'tools' => 'Figma · Laravel']],
         ['type' => 'register', 'data' => ['number' => '02', 'label' => 'Register', 'aside' => '{total} totalt', 'projects' => [['project_id' => Project::orderBy('id')->first()->id], ['project_id' => Project::orderByDesc('id')->first()->id]], 'all_label' => null]],
         ['type' => 'featured_cases', 'data' => ['number' => '01', 'label' => 'Utvalda case', 'aside' => 'Tre av {total}', 'projects' => [['project_id' => Project::orderBy('id')->first()->id]]]],
+        ['type' => 'hero', 'data' => ['lead' => 'Jag levererar', 'phrases' => "UI/UX-design\nFrontend", 'intro_one' => 'Ett.', 'intro_two' => 'Två.', 'work_label' => 'Se arbetet', 'cv_label' => 'Ladda ner CV', 'cv_url' => '/files/Sjeren-Portfolio-cv-2024.pdf']],
     ];
 }
 
