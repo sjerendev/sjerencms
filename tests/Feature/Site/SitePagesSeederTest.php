@@ -2,6 +2,9 @@
 
 use App\Models\Page;
 use Database\Seeders\SitePagesSeeder;
+use Illuminate\Support\Facades\Storage;
+
+beforeEach(fn () => Storage::fake('public'));
 
 it('seeds the six site pages idempotently', function () {
     $this->seed(SitePagesSeeder::class);
