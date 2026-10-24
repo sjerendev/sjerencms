@@ -1,0 +1,347 @@
+{
+  "projects": [
+    {
+      "slug": "kalibr",
+      "client": "Kalibr.",
+      "headline": {
+        "se": "Byrå för webb och AI. Pixel för pixel, algoritm för algoritm.",
+        "en": "A studio for web and AI. Pixel by pixel, algorithm by algorithm."
+      },
+      "services": [
+        "Laravel",
+        "Vue.js",
+        "UI/UX-design"
+      ],
+      "href": "https://kalibr.se/",
+      "image": "/images/kalibr-projekt.webp",
+      "preview": "/images/kalibr_preview.webp",
+      "tall": {
+        "src": "/images/kalibr-full.webp",
+        "width": 1680,
+        "height": 3531
+      }
+    },
+    {
+      "slug": "david-andersson",
+      "client": "David Andersson",
+      "headline": {
+        "se": "Filmklippare. Meritlistan som affischvägg.",
+        "en": "Film editor. Credits as a wall of posters."
+      },
+      "services": [
+        "Wordpress",
+        "Bootstrap",
+        "UI/UX-design"
+      ],
+      "href": "https://davidfilm.se/",
+      "image": "/images/davidfilm-projekt.webp",
+      "preview": "/images/davidfilm_preview.webp"
+    },
+    {
+      "slug": "konditori-katarina",
+      "client": "Konditori Katarina",
+      "headline": {
+        "se": "Konditori i Malmö. Sortimentet och vägen till en beställning.",
+        "en": "A patisserie in Malmö. The range and the route to an order."
+      },
+      "services": [
+        "Laravel",
+        "Vue.js",
+        "UI/UX-design"
+      ],
+      "href": "https://www.konditorikatarina.se/",
+      "image": "/images/case-konditori-katarina.jpg",
+      "preview": "/images/katarina_preview.webp",
+      "tall": {
+        "src": "/images/katarina-full.webp",
+        "width": 3360,
+        "height": 6412
+      },
+      "role": {
+        "se": "Design & utveckling",
+        "en": "Design & development"
+      },
+      "tech": "Laravel · Vue.js · Tailwind · UI/UX"
+    },
+    {
+      "slug": "cmf-homestyling",
+      "client": "CMF Homestyling",
+      "headline": {
+        "se": "Homestyling i Skåne. Tjänster och genomförda uppdrag.",
+        "en": "Home styling in Skåne. Services and past jobs."
+      },
+      "services": [
+        "Wordpress",
+        "App-frontend",
+        "UI/UX-design"
+      ],
+      "href": "https://www.cmfhomestyling.se/",
+      "image": "/images/case-cmf-homestyling.jpg",
+      "preview": "/images/cmf_preview.webp",
+      "tall": {
+        "src": "/images/cmf-homestyling-full.webp",
+        "width": 3360,
+        "height": 8782
+      },
+      "role": {
+        "se": "Design & frontend",
+        "en": "Design & frontend"
+      },
+      "tech": "Wordpress · App-frontend · UI/UX"
+    },
+    {
+      "slug": "cado-aqua",
+      "client": "Cado Aqua",
+      "headline": {
+        "se": "Vattenlekplatser för parker och bad. Produktserier och referensanläggningar.",
+        "en": "Water playgrounds for parks and pools. Product ranges and installations."
+      },
+      "services": [
+        "Wordpress",
+        "Bootstrap",
+        "UI/UX-design"
+      ],
+      "href": "https://www.cadoaqua.se/",
+      "image": "/images/cado-projekt.webp",
+      "preview": "/images/cado_preview.webp",
+      "tall": {
+        "src": "/images/cadoaqua-full.webp",
+        "width": 3360,
+        "height": 7863
+      }
+    },
+    {
+      "slug": "sussi-mattsson",
+      "client": "Sussi Mattsson",
+      "headline": {
+        "se": "Internationell föreläsare. Medverkat i CNN, CNBC och Bravo.",
+        "en": "International speaker. Featured on CNN, CNBC and Bravo."
+      },
+      "services": [
+        "Wordpress",
+        "Elementor",
+        "UI/UX-design"
+      ],
+      "href": "https://sussimattsson.com/",
+      "image": "/images/sussi-projekt.webp",
+      "preview": "/images/sussi_preview.webp"
+    },
+    {
+      "slug": "champion-generators",
+      "client": "Champion Generators",
+      "headline": {
+        "se": "Elverk och generatorer. Produktväljare och e-handel.",
+        "en": "Generators. Product finder and online shop."
+      },
+      "services": [
+        "Woocommerce",
+        "Vue.js",
+        "UI-design"
+      ],
+      "href": "https://www.championgenerators.se/",
+      "rebuilt": true,
+      "image": "/images/case-champion-generators.jpg",
+      "preview": "/images/champion_preview.webp",
+      "role": {
+        "se": "Design & utveckling",
+        "en": "Design & development"
+      },
+      "tech": "Wordpress · Woocommerce · Vue.js"
+    },
+    {
+      "slug": "angdala-skolor",
+      "client": "Ängdala Skolor",
+      "headline": {
+        "se": "Friskola i Höllviken. Förskola, grundskola och fritids i samma sajt.",
+        "en": "An independent school in Höllviken. Preschool, school and after-school in one site."
+      },
+      "services": [
+        "Wordpress",
+        "Live Canvas",
+        "UI-design"
+      ],
+      "href": "https://www.angdalaskolor.se/",
+      "image": "/images/case-angdala-skolor.jpg",
+      "preview": "/images/angdala_preview.webp"
+    },
+    {
+      "slug": "kenneths-dack",
+      "client": "Kenneths Däck",
+      "headline": {
+        "se": "Däck och bilservice i Malmö. Tidsbokning inför säsongsskiftena.",
+        "en": "Tyres and car service in Malmö. Booking ahead of the changeover seasons."
+      },
+      "services": [
+        "Laravel",
+        "Vue.js",
+        "UI/UX-design"
+      ],
+      "href": "https://www.kennethsdack.se/",
+      "image": "/images/case-kenneths-dack.jpg",
+      "preview": "/images/kenneths_preview.webp"
+    },
+    {
+      "slug": "wiklundska",
+      "client": "Wiklundska Studenthemmen",
+      "headline": {
+        "se": "Studentbostäder i Lund. Rummen, kölistan och ansökan.",
+        "en": "Student housing in Lund. The rooms, the waiting list and the application."
+      },
+      "services": [
+        "Wordpress",
+        "Live Canvas",
+        "UI-design"
+      ],
+      "href": "https://www.wiklundska.com/",
+      "image": "/images/wiklundska-projekt.webp",
+      "preview": "/images/wiklundska_preview.webp"
+    },
+    {
+      "slug": "cadiform",
+      "client": "Cadiform",
+      "headline": {
+        "se": "Möbler för skolor och förskolor. Katalog med webbutik.",
+        "en": "Furniture for schools and preschools. Catalogue with a shop."
+      },
+      "services": [
+        "Wordpress",
+        "Woocommerce",
+        "UI-design"
+      ],
+      "href": "https://www.cadiform.se/",
+      "image": "/images/cadiform-projekt.webp",
+      "preview": "/images/cadiform_preview.webp"
+    },
+    {
+      "slug": "bege",
+      "client": "Bege",
+      "headline": {
+        "se": "Ställningar och arbetsplattformar för byggplatser. Sortiment och genomförda projekt.",
+        "en": "Scaffolding and work platforms for construction sites. Range and completed projects."
+      },
+      "services": [
+        "Wordpress",
+        "Live Canvas",
+        "UI-design"
+      ],
+      "href": "https://www.begeab.se/",
+      "image": "/images/bege-projekt.webp",
+      "preview": "/images/bege_preview.webp"
+    },
+    {
+      "slug": "intra",
+      "client": "Intra",
+      "headline": {
+        "se": "Materialhantering. Återförsäljarinlogg och förfrågningar på fyra språk.",
+        "en": "Materials handling. Dealer login and enquiries in four languages."
+      },
+      "services": [
+        "Laravel",
+        "Vue.js",
+        "UI/UX-design"
+      ],
+      "href": "https://www.intra.se/",
+      "image": "/images/intra-projekt.webp",
+      "preview": "/images/intra_preview.webp"
+    },
+    {
+      "slug": "progress-4-business",
+      "client": "Progress 4 Business",
+      "headline": {
+        "se": "Affärsutveckling för egenföretagare. Kurskatalog med bokning.",
+        "en": "Business coaching for sole traders. Course catalogue with booking."
+      },
+      "services": [
+        "Wordpress",
+        "Woocommerce",
+        "UI-design"
+      ],
+      "href": "https://www.progress4business.com/",
+      "image": "/images/p4b-projekt.webp",
+      "preview": "/images/p4b_preview.webp"
+    },
+    {
+      "slug": "funnys-aventyr",
+      "client": "Funnys Äventyr",
+      "headline": {
+        "se": "Lekland i Malmö. Öppettider, biljetter och teaterkalender.",
+        "en": "An indoor playground in Malmö. Hours, tickets and the theatre calendar."
+      },
+      "services": [
+        "Wordpress",
+        "Live Canvas"
+      ],
+      "href": "https://www.funnysaventyr.se/",
+      "image": "/images/funnys-projekt.webp",
+      "preview": "/images/funnys_preview.webp"
+    },
+    {
+      "slug": "kakelidea-hollviken",
+      "client": "Kakelidea Höllviken",
+      "headline": {
+        "se": "Badrumsbutik i Höllviken. Utställningen på webben.",
+        "en": "A bathroom shop in Höllviken. The showroom online."
+      },
+      "services": [
+        "Wordpress",
+        "Live Canvas",
+        "UI-design"
+      ],
+      "href": "https://www.hollviken.bad-varme.se/",
+      "image": "/images/kakelidea-projekt.webp",
+      "preview": "/images/kakelidea_preview.webp"
+    },
+    {
+      "slug": "full-story-media",
+      "client": "Full Story Media",
+      "headline": {
+        "se": "Konsult inom marknadsföring och journalistik. Två spår, två språk.",
+        "en": "A marketing and journalism consultancy. Two tracks, two languages."
+      },
+      "services": [
+        "Wordpress",
+        "Live Canvas",
+        "UI-design"
+      ],
+      "href": "https://www.fullstory-media.com/",
+      "image": "/images/fullstory-projekt.webp",
+      "preview": "/images/fullstory_preview.webp"
+    },
+    {
+      "slug": "auma",
+      "client": "Auma",
+      "headline": {
+        "se": "Elektriska ställdon för ventiler. Teknisk produktdata som fungerar i mobilen.",
+        "en": "Electric actuators for valves. Technical data that works on a phone."
+      },
+      "services": [
+        "Wordpress",
+        "Divi",
+        "UI-design"
+      ],
+      "href": "https://www.auma.se/",
+      "image": "/images/auma-projekt.webp",
+      "preview": "/images/auma_preview.webp"
+    },
+    {
+      "slug": "larsson-lange",
+      "client": "Larsson & Lange",
+      "headline": {
+        "se": "Frisörkedja i Skåne. Salongerna och vägen till bokning.",
+        "en": "A hair salon chain in Skåne. The salons and the route to a booking."
+      },
+      "services": [
+        "PHP CMS",
+        "UI/UX-design"
+      ],
+      "href": "https://www.larssonlange.se/",
+      "image": "/images/larssonlange-projekt.webp",
+      "preview": "/images/larssonolange_preview.webp"
+    }
+  ],
+  "featured": [
+    "konditori-katarina",
+    "cmf-homestyling",
+    "cado-aqua"
+  ]
+}

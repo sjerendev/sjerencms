@@ -1,0 +1,364 @@
+{
+  "timeline": [
+    {
+      "years": {
+        "se": "1989",
+        "en": "1989"
+      },
+      "title": "Ibiza",
+      "subtitle": {
+        "se": "Restresa, 19 år",
+        "en": "Last-minute trip, aged 19"
+      },
+      "body": {
+        "se": "Sista Summer of Love. Acid house och balearic beats. Allt som kom sedan går att spåra tillbaka hit.",
+        "en": "The last Summer of Love. Acid house and balearic beats. Everything that came after traces back to this."
+      },
+      "track": "sound"
+    },
+    {
+      "years": {
+        "se": "1990 — 97",
+        "en": "1990 — 97"
+      },
+      "title": "DJ, artist, producent",
+      "subtitle": {
+        "se": "House och techno",
+        "en": "House and techno"
+      },
+      "body": {
+        "se": "Försörjde mig på musiken. Bodde ett drygt år utanför London, spelade på Rex Club i Paris, live i Zürich. Mer studiomus än liveartist, ärligt talat.",
+        "en": "Made a living from music. Lived just outside London for a year, played Rex Club in Paris, a live set in Zürich. More studio mouse than live act, honestly."
+      },
+      "track": "sound"
+    },
+    {
+      "years": {
+        "se": "1999 — 2000",
+        "en": "1999 — 2000"
+      },
+      "title": "Webfabriken",
+      "subtitle": {
+        "se": "Webbdesigner & grafisk designer, Stockholm",
+        "en": "Web designer & graphic designer, Stockholm"
+      },
+      "body": {
+        "se": "Första riktiga webbjobbet. Firman flyttade senare till Dalarna.",
+        "en": "The first real web job. The firm later moved to Dalarna."
+      },
+      "tags": [
+        "Webbdesign",
+        "Print",
+        "Adobe"
+      ],
+      "track": "work"
+    },
+    {
+      "years": {
+        "se": "2000 — 2006",
+        "en": "2000 — 2006"
+      },
+      "title": "Reactive Music, Pitch Adjust, Audio Beyond",
+      "subtitle": {
+        "se": "AD, chefsredaktör, A&R",
+        "en": "AD, editor-in-chief, A&R"
+      },
+      "body": {
+        "se": "Art director på ett litet indiebolag med musikförlag och studio. Startade en onlinetidning för klubbmusik och var chefsredaktör. Och ett eget bolag för tech-house.",
+        "en": "Art director at a small indie label with a publishing arm and a studio. Started an online magazine for club music and edited it. Plus a label of my own for tech house."
+      },
+      "track": "sound"
+    },
+    {
+      "years": {
+        "se": "2006 — 2008",
+        "en": "2006 — 2008"
+      },
+      "title": "IDMedia, Groovegate, iMusic Tools",
+      "subtitle": {
+        "se": "Frilans och entreprenör",
+        "en": "Freelance and founder"
+      },
+      "body": {
+        "se": "Frilansade på Wordpress och Joomla. Byggde en musiknedladdningsportal med egen e-handelslösning i PHP och MySQL — vi sålde sedan licenser på den.",
+        "en": "Freelanced on Wordpress and Joomla. Built a music download portal on a home-grown e-commerce engine in PHP and MySQL — we later licensed it out."
+      },
+      "tags": [
+        "PHP",
+        "MySQL",
+        "Wordpress",
+        "Joomla"
+      ],
+      "track": "work"
+    },
+    {
+      "years": {
+        "se": "2008 — 2019",
+        "en": "2008 — 2019"
+      },
+      "title": "Webzoo / Great Agency",
+      "subtitle": {
+        "se": "UI/UX, frontend, grafisk form",
+        "en": "UI/UX, frontend, graphic design"
+      },
+      "body": {
+        "se": "Elva år. Först ett egenutvecklat PHP-CMS i vanilla, senare React och andra ramverk. Massor av logotyper, visitkort, broschyrer och bilstripning vid sidan om.",
+        "en": "Eleven years. First an in-house PHP CMS in vanilla, later React and other frameworks. Plenty of logos, business cards, brochures and vehicle wraps on the side."
+      },
+      "tags": [
+        "PHP",
+        "React",
+        "Wordpress",
+        "Woocommerce",
+        "Bootstrap",
+        "Foundation",
+        "SEO"
+      ],
+      "track": "work"
+    },
+    {
+      "years": {
+        "se": "2019 — 2023",
+        "en": "2019 — 2023"
+      },
+      "title": "First Vision",
+      "subtitle": {
+        "se": "UI/UX-designer och frontendutvecklare",
+        "en": "UI/UX designer and frontend developer"
+      },
+      "body": {
+        "se": "Wordpress, Laravel och Vue — och mycket kraft på SEO och laddtider. Funnys Äventyr, Cado Aqua, Champion Generators, Kenneths Däck, Intra, Konditori Katarina.",
+        "en": "Wordpress, Laravel and Vue — with real effort spent on SEO and load times. Funnys Äventyr, Cado Aqua, Champion Generators, Kenneths Däck, Intra, Konditori Katarina."
+      },
+      "tags": [
+        "Laravel",
+        "Vue.js",
+        "React",
+        "Woocommerce",
+        "Tailwind",
+        "Forge",
+        "Envoyer"
+      ],
+      "track": "work"
+    },
+    {
+      "years": {
+        "se": "2023 — 2024",
+        "en": "2023 — 2024"
+      },
+      "title": "Svensk Cater",
+      "subtitle": {
+        "se": "Frontendutvecklare, konsult via Get a Qlue",
+        "en": "Frontend developer, consulting through Get a Qlue"
+      },
+      "body": {
+        "se": "Dokumenterade en tech stack på .NET 4.8, Umbraco, Next och Vue, byggde nya funktioner och skrev fram vägarna ut ur den.",
+        "en": "Documented a stack of .NET 4.8, Umbraco, Next and Vue, built new features and mapped the ways out of it."
+      },
+      "tags": [
+        ".NET",
+        "Umbraco",
+        "Next.js",
+        "Vue.js",
+        "MS SQL"
+      ],
+      "track": "work"
+    },
+    {
+      "years": {
+        "se": "2024 —",
+        "en": "2024 —"
+      },
+      "title": "Eget",
+      "subtitle": {
+        "se": "Malmö",
+        "en": "Malmö, Sweden"
+      },
+      "body": {
+        "se": "Design och kod för uppdrag som ska hålla i tio år. Ramverksagnostiker på riktigt — plattformen väljs efter projektet.",
+        "en": "Design and code for work that has to last ten years. Genuinely framework agnostic — the platform follows the project."
+      },
+      "tags": [
+        "Next.js",
+        "Nuxt",
+        "Laravel",
+        "Livewire",
+        "Filament",
+        "Astro",
+        "Tailwind",
+        "GSAP"
+      ],
+      "track": "work"
+    },
+    {
+      "years": {
+        "se": "2025 —",
+        "en": "2025 —"
+      },
+      "title": "WeUnite AB",
+      "subtitle": {
+        "se": "Frontend och en del backend — sedan februari 2025, pågående",
+        "en": "Frontend plus some backend — since February 2025, ongoing"
+      },
+      "body": {
+        "se": "Vi bygger om en SaaS för sportadministration från grunden: multi-tenancy i Laravel och Livewire, Nuxt i fronten, uppdelat på flera repon. Mest frontend på min lott, men backend där det behövs.",
+        "en": "We are rebuilding a sports administration SaaS from the ground up: multi-tenancy in Laravel and Livewire, Nuxt on the front, split across several repos. Mostly frontend on my side, backend where it is needed."
+      },
+      "tags": [
+        "Laravel",
+        "Livewire",
+        "Nuxt",
+        "Vue.js",
+        "Multi-tenancy",
+        "Tailwind"
+      ],
+      "track": "work"
+    },
+    {
+      "years": {
+        "se": "Nu",
+        "en": "Now"
+      },
+      "title": "Fortfarande i studion",
+      "subtitle": {
+        "se": "Och i skogen med Chaka",
+        "en": "And in the woods with Chaka"
+      },
+      "body": {
+        "se": "En Jack Russell, en strand och ett spår som aldrig blir helt klart. Det är där rötterna sitter.",
+        "en": "A Jack Russell, a beach and a track that never quite gets finished. That is where the roots are."
+      },
+      "track": "sound"
+    }
+  ],
+  "stack": [
+    {
+      "label": {
+        "se": "Design",
+        "en": "Design"
+      },
+      "items": "Figma · Penpot · Affinity · Adobe CC · Inkscape · Pixelmator"
+    },
+    {
+      "label": {
+        "se": "Frontend",
+        "en": "Frontend"
+      },
+      "items": "Next.js · React · Nuxt · Vue.js · Astro · Livewire · Tailwind · GSAP · Node"
+    },
+    {
+      "label": {
+        "se": "Backend & CMS",
+        "en": "Backend & CMS"
+      },
+      "items": "Laravel · Filament · PHP · MySQL · Wordpress · Woocommerce · Headless CMS · Webflow"
+    },
+    {
+      "label": {
+        "se": "Drift",
+        "en": "Hosting & ops"
+      },
+      "items": "Docker · Forge · Envoyer · Herd · Vercel · Netlify · Digital Ocean · Hostup"
+    },
+    {
+      "label": {
+        "se": "AI & agenter",
+        "en": "AI & agents"
+      },
+      "items": "Claude Code · Codex · MCP-servrar · Subagenter · Hooks & skills · Context engineering"
+    },
+    {
+      "label": {
+        "se": "Övrigt",
+        "en": "Other"
+      },
+      "items": "SEO · Prestanda · Dokumentation · Systemadministration · Print & grafisk form"
+    }
+  ],
+  "questions": [
+    {
+      "q": {
+        "se": "Vad gör du, egentligen?",
+        "en": "What is it you actually do?"
+      },
+      "a": {
+        "se": "Jag designar och bygger webbplatser och gränssnitt. Hela vägen — från koncept och layout till koden som gör dem snabba. Att jag gör båda delarna är hela poängen: designen och tekniken bråkar inte med varandra när samma person håller i dem.",
+        "en": "I design and build websites and interfaces. All the way — from concept and layout to the code that makes them fast. Doing both is the whole point: design and technology stop fighting each other when the same person holds them."
+      },
+      "note": {
+        "se": "Design, kod, interaktion — i samklang.",
+        "en": "Design, code, interaction — in step."
+      }
+    },
+    {
+      "q": {
+        "se": "Varför kallar du dig ramverksagnostiker?",
+        "en": "Why call yourself framework agnostic?"
+      },
+      "a": {
+        "se": "För att jag inte är bunden till ett enda verktyg. Jag väljer plattform efter projektets krav och mål istället för att pressa in varje uppdrag i samma form. Just nu blir det oftast Next, Nuxt, Laravel eller Webflow. Wordpress kan jag utan och innan, men det finns numera bättre alternativ — beroende på projektet.",
+        "en": "Because I am not tied to one tool. I choose the platform from the brief and its goals instead of forcing every job into the same shape. Right now that usually means Next, Nuxt, Laravel or Webflow. I know Wordpress inside out, but there are better options these days — depending on the project."
+      },
+      "note": {
+        "se": "Rätt verktyg, inte mitt favoritverktyg.",
+        "en": "The right tool, not my favourite tool."
+      }
+    },
+    {
+      "q": {
+        "se": "Hur jobbar du med en ny kund?",
+        "en": "How do you work with a new client?"
+      },
+      "a": {
+        "se": "Först vad sajten ska göra — sälja, boka eller förklara. Sedan struktur och innehåll, innan något ritas. Du får se en klickbar version tidigt, så att vi ändrar i något riktigt i stället för att diskutera i text.",
+        "en": "First, what the site has to do — sell, book or explain. Then structure and content, before anything is drawn. You see a clickable version early, so we change something real instead of arguing about it in writing."
+      },
+      "note": {
+        "se": "Ett huvud, färre missförstånd.",
+        "en": "One head, fewer misunderstandings."
+      }
+    },
+    {
+      "q": {
+        "se": "Och innan webben?",
+        "en": "And before the web?"
+      },
+      "a": {
+        "se": "Ljud. Mellan 1990 och 1997 försörjde jag mig som DJ, artist och producent inom house och techno — efter en restresa till Ibiza 1989 där jag fick uppleva sista Summer of Love. Ett drygt år utanför London, en kväll på Rex Club i Paris, ett live-gig i Zürich. Sedan art director på ett indiebolag, chefsredaktör för en klubbmusiktidning, och ett eget skivbolag för tech-house.",
+        "en": "Sound. Between 1990 and 1997 I made a living as a DJ, artist and producer in house and techno — after a last-minute trip to Ibiza in 1989 where I caught the last Summer of Love. A year or so outside London, a night at Rex Club in Paris, a live gig in Zürich. Then art director at an indie label, editor-in-chief of a club music magazine, and a tech house label of my own."
+      },
+      "note": {
+        "se": "Rytm och timing lär man sig inte i Figma.",
+        "en": "Rhythm and timing are not learned in Figma."
+      }
+    },
+    {
+      "q": {
+        "se": "Vad gör du när du inte jobbar?",
+        "en": "What do you do when you are not working?"
+      },
+      "a": {
+        "se": "Är ute i skogen eller på stranden med Chaka, min Jack Russell. Eller sitter med ett nytt spår som aldrig blir helt klart.",
+        "en": "Out in the woods or on the beach with Chaka, my Jack Russell. Or sitting with a new track that never quite gets finished."
+      },
+      "note": {
+        "se": "Fortfarande mer studiomus än liveartist.",
+        "en": "Still more studio mouse than live act."
+      }
+    },
+    {
+      "q": {
+        "se": "Använder du AI när du bygger?",
+        "en": "Do you use AI when you build?"
+      },
+      "a": {
+        "se": "Varje dag, som ett verktyg bland andra. Jag jobbar i Claude Code och Codex med egna riggar: MCP-servrar, subagenter, hooks och skills. Det mesta av arbetet handlar om att bestämma vad modellen får se och när — context engineering. En agent som gissar kostar mer tid än den sparar.",
+        "en": "Every day, as one tool among others. I work in Claude Code and Codex with harnesses of my own: MCP servers, subagents, hooks and skills. Most of the work is deciding what the model gets to see and when — context engineering. An agent left guessing costs more time than it saves."
+      },
+      "note": {
+        "se": "Rätt kontext, inte fler tokens.",
+        "en": "The right context, not more tokens."
+      }
+    }
+  ]
+}

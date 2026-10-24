@@ -1,0 +1,106 @@
+{
+  "Meta": {
+    "title": "Patrik Sjerén — Design and code",
+    "description": "UI/UX designer and frontend developer in Malmö, Sweden. 25 years of experience, 15 of them agency-side."
+  },
+  "Nav": {
+    "work": "Projects",
+    "about": "About",
+    "playground": "Playground",
+    "cta": "Book a call",
+    "theme": "Switch mode",
+    "themeLight": "Light mode",
+    "themeDark": "Dark mode",
+    "menu": "Menu"
+  },
+  "Bar": {
+    "place": "Portfolio '26 — Malmö, Sweden",
+    "status": "Available for contract or full-time"
+  },
+  "Home": {
+    "introOne": "I am a UI/UX designer and frontend developer in Malmö, Sweden, with 25 years of experience, 15 of them agency-side. The same person designs and builds, from first draft to deployed site.",
+    "introTwo": "Framework agnostic, which mostly means I have no ego invested in the stack. The site has to be maintainable after I leave — that decides more than what is fun to build right now.",
+    "linkWork": "See the work",
+    "linkCv": "Download CV",
+    "featuredLabel": "Selected work",
+    "featuredCount": "Three of {total}",
+    "registerLabel": "More selected work",
+    "registerCount": "{total} in total",
+    "registerAll": "Show all {total}",
+    "servicesLabel": "Services",
+    "aboutLabel": "About",
+    "aboutHeadline": "House and techno first, HTML later. Same job, really: find the structure and take out everything that is not holding it up.",
+    "aboutBody": "I have built in Wordpress, Laravel, Vue, Nuxt and Next. None of them is the answer to everything, and anyone who says otherwise has only tried one. It took about twenty years to stop having opinions about it.",
+    "aboutCardDesignTitle": "Design",
+    "aboutCardDesignBody": "Logotypes, interfaces, print. I have done vehicle wraps and design systems in the same career, and they are more alike than they sound.",
+    "aboutCardDevTitle": "Development",
+    "aboutCardDevBody": "I build scalable sites from scratch that fit the design cleanly. The platform is chosen to match the complexity of the project.",
+    "aboutCardFreeTitle": "Off hours",
+    "aboutCardFreeBody": "In the woods or on the beach with Chaka, my Jack Russell. Or working on a new music track — that is where my roots are.",
+    "heroLead": "I deliver",
+    "heroPhrases": "UI/UX design|Design systems|Frontend|Headless CMS|E-commerce|App development|AI-assisted development"
+  },
+  "Meta_fields": {
+    "role": "Role",
+    "tech": "Tech",
+    "site": "Website",
+    "rebuilt": "Rebuilt since"
+  },
+  "Services": {
+    "designTitle": "Design",
+    "designItems": "UI/UX design|Design systems|Prototypes|Wireframes",
+    "devTitle": "Development",
+    "devItems": "Frontend|Headless CMS|E-commerce|App development",
+    "graphicTitle": "Graphic design",
+    "graphicItems": "Logo & identity|Print|Brochures|Brand material",
+    "techTitle": "Technical",
+    "techItems": "SEO & performance|Technical advice|Documentation|Hosting & maintenance|AI-assisted development"
+  },
+  "Colophon": {
+    "label": "Tools",
+    "tools": "Figma · Penpot · Affinity · Adobe CC · Next.js · React · Nuxt · Vue.js · Laravel · Livewire · Filament · Astro · Node · Tailwind · GSAP · Docker · Forge · Envoyer · Vercel · Netlify · Webflow · Wordpress"
+  },
+  "Footer": {
+    "headline": "Got something in the works?",
+    "headlineAccent": "Get in touch!",
+    "email": "patrik.sjeren@gmail.com",
+    "linkedin": "LinkedIn",
+    "facebook": "Facebook",
+    "youtube": "YouTube",
+    "bandcamp": "Bandcamp",
+    "copyright": "© {year} Patrik Sjerén",
+    "place": "Malmö · Sweden"
+  },
+  "About": {
+    "title": "About — Patrik Sjerén",
+    "description": "Thirty-seven years, two tracks. Frontend developer and designer in Malmö, with roots in club music.",
+    "heroOne": "Thirty-seven years,",
+    "heroTwo": "two tracks",
+    "heroBody": "I have been at this since 1989 — though the first years were about sound, not pixels. Both tracks run through everything I do, so here they share a line.",
+    "profileLabel": "Profile",
+    "profileOne": "I design and I build. Fifteen of my twenty-five years in the trade were spent agency-side — teams, deadlines and clients who change their minds late.",
+    "profileTwo": "I have worked in teams at Webzoo and First Vision, and as a consultant through Get a Qlue at Svensk Cater, where I documented a stack of .NET, Umbraco, Next and Vue and mapped the way forward. Clients have ranged from a tyre shop in Malmö to AUMA's electric actuators.",
+    "profileThree": "I come from print as much as from the web. Logotypes, brochures and vehicle wraps still shape how I look at type and spacing, even when the result is a screen.",
+    "profileFour": "I am looking for both contract work and a permanent role. Preferably somewhere design and code do not sit in separate rooms.",
+    "statYears": "Years in the trade",
+    "statAgency": "Of them agency-side",
+    "statSound": "Started with sound",
+    "experienceLabel": "Experience",
+    "trackWork": "Work",
+    "trackSound": "Sound",
+    "stackLabel": "Working with",
+    "questionsLabel": "Six questions I always get",
+    "ctaOne": "Got a",
+    "ctaTwo": "seventh",
+    "ctaAccent": "question?",
+    "cv": "Download CV"
+  },
+  "Projects": {
+    "title": "Projects — Patrik Sjerén",
+    "description": "A selection of my work. Design and code for clients in Skåne and across Sweden.",
+    "heroCount": "A selection of my work",
+    "heroBody": "Wordpress, Laravel, Vue and Next — the platform has always followed the brief. These {total} stand in for the rest.",
+    "filterAll": "All",
+    "listLabel": "Projects"
+  }
+}
