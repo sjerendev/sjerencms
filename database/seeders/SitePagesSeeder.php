@@ -15,8 +15,12 @@ use Illuminate\Database\Seeder;
  *
  * All text is copied from sjeren-2026 messages/*.json, about.ts and
  * projects.ts, via the snapshot in data/portfolio/. A page gets its blocks
- * when it is missing, empty or still holds the phase-2 colophon, never when
- * it has been edited in the admin.
+ * when it is missing, empty (`[]`, also when emptied on purpose in the
+ * admin) or still holds the phase-2 colophon, never when it has been edited.
+ *
+ * Projects are seeded (ProjectSeeder) only into an empty table, so a project
+ * or image deleted in the admin stays deleted. Filling a page that picks a
+ * deleted project throws.
  */
 class SitePagesSeeder extends Seeder
 {
@@ -35,7 +39,10 @@ class SitePagesSeeder extends Seeder
 
     public function run(): void
     {
-        $this->call(ProjectSeeder::class);
+        // Only into an empty table: ProjectSeeder would bring back deleted projects and removed images.
+        if (Project::doesntExist()) {
+            $this->call(ProjectSeeder::class);
+        }
 
         $dir = database_path('seeders/data/portfolio');
         $this->about = json_decode(file_get_contents("{$dir}/about.json"), true);
@@ -75,7 +82,8 @@ class SitePagesSeeder extends Seeder
 
         foreach ($pages as $language => $bySlug) {
             foreach ($bySlug as $slug => $attributes) {
-                $content = match ($slug) {
+                // Built only for a page that gets filled, so a no-op run never resolves picks.
+                $content = fn () => match ($slug) {
                     'start' => $this->start($language),
                     'om-mig' => $this->about($language),
                     'projekt' => $this->projects($language),
@@ -83,12 +91,12 @@ class SitePagesSeeder extends Seeder
 
                 $page = Page::firstOrCreate(
                     ['slug' => $slug, 'language' => $language],
-                    $attributes + ['is_published' => true, 'is_homepage' => false, 'content' => $content],
+                    fn () => $attributes + ['is_published' => true, 'is_homepage' => false, 'content' => $content()],
                 );
 
                 // `==`, not `===`: the stored JSON may order its keys differently.
                 if (! $page->wasRecentlyCreated && ($page->content == [] || $page->content == $this->phaseTwo($slug, $language))) {
-                    $page->update(['content' => $content]);
+                    $page->update(['content' => $content()]);
                 }
             }
         }

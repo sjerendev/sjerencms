@@ -82,9 +82,12 @@ a shared host (hostup): no Node process, no long-running queue worker.
 Run behaviour checks with `agent-browser` against Valet:
 `http://sjerencms.test` (this app) and `http://sjeren-2026.test` (the old
 Next site, the visual reference). Local pages and projects come from
-`php artisan db:seed --class=SitePagesSeeder`. It runs `ProjectSeeder`,
-adds missing pages and fills pages that are empty or still hold the
-phase-2 colophon. It never overwrites admin edits. Pair
+`php artisan db:seed --class=SitePagesSeeder`. It runs `ProjectSeeder`
+only while the projects table is empty, adds missing pages and fills pages
+that are empty (`[]`, also when emptied on purpose) or still hold the
+phase-2 colophon. It never overwrites other admin edits. Run directly,
+`ProjectSeeder` re-creates deleted snapshot projects and re-adds removed
+images. Pair
 every screenshot with an `eval` value, give `screenshot` an absolute path
 outside the repo, and run `git status` afterwards.
 Music: `php artisan db:seed --class=MusicSeeder` gives releases without

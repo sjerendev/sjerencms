@@ -28,7 +28,9 @@ use Illuminate\Database\Seeder;
  *
  * Safe to run again: a project is matched on slug and then left alone (the
  * headlines are drafts that get rewritten in the admin), and an image is
- * only added when its collection is empty.
+ * only added when its collection is empty. Run directly, it therefore
+ * re-creates a snapshot project deleted in the admin and re-adds a removed
+ * image. SitePagesSeeder only calls it while the projects table is empty.
  */
 class ProjectSeeder extends Seeder
 {

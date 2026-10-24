@@ -49,12 +49,17 @@ the export, use the node command in the `ProjectSeeder` docblock (run from
 
 - `php artisan db:seed --class=ProjectSeeder`: `firstOrCreate` on slug, so
   an existing project (headlines rewritten in the admin) is left alone. An
-  image is added only when its collection is empty.
-- `php artisan db:seed --class=SitePagesSeeder` calls `ProjectSeeder`, then
-  builds start, /om-mig and /projekt in `sv` and `en`. A page gets the
-  blocks when it is created, or when its `content` is `[]` or equal (`==`,
-  key order ignored) to the phase-2 colophon. Any other content counts as
-  an admin edit and is never touched.
+  image is added only when its collection is empty. Run directly, it
+  therefore re-creates a snapshot project deleted in the admin and re-adds
+  an image removed there.
+- `php artisan db:seed --class=SitePagesSeeder` calls `ProjectSeeder` only
+  when the projects table is empty, then builds start, /om-mig and /projekt
+  in `sv` and `en`. A page gets the blocks when it is created, or when its
+  `content` is `[]` (also a page emptied on purpose in the admin) or equal
+  (`==`, key order ignored) to the phase-2 colophon. Any other content
+  counts as an admin edit and is never touched. Content is built only for a
+  page that gets filled, so a re-run after a project is deleted is a no-op;
+  filling a page that needs the deleted project throws.
 - Copy comes from the snapshot through `t()`, which throws on a missing
   message. `picks()` turns slugs into picker items and throws on an unknown
   slug. `|` in a message becomes a line break (one item per line).
@@ -88,6 +93,9 @@ Section numbers (`01`, `02` …) are a field, not counted from the order.
     cases would be wrong on any page.
   - The case counter `01 / 0N` counts the cases rendered, so a deleted
     project shortens it.
+  - The picker drops a pick of a deleted project when the form loads, so
+    the page still saves (the Select's `in` rule would reject it). The
+    stored content keeps the stale id until that page is saved.
 - `stack.items` is one string shown as typed (`Figma · Penpot`), not one
   per line. A list would mean inventing a separator.
 - A new or changed block also goes into `everyBlock()` in
