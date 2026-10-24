@@ -2,12 +2,10 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
-use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Grid;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms;
 use Filament\Forms\Components\Builder\Block;
-use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 
 class HeadlineTextBlock extends Block
 {
@@ -16,36 +14,22 @@ class HeadlineTextBlock extends Block
         return parent::make($name)
             ->label('Headline and Text')
             ->schema([
-                Select::make('container_type')
-                    ->label('Container Type')
-                    ->options([
-                        'container' => 'Container',
-                        'container-fluid' => 'Full Width',
-                    ])
-                    ->default('container')
+                TextInput::make('number')
                     ->required(),
-                Grid::make()
+                TextInput::make('label')
+                    ->required(),
+                TextInput::make('headline')
+                    ->required(),
+                Textarea::make('text')
+                    ->required(),
+                Repeater::make('cards')
                     ->schema([
-                        TextInput::make('headline')
+                        TextInput::make('title')
                             ->required(),
-                        MarkdownEditor::make('text')
-                            ->required()
-                            ->toolbarButtons([
-                                'heading',
-                                'bold',
-                                'italic',
-                                'strike',
-                                'link',
-                                'blockquote',
-                                'bulletList',
-                                'orderedList',
-                                'codeBlock',
-                                'table',
-                            ]),
-                    ]),
-                TextInput::make('section_class')
-                    ->label('Section Class Name')
-                    ->placeholder('Add custom CSS classes'),
+                        Textarea::make('body'),
+                    ])
+                    ->collapsible()
+                    ->reorderable(),
             ]);
     }
 }

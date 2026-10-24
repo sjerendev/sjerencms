@@ -16,7 +16,8 @@ it('saves a page with a headline_text block and reopens it', function () {
             'content' => [[
                 'type' => 'headline_text',
                 'data' => [
-                    'container_type' => 'container',
+                    'number' => '04',
+                    'label' => 'Om mig',
                     'headline' => 'Rubrik',
                     'text' => 'Brödtext',
                 ],

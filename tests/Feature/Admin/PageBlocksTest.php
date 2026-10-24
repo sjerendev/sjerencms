@@ -13,15 +13,15 @@ function everyBlock(): array
     return [
         ['type' => 'image_text', 'data' => ['image' => 'content-images/a.jpg', 'text' => 'Image text', 'reverse_layout' => false]],
         ['type' => 'full_text', 'data' => ['text' => 'Full text']],
-        ['type' => 'headline_text', 'data' => ['container_type' => 'container', 'headline' => 'Headline', 'text' => 'Body']],
+        ['type' => 'headline_text', 'data' => ['number' => '04', 'label' => 'Om mig', 'headline' => 'Headline', 'text' => 'Body', 'cards' => [['title' => 'Design', 'body' => '']]]],
         ['type' => 'sticky_carousel', 'data' => ['section_height' => '100vh', 'images' => [
             ['image' => 'sticky-carousel/a.jpg', 'title' => 'A', 'url' => 'https://a.se'],
             ['image' => 'sticky-carousel/b.jpg', 'title' => 'B', 'url' => 'https://b.se'],
             ['image' => 'sticky-carousel/c.jpg', 'title' => 'C', 'url' => 'https://c.se'],
         ]]],
         ['type' => 'call_to_action', 'data' => ['headline' => 'Call to action', 'text' => 'Text', 'button_text' => 'Go', 'button_url' => '/x', 'background_type' => 'color', 'background_color' => '#ffffff']],
-        ['type' => 'faq_accordion', 'data' => ['heading' => 'Questions', 'items' => [['question' => 'Q', 'answer' => 'A']]]],
-        ['type' => 'service_cards', 'data' => ['section_title' => 'Services', 'cards' => [['icon' => 'gear', 'icon_color' => '#000000', 'title' => 'T', 'description' => 'D']]]],
+        ['type' => 'faq_accordion', 'data' => ['number' => '04', 'label' => 'Six questions', 'items' => [['question' => 'Q', 'answer' => 'A', 'note' => 'N']]]],
+        ['type' => 'service_cards', 'data' => ['number' => '03', 'label' => 'Services', 'columns' => [['title' => 'T', 'items' => "A\nB"]]]],
         ['type' => 'ticker', 'data' => ['background_color' => '#ffffff', 'text_color' => '#000000', 'angle' => 0, 'direction' => 'left-to-right', 'words' => ['a', 'b']]],
         ['type' => 'stagger_text', 'data' => ['text_row_1' => 'Stagger', 'color_row_1' => '#000000']],
         ['type' => 'colophon', 'data' => ['label' => 'Verktyg', 'tools' => 'Figma · Laravel']],
@@ -44,7 +44,7 @@ beforeEach(function () {
 
 it('renders the edit page with every block', function () {
     $this->get("/admin/pages/{$this->page->id}/edit")->assertOk()
-        ->assertSee(['Headline', 'Call to action', 'Questions', 'Services', 'Stagger', 'Verktyg']);
+        ->assertSee(['Headline', 'Call to action', 'Six questions', 'Services', 'Stagger', 'Verktyg']);
 });
 
 it('saves the edit page with every block in order', function () {
