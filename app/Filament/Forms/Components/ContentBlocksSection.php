@@ -15,6 +15,7 @@ use App\Filament\Forms\Components\Blocks\TickerBlock;
 use App\Filament\Forms\Components\Blocks\StaggerTextBlock;
 use App\Filament\Forms\Components\Blocks\ColophonBlock;
 use App\Filament\Forms\Components\Blocks\RegisterBlock;
+use App\Filament\Forms\Components\Blocks\FeaturedCasesBlock;
 use Filament\Forms;
 use Illuminate\Contracts\Support\Htmlable;
 use Closure;
@@ -38,6 +39,7 @@ class ContentBlocksSection extends Section
                         StaggerTextBlock::make(),
                         ColophonBlock::make(),
                         RegisterBlock::make(),
+                        FeaturedCasesBlock::make(),
                     ])
                     ->collapsible(),
             ]);

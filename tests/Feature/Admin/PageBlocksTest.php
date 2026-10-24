@@ -25,6 +25,7 @@ function everyBlock(): array
         ['type' => 'stagger_text', 'data' => ['text_row_1' => 'Stagger', 'color_row_1' => '#000000']],
         ['type' => 'colophon', 'data' => ['label' => 'Verktyg', 'tools' => 'Figma · Laravel']],
         ['type' => 'register', 'data' => ['number' => '02', 'label' => 'Register', 'aside' => '{total} totalt', 'projects' => [['project_id' => Project::orderBy('id')->first()->id], ['project_id' => Project::orderByDesc('id')->first()->id]], 'all_label' => null]],
+        ['type' => 'featured_cases', 'data' => ['number' => '01', 'label' => 'Utvalda case', 'aside' => 'Tre av {total}', 'projects' => [['project_id' => Project::orderBy('id')->first()->id]]]],
     ];
 }
 

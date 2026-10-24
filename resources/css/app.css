@@ -178,3 +178,18 @@
 html[data-player="on"] footer {
   padding-bottom: 120px;
 }
+
+/* The pinned case is the window minus the player bar, so its meta row shows
+   above the bar. Outside the layers, or the h-svh utility wins. Mini player:
+   2px progress + 2 × 12px padding + 48px button = 74px; the bar from lg is
+   80px. Its 1px top border fits in the case's bottom padding. case-pin.js
+   refreshes the pin when data-player changes. */
+html[data-player="on"] [data-motion="case-pin"] {
+  height: calc(100svh - 74px);
+}
+
+@media (width >= 64rem) {
+  html[data-player="on"] [data-motion="case-pin"] {
+    height: calc(100svh - 80px);
+  }
+}
