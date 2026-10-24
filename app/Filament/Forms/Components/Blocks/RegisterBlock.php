@@ -2,6 +2,7 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use App\Filament\Forms\Components\MotionSettings;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\TextInput;
 
@@ -18,6 +19,7 @@ class RegisterBlock extends Block
                     ->required(),
                 TextInput::make('aside')
                     ->helperText('{total} becomes the number of projects'),
+                MotionSettings::make('head', 'Section head'),
                 ProjectPicker::make()
                     ->helperText('Empty means every project, by position'),
                 TextInput::make('all_label')

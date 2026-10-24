@@ -2,6 +2,7 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use App\Filament\Forms\Components\MotionSettings;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -20,6 +21,7 @@ class TimelineBlock extends Block
                     ->required(),
                 TextInput::make('label')
                     ->required(),
+                MotionSettings::make('head', 'Section head'),
                 TextInput::make('work_label')
                     ->required()
                     ->helperText('Legend and entry label for the work track'),
@@ -46,6 +48,10 @@ class TimelineBlock extends Block
                     ->reorderable()
                     ->defaultItems(1)
                     ->required(),
+                MotionSettings::make('entries_years', 'Years'),
+                MotionSettings::make('entries_title', 'Titles'),
+                MotionSettings::make('entries_subtitle', 'Subtitles'),
+                MotionSettings::make('entries_body', 'Bodies'),
             ]);
     }
 }

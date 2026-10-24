@@ -2,6 +2,7 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use App\Filament\Forms\Components\MotionSettings;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -18,6 +19,7 @@ class ServiceCardsBlock extends Block
                     ->required(),
                 TextInput::make('label')
                     ->required(),
+                MotionSettings::make('head', 'Section head'),
                 Repeater::make('columns')
                     ->schema([
                         TextInput::make('title')
@@ -30,6 +32,8 @@ class ServiceCardsBlock extends Block
                     ->reorderable()
                     ->defaultItems(1)
                     ->required(),
+                MotionSettings::make('columns_title', 'Column titles'),
+                MotionSettings::make('columns_items', 'Column items'),
             ]);
     }
 }

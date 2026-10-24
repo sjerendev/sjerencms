@@ -2,6 +2,7 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use App\Filament\Forms\Components\MotionSettings;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -15,13 +16,16 @@ class HeroBlock extends Block
             ->schema([
                 TextInput::make('lead')
                     ->required(),
+                MotionSettings::make('lead', 'Lead'),
                 Textarea::make('phrases')
                     ->required()
                     ->helperText('One per line. They roll after the lead, the first one stands still without motion'),
                 Textarea::make('intro_one')
                     ->required(),
+                MotionSettings::make('intro_one', 'Intro one'),
                 Textarea::make('intro_two')
                     ->required(),
+                MotionSettings::make('intro_two', 'Intro two'),
                 TextInput::make('work_label')
                     ->required()
                     ->helperText('Links to the projekt page in this language'),

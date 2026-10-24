@@ -2,6 +2,7 @@
 
 namespace App\Filament\Forms\Components\Blocks;
 
+use App\Filament\Forms\Components\MotionSettings;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -18,6 +19,7 @@ class FaqAccordionBlock extends Block
                     ->required(),
                 TextInput::make('label')
                     ->required(),
+                MotionSettings::make('head', 'Section head'),
                 Repeater::make('items')
                     ->schema([
                         TextInput::make('question')
@@ -31,6 +33,9 @@ class FaqAccordionBlock extends Block
                     ->reorderable()
                     ->defaultItems(1)
                     ->required(),
+                MotionSettings::make('items_question', 'Questions'),
+                MotionSettings::make('items_answer', 'Answers'),
+                MotionSettings::make('items_note', 'Notes'),
             ]);
     }
 }
