@@ -115,9 +115,13 @@ database/seeders/data/         # music.json and covers; portfolio/ (Next snapsho
 1. Create `app/Filament/Forms/Components/Blocks/YourBlock.php`
 2. Register it in `ContentBlocksSection.php`
 3. Add `resources/views/blocks/your_block.blade.php`; it receives `$data`
-4. Add it with its fields to `everyBlock()` in
-   `tests/Feature/Admin/PageBlocksTest.php`
+4. Add it with its fields to `everyBlock()` in `tests/Pest.php`
+   (used by `tests/Feature/Admin/PageBlocksTest.php`)
    (its registration test fails if you skip step 2)
+5. Give its texts motion: `MotionSettings::make('key', 'Label')` after each
+   text field, `@textMotion('key')` on the element in the view, and the
+   pairs in the dataset in `tests/Feature/Admin/MotionSettingsTest.php`
+   (see `.claude/rules/site.md`)
 
 ## graphify
 

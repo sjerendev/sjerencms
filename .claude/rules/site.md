@@ -28,3 +28,21 @@
   `register.js` is not a motion: it is one `mousemove` listener on
   `document` for the register's hover image, so there is nothing to clean
   up.
+- `text` (`motions/text.js`) is the per-text motion Patrik turns on in
+  admin. Off unless he does: a text without it renders as it always did.
+  - Stored in the block's data as `motion.{key}`. The key is the field
+    (`intro_one`), `{repeater}_{field}` for repeater fields
+    (`items_answer`, one setting for every row) or `head` for the section
+    head. `MotionSettings::make($key, $label)` is the folded admin panel;
+    `App\Support\TextMotion` normalizes the settings (defaults, ranges).
+  - Views print it with `@textMotion('key')` straight after a closing
+    quote (`class="x"@textMotion('k')`), so motion off leaves the HTML
+    byte for byte. A field that renders several elements puts it on their
+    container and `@motionPiece('key')` on each element; the stagger runs
+    across them.
+  - Set once, on the Swedish page: `PageMotion::for()` gives an English
+    page the motion of the block at the same place on the published
+    Swedish page with the same slug, if it is the same type.
+  - Plays once at `top 85%`, then the SplitText is reverted. `app.css`
+    hides `[data-text-motion]` under `html[data-js]` until text.js arms it,
+    and shows it after 2 s if it never does. Reduced motion: shown at once.

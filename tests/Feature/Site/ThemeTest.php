@@ -29,3 +29,8 @@ it('defaults to light mode when nothing is saved, whatever the system prefers', 
 
     expect($head)->toContain('if(!t){t="light"}')->not->toContain('prefers-color-scheme');
 });
+
+it('marks that JavaScript runs, in the blocking head script', function () {
+    $head = Str::between($this->get('/se')->getContent(), '<head>', '</head>');
+    expect($head)->toContain('document.documentElement.dataset.js=""');
+});

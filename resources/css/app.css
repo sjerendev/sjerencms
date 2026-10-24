@@ -193,3 +193,17 @@ html[data-player="on"] [data-motion="case-pin"] {
     height: calc(100svh - 80px);
   }
 }
+
+/* Moving text is hidden until text.js has set its start state, so it never
+   shows finished first. If that never happens it shows anyway after 2 s.
+   Without JavaScript <html> has no data-js and nothing is hidden. */
+html[data-js] [data-text-motion]:not([data-text-motion-armed]) {
+  visibility: hidden;
+  animation: text-motion-failsafe 0s 2s forwards;
+}
+
+@keyframes text-motion-failsafe {
+  to {
+    visibility: visible;
+  }
+}
