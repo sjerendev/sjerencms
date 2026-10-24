@@ -196,14 +196,26 @@ html[data-player="on"] [data-motion="case-pin"] {
 
 /* Moving text is hidden until text.js has set its start state, so it never
    shows finished first. If that never happens it shows anyway after 2 s.
-   Without JavaScript <html> has no data-js and nothing is hidden. */
-html[data-js] [data-text-motion]:not([data-text-motion-armed]) {
-  visibility: hidden;
-  animation: text-motion-failsafe 0s 2s forwards;
+   Without JavaScript <html> has no data-js and nothing is hidden, and with
+   reduced motion the text never moves, so it is never hidden either. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-js] [data-text-motion]:not([data-text-motion-armed]) {
+    visibility: hidden;
+    animation: text-motion-failsafe 0s 2s forwards;
+  }
 }
 
 @keyframes text-motion-failsafe {
   to {
     visibility: visible;
   }
+}
+
+/* SplitText's masks clip with overflow: clip, which cuts the ring on Å and
+   the descenders on the tight headlines (leading 0.95). The clip-path reaches
+   0.25em past the line instead, without changing the layout; text.js starts
+   a vertical slide 150% away so nothing peeks below the edge. */
+.tm-mask {
+  overflow: visible !important;
+  clip-path: inset(-0.25em 0);
 }

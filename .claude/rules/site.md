@@ -43,6 +43,13 @@
   - Set once, on the Swedish page: `PageMotion::for()` gives an English
     page the motion of the block at the same place on the published
     Swedish page with the same slug, if it is the same type.
-  - Plays once at `top 85%`, then the SplitText is reverted. `app.css`
-    hides `[data-text-motion]` under `html[data-js]` until text.js arms it,
-    and shows it after 2 s if it never does. Reduced motion: shown at once.
+  - Plays once at `top 85%`. It is split only then (split pieces are
+    `aria-hidden`, so a waiting text stays whole for screen readers and is
+    hidden with opacity alone), and the split is reverted when it is done.
+  - `app.css` hides `[data-text-motion]` under `html[data-js]` until text.js
+    arms it, and shows it after 2 s if it never does; text.js then leaves a
+    shown text standing instead of replaying it. Reduced motion: never
+    hidden, never moved.
+  - Masks get the class `tm-mask`: a `clip-path` 0.25em past the line
+    instead of `overflow: clip`, so Å and descenders survive the tight
+    headlines; a vertical masked slide starts 200% away.
