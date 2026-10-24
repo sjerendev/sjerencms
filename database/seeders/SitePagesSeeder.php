@@ -253,12 +253,14 @@ class SitePagesSeeder extends Seeder
         return str_replace('|', "\n", $this->t($language, $section, $key));
     }
 
-    /** Slugs to the picker's `[['project_id' => id], …]`, in the given order. A slug without a project is skipped. */
+    /** Slugs to the picker's `[['project_id' => id], …]`, in the given order. An unknown slug is an error. */
     private function picks(array $slugs): array
     {
         $ids = Project::whereIn('slug', $slugs)->pluck('id', 'slug');
 
-        return collect($slugs)->filter(fn ($slug) => $ids->has($slug))
-            ->map(fn ($slug) => ['project_id' => $ids[$slug]])->values()->all();
+        return array_map(
+            fn (string $slug) => ['project_id' => $ids[$slug] ?? throw new \RuntimeException("Missing project {$slug}")],
+            $slugs,
+        );
     }
 }

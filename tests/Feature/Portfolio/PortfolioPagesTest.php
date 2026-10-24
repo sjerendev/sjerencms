@@ -33,13 +33,61 @@ it('serves the three pages in both languages with the live total', function () {
     $this->get('/se/projekt')->assertOk()->assertSee('/ '.str_pad((string) $total, 3, '0', STR_PAD_LEFT));
 });
 
-it('fills a page that still has its phase-2 content', function () {
-    Page::create(['title' => 'Patrik Sjerén', 'slug' => 'start', 'language' => 'sv', 'is_homepage' => true, 'is_published' => true,
-        'content' => [['type' => 'colophon', 'data' => ['label' => 'Verktyg', 'tools' => 'Figma · Penpot · Affinity · Adobe CC · Next.js · React · Nuxt · Vue.js · Laravel · Livewire · Filament · Astro · Node · Tailwind · GSAP · Docker · Forge · Envoyer · Vercel · Netlify · Webflow · Wordpress']]]]);
+const PHASE_TWO_TOOLS = 'Figma · Penpot · Affinity · Adobe CC · Next.js · React · Nuxt · Vue.js · Laravel · Livewire · Filament · Astro · Node · Tailwind · GSAP · Docker · Forge · Envoyer · Vercel · Netlify · Webflow · Wordpress';
+
+// `data` before `type`, the key order MySQL stores.
+function startPage(string $language, array $content, array $attributes = []): Page
+{
+    return Page::create($attributes + ['title' => 'Patrik Sjerén', 'slug' => 'start', 'language' => $language, 'is_homepage' => true, 'is_published' => true, 'content' => $content]);
+}
+
+function phaseTwoColophon(string $label = 'Verktyg', string $tools = PHASE_TWO_TOOLS): array
+{
+    return ['data' => ['label' => $label, 'tools' => $tools], 'type' => 'colophon'];
+}
+
+it('fills a page that still has its phase-2 content, whatever order its keys are stored in', function () {
+    $page = startPage('sv', [phaseTwoColophon()]);
+    expect(array_key_first($page->fresh()->content[0]))->toBe('data');
 
     $this->seed(SitePagesSeeder::class);
 
-    expect(count(Page::where('slug', 'start')->where('language', 'sv')->first()->content))->toBe(6);
+    $content = $page->fresh()->content;
+    expect($content)->toHaveCount(6)->and(end($content)['type'])->toBe('colophon');
+});
+
+it('fills an English start page that still has the phase-2 Tools colophon', function () {
+    $page = startPage('en', [phaseTwoColophon('Tools')]);
+
+    $this->seed(SitePagesSeeder::class);
+
+    expect($page->fresh()->content)->toHaveCount(6);
+});
+
+it('leaves a colophon with edited tools alone', function () {
+    $content = [phaseTwoColophon('Verktyg', 'Figma')];
+    $page = startPage('sv', $content);
+
+    $this->seed(SitePagesSeeder::class);
+
+    expect($page->fresh()->content)->toBe($content);
+});
+
+it('leaves the phase-2 colophon plus another block alone', function () {
+    $content = [phaseTwoColophon(), ['data' => ['label' => 'Egen', 'tools' => 'Figma'], 'type' => 'colophon']];
+    $page = startPage('sv', $content);
+
+    $this->seed(SitePagesSeeder::class);
+
+    expect($page->fresh()->content)->toBe($content);
+});
+
+it('keeps an edited title and meta when it fills the content', function () {
+    $page = startPage('sv', [phaseTwoColophon()], ['title' => 'Ändrad titel', 'meta_title' => 'Ändrad meta']);
+
+    $this->seed(SitePagesSeeder::class);
+
+    expect($page->fresh())->content->toHaveCount(6)->title->toBe('Ändrad titel')->meta_title->toBe('Ändrad meta');
 });
 
 it('leaves content edited in the admin alone', function () {
