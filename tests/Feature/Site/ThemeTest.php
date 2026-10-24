@@ -23,3 +23,9 @@ it('renders the theme toggle with translated labels', function () {
     app()->setLocale('en');
     expect(Blade::render('<x-theme-toggle />'))->toContain('aria-label="Light mode"');
 });
+
+it('defaults to light mode when nothing is saved, whatever the system prefers', function () {
+    $head = Str::between($this->get('/se')->getContent(), '<head>', '</head>');
+
+    expect($head)->toContain('if(!t){t="light"}')->not->toContain('prefers-color-scheme');
+});

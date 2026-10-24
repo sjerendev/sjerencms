@@ -10,8 +10,9 @@
     @foreach ($alternates as $language => $href)
         <link rel="alternate" hreflang="{{ $language }}" href="{{ $href }}">
     @endforeach
-    {{-- Runs while the HTML is parsed, before first paint, so dark mode never flashes light. From ThemeScript.tsx. --}}
-    <script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){}})()</script>
+    {{-- Runs while the HTML is parsed, before first paint, so dark mode never flashes light. From ThemeScript.tsx,
+         but light unless the visitor picked dark: the system preference is ignored (Patrik, 2026-10-24). --}}
+    <script>(function(){try{var t=localStorage.getItem("theme");if(!t){t="light"}document.documentElement.dataset.theme=t}catch(e){}})()</script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
