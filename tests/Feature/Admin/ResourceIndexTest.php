@@ -12,6 +12,7 @@ it('renders every resource index', function (string $url) {
 })->with([
     '/admin/pages',
     '/admin/releases',
+    '/admin/projects',
     '/admin/orders',
     '/admin/manage-settings',
 ]);
