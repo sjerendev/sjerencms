@@ -6,7 +6,7 @@
 @endphp
 @if ($projects->isNotEmpty())
 <section class="gut pt-[clamp(72px,10vw,116px)]">
-    <x-section-head :number="$data['number'] ?? ''" :label="$data['label'] ?? ''" :aside="\App\Models\Project::withTotal($data['aside'] ?? null)" />
+    <x-section-head :motion="($motion ?? [])['head'] ?? null" :number="$data['number'] ?? ''" :label="$data['label'] ?? ''" :aside="\App\Models\Project::withTotal($data['aside'] ?? null)" />
     <div class="mt-[8px] flex flex-col">
         @foreach ($projects as $project)
             @php

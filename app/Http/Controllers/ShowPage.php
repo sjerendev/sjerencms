@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Middleware\SetLocaleFromPrefix;
 use App\Models\Page;
+use App\Support\PageMotion;
 use Illuminate\View\View;
 
 class ShowPage
@@ -24,6 +25,7 @@ class ShowPage
             'title' => $page->meta_title ?: __('meta.title'),
             'description' => $page->meta_description ?: __('meta.description'),
             'alternates' => $alternates,
+            'motions' => PageMotion::for($page),
         ]);
     }
 

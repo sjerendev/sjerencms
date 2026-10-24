@@ -8,7 +8,7 @@
 @endphp
 <section class="gut pt-[clamp(48px,7vw,76px)]">
     <div class="grid grid-cols-1 items-end gap-[40px] lg:grid-cols-[1fr_420px] lg:gap-[60px]">
-        <h1 class="m-0 {{ $heading }} font-semibold tracking-[-0.038em]">{!! implode('<br>', array_map('e', $lines)) !!}</h1>
-        <p class="m-0 text-[16px] leading-[1.6] text-ink-dim">{{ \App\Models\Project::withTotal($data['text'] ?? null) }}</p>
+        <h1 class="m-0 {{ $heading }} font-semibold tracking-[-0.038em]"@textMotion('lines')>{!! implode('<br>', array_map('e', $lines)) !!}</h1>
+        <p class="m-0 text-[16px] leading-[1.6] text-ink-dim"@textMotion('text')>{{ \App\Models\Project::withTotal($data['text'] ?? null) }}</p>
     </div>
 </section>

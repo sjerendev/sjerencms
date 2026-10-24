@@ -63,6 +63,12 @@ class TextMotion
         return $motion;
     }
 
+    /** Marks one element of a field that renders several (paragraphs, lines), only when the field moves. */
+    public static function piece(?array $settings): HtmlString
+    {
+        return new HtmlString(self::normalize($settings) === null ? '' : ' data-motion-piece');
+    }
+
     public static function attributes(?array $settings): HtmlString
     {
         $motion = self::normalize($settings);

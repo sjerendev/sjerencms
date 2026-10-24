@@ -33,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
 
         // <p @textMotion('intro_one')>: the block's motion settings for that text, or nothing.
         Blade::directive('textMotion', fn (string $key) => "<?php echo \\App\\Support\\TextMotion::attributes((\$motion ?? [])[{$key}] ?? null); ?>");
+        Blade::directive('motionPiece', fn (string $key) => "<?php echo \\App\\Support\\TextMotion::piece((\$motion ?? [])[{$key}] ?? null); ?>");
     }
 }

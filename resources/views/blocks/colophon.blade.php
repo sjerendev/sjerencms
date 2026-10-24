@@ -5,7 +5,7 @@
 {{-- The band runs edge to edge, the label stays in the margin. --}}
 <section class="pt-[96px]">
     <div class="gut">
-        <span class="lbl text-ink-dimmer">{{ $data['label'] ?? '' }}</span>
+        <span class="lbl text-ink-dimmer"@textMotion('label')>{{ $data['label'] ?? '' }}</span>
     </div>
     <div class="relative mt-[16px] overflow-hidden border-y border-hair py-[26px] motion-reduce:overflow-visible motion-reduce:px-[var(--gutter)]">
         <div data-motion="colophon" class="flex w-max motion-reduce:w-full">

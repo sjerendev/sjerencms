@@ -3,11 +3,11 @@
     $trackLabel = fn (array $entry) => ($entry['track'] ?? 'work') === 'sound' ? ($data['sound_label'] ?? '') : ($data['work_label'] ?? '');
 @endphp
 <section class="gut pt-[clamp(56px,8vw,96px)]">
-    <div class="flex flex-wrap items-center gap-[20px] border-b border-hair-strong pb-[14px]">
-        <span class="lbl">{{ $data['number'] ?? '' }}</span>
-        <span aria-hidden="true" class="block h-px w-[26px] bg-hair-strong"></span>
-        <h2 class="lbl m-0 font-semibold">{{ $data['label'] ?? '' }}</h2>
-        <span class="ml-auto flex gap-[24px]">
+    <div class="flex flex-wrap items-center gap-[20px] border-b border-hair-strong pb-[14px]"@textMotion('head')>
+        <span class="lbl"@motionPiece('head')>{{ $data['number'] ?? '' }}</span>
+        <span aria-hidden="true"@motionPiece('head') class="block h-px w-[26px] bg-hair-strong"></span>
+        <h2 class="lbl m-0 font-semibold"@motionPiece('head')>{{ $data['label'] ?? '' }}</h2>
+        <span class="ml-auto flex gap-[24px]"@motionPiece('head')>
             <span class="lbl flex items-center gap-[8px] text-ink-dim">
                 <span aria-hidden="true" class="inline-block size-[10px] rounded-pill bg-accent"></span>
                 {{ $data['work_label'] ?? '' }}
@@ -21,7 +21,7 @@
     <div class="mt-[26px]">
         @foreach ($data['entries'] ?? [] as $entry)
             <div class="grid grid-cols-[70px_28px_1fr] border-b border-hair py-[28px] md:grid-cols-[150px_40px_1fr_150px] md:py-[34px]">
-                <span class="lbl pt-[2px] text-[13px] tracking-[0.04em] md:text-[15px]">{{ $entry['years'] ?? '' }}</span>
+                <span class="lbl pt-[2px] text-[13px] tracking-[0.04em] md:text-[15px]"@textMotion('entries_years')>{{ $entry['years'] ?? '' }}</span>
 
                 <div class="relative flex justify-center">
                     <span aria-hidden="true" class="absolute top-0 -bottom-[28px] block w-px bg-hair-mid md:-bottom-[34px]"></span>
@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="flex flex-col gap-[8px] pl-[18px] md:pl-[34px]">
-                    <span class="text-[21px] leading-[1.14] font-semibold tracking-[-0.025em] md:text-[27px]">{{ $entry['title'] ?? '' }}</span>
-                    <span class="text-[15px] text-ink-dim">{{ $entry['subtitle'] ?? '' }}</span>
-                    <p class="m-0 mt-[6px] max-w-[56ch] text-[16px] leading-[1.6] text-ink-dim">{{ $entry['body'] ?? '' }}</p>
+                    <span class="text-[21px] leading-[1.14] font-semibold tracking-[-0.025em] md:text-[27px]"@textMotion('entries_title')>{{ $entry['title'] ?? '' }}</span>
+                    <span class="text-[15px] text-ink-dim"@textMotion('entries_subtitle')>{{ $entry['subtitle'] ?? '' }}</span>
+                    <p class="m-0 mt-[6px] max-w-[56ch] text-[16px] leading-[1.6] text-ink-dim"@textMotion('entries_body')>{{ $entry['body'] ?? '' }}</p>
                     @if (! empty($entry['tags']))
                         <div class="mt-[16px] flex flex-wrap gap-[7px]">
                             @foreach ($entry['tags'] as $tag)

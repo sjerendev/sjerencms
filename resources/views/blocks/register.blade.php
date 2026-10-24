@@ -4,7 +4,7 @@
 @endphp
 {{-- The air above depends on the page: the home page has more (see data-home in pages/show). --}}
 <section class="gut pt-[clamp(56px,8vw,90px)] [[data-home]_&]:pt-[clamp(72px,10vw,116px)]">
-    <x-section-head :number="$data['number'] ?? ''" :label="$data['label'] ?? ''" :aside="\App\Models\Project::withTotal($data['aside'] ?? null)" />
+    <x-section-head :motion="($motion ?? [])['head'] ?? null" :number="$data['number'] ?? ''" :label="$data['label'] ?? ''" :aside="\App\Models\Project::withTotal($data['aside'] ?? null)" />
     <div class="mt-[44px]">
         @foreach ($projects as $project)
             <x-register-row :project="$project" :number="$loop->iteration" />
