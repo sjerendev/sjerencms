@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Page;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -29,3 +31,18 @@ pest()->extend(Tests\TestCase::class)
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Functions
+|--------------------------------------------------------------------------
+*/
+
+/** The published home page for a language, holding one block. */
+function blockPage(string $type, array $data, string $language = 'sv'): Page
+{
+    return Page::factory()->homepage()->create([
+        'language' => $language,
+        'content' => [['type' => $type, 'data' => $data]],
+    ]);
+}

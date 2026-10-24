@@ -2,6 +2,7 @@
 
 use App\Filament\Resources\Pages\Pages\EditPage;
 use App\Models\Page;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
@@ -23,6 +24,7 @@ function everyBlock(): array
         ['type' => 'ticker', 'data' => ['background_color' => '#ffffff', 'text_color' => '#000000', 'angle' => 0, 'direction' => 'left-to-right', 'words' => ['a', 'b']]],
         ['type' => 'stagger_text', 'data' => ['text_row_1' => 'Stagger', 'color_row_1' => '#000000']],
         ['type' => 'colophon', 'data' => ['label' => 'Verktyg', 'tools' => 'Figma · Laravel']],
+        ['type' => 'register', 'data' => ['number' => '02', 'label' => 'Register', 'aside' => '{total} totalt', 'projects' => [['project_id' => Project::orderBy('id')->first()->id], ['project_id' => Project::orderByDesc('id')->first()->id]], 'all_label' => null]],
     ];
 }
 
@@ -32,6 +34,7 @@ beforeEach(function () {
         Storage::disk('public')->put($file, 'x');
     }
 
+    Project::factory()->count(2)->create();
     $this->actingAs(User::factory()->admin()->create());
     $this->page = Page::create(['title' => 'All', 'slug' => 'all', 'language' => 'sv', 'content' => everyBlock()]);
 });
