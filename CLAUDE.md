@@ -70,6 +70,8 @@ a shared host (hostup): no Node process, no long-running queue worker.
 
 - `.claude/rules/site.md`: routing, layout, UI text, `wire:navigate`, theme
   and motion.
+- `.claude/rules/portfolio.md`: projects, the snapshot of the Next site,
+  the page blocks, seeding, the player-bar rule and the hero/case motions.
 - `.claude/rules/music.md`: releases and tracks, the disks, the music routes
   and the player's events, which the shop listens to.
 - `.claude/rules/shop.md`: cart, checkout, Stripe webhook, login links,
@@ -79,8 +81,10 @@ a shared host (hostup): no Node process, no long-running queue worker.
 
 Run behaviour checks with `agent-browser` against Valet:
 `http://sjerencms.test` (this app) and `http://sjeren-2026.test` (the old
-Next site, the visual reference). Local pages come from
-`php artisan db:seed --class=SitePagesSeeder` (adds missing pages, never overwrites admin edits). Pair
+Next site, the visual reference). Local pages and projects come from
+`php artisan db:seed --class=SitePagesSeeder`. It runs `ProjectSeeder`,
+adds missing pages and fills pages that are empty or still hold the
+phase-2 colophon. It never overwrites admin edits. Pair
 every screenshot with an `eval` value, give `screenshot` an absolute path
 outside the repo, and run `git status` afterwards.
 Music: `php artisan db:seed --class=MusicSeeder` gives releases without
@@ -95,12 +99,12 @@ app/
     Forms/Components/Blocks/   # Page builder blocks
     Resources/Pages/           # PageResource (Filament v4+ structure)
     Pages/ManageSettings.php   # Site settings
-  Models/                      # Page, User
+  Models/                      # Page, Project, Release, Track, Order, OrderItem, User
   Settings/GeneralSettings.php
 docs/
   superpowers/                 # spec and plans
   design/musik/                # music shop artboards (*.dc.html)
-database/seeders/data/         # music.json and covers for the shop seed
+database/seeders/data/         # music.json and covers; portfolio/ (Next snapshot)
 ```
 
 ### Adding a New Block
@@ -108,6 +112,9 @@ database/seeders/data/         # music.json and covers for the shop seed
 1. Create `app/Filament/Forms/Components/Blocks/YourBlock.php`
 2. Register it in `ContentBlocksSection.php`
 3. Add `resources/views/blocks/your_block.blade.php`; it receives `$data`
+4. Add it with its fields to `everyBlock()` in
+   `tests/Feature/Admin/PageBlocksTest.php`
+   (its registration test fails if you skip step 2)
 
 ## graphify
 

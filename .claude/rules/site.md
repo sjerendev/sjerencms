@@ -23,3 +23,8 @@
   `defineMotion(name, init)` starts on every `livewire:navigated` for each
   `[data-motion=name]`; the cleanup `init` returns runs on
   `livewire:navigating`. `<html data-motion-active>` counts what runs.
+- Motions in `resources/js/motions/`: `colophon`, `hero-rotator`,
+  `hero-waves` and `case-pin` (the last three are in `portfolio.md`).
+  `register.js` is not a motion: it is one `mousemove` listener on
+  `document` for the register's hover image, so there is nothing to clean
+  up.
