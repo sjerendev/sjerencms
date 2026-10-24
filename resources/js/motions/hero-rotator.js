@@ -19,7 +19,8 @@ defineMotion('hero-rotator', (el) => {
         // One phrase has nothing to roll to.
         if (phrases.length < 2) return;
 
-        let index = 0;
+        // From the phrase on show: reduced motion toggled back off, or a back-button snapshot, isn't at 0.
+        let index = Math.max(0, phrases.indexOf(label.textContent.trim()));
         let tl;
 
         const letters = (row, text, mark) => {

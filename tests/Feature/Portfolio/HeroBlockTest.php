@@ -17,7 +17,9 @@ it('renders the lead with the first phrase standing still', function () {
         ->toContain('<span class="sr-only">UI/UX-design</span>')
         ->toContain('data-motion="hero-rotator"')
         ->toContain('data-phrases="'.e(json_encode(['UI/UX-design', 'Designsystem', 'Frontend'])).'"')
-        ->toContain('data-motion="hero-waves"');
+        ->toContain('data-motion="hero-waves"')
+        // The next phrase waits below the edge, so it never overlaps the first.
+        ->toContain('<span data-in class="inline-block whitespace-pre" style="transform: translateY(1.35em)">D</span>');
 });
 
 it('keeps å, ä and ö whole when it splits the lines and the letters', function () {
@@ -31,8 +33,15 @@ it('keeps å, ä and ö whole when it splits the lines and the letters', functio
 it('links to the work and the CV', function () {
     Page::factory()->homepage()->create(['content' => [['type' => 'hero', 'data' => heroData()]]]);
 
-    $this->get('/se')->assertSee('href="'.url('/se/projekt').'"', false)
+    // In order after the lead, so the header's own projekt link doesn't count.
+    $this->get('/se')->assertSeeInOrder(['Jag levererar', 'href="'.url('/se/projekt').'"', 'Se arbetet'], false)
         ->assertSee('href="/files/Sjeren-Portfolio-cv-2024.pdf"', false);
+});
+
+it('links to the English work on /en', function () {
+    Page::factory()->homepage()->create(['language' => 'en', 'content' => [['type' => 'hero', 'data' => heroData()]]]);
+
+    $this->get('/en')->assertSeeInOrder(['Jag levererar', 'href="'.url('/en/projekt').'"', 'Se arbetet'], false);
 });
 
 it('serves both CVs at their old addresses', function () {

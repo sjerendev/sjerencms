@@ -4,6 +4,7 @@ use App\Filament\Resources\Pages\Pages\EditPage;
 use App\Models\Page;
 use App\Models\Project;
 use App\Models\User;
+use Filament\Forms\Components\Builder;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
@@ -53,4 +54,14 @@ it('saves the edit page with every block in order', function () {
 
     expect(collect($this->page->fresh()->content)->pluck('type')->all())
         ->toBe(collect(everyBlock())->pluck('type')->all());
+});
+
+it('registers every block type in the page form', function () {
+    // Saving keeps an unknown block's data, so only the form can tell a missing registration.
+    $builder = Livewire::test(EditPage::class, ['record' => $this->page->getRouteKey()])
+        ->instance()->getSchema('form')->getComponent(fn ($component) => $component instanceof Builder);
+
+    foreach (collect(everyBlock())->pluck('type') as $type) {
+        expect($builder->hasBlock($type))->toBeTrue("{$type} is not registered");
+    }
 });
