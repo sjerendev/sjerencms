@@ -6,6 +6,7 @@ use App\Models\Page;
 use App\Models\Project;
 use App\Models\User;
 use Database\Seeders\SitePagesSeeder;
+use Filament\Actions\DeleteAction;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
@@ -92,6 +93,31 @@ it('keeps a replaced CV that another page still links to', function () {
     $form->set("{$path}.cv_file", [])
         ->set("{$path}.cv_file", UploadedFile::fake()->create('Ny-CV.pdf', 100, 'application/pdf'))
         ->call('save')->assertHasNoFormErrors();
+
+    Storage::disk('public')->assertExists('cv/a.pdf');
+});
+
+it('deletes the CV from the disk when its page is deleted', function () {
+    Storage::fake('public');
+    Storage::disk('public')->put('cv/a.pdf', '');
+    Project::factory()->count(2)->create();
+    $page = blockPage('hero', collect(everyBlock())->firstWhere('type', 'hero')['data']);
+
+    Livewire::test(EditPage::class, ['record' => $page->getRouteKey()])->callAction(DeleteAction::class);
+
+    expect(Page::count())->toBe(0);
+    Storage::disk('public')->assertMissing('cv/a.pdf');
+});
+
+it('keeps the CV of a deleted page that another page still links to', function () {
+    Storage::fake('public');
+    Storage::disk('public')->put('cv/a.pdf', '');
+    Project::factory()->count(2)->create();
+    $hero = collect(everyBlock())->firstWhere('type', 'hero')['data'];
+    $page = blockPage('hero', $hero);
+    blockPage('hero', $hero, 'en');
+
+    Livewire::test(EditPage::class, ['record' => $page->getRouteKey()])->callAction(DeleteAction::class);
 
     Storage::disk('public')->assertExists('cv/a.pdf');
 });

@@ -53,17 +53,22 @@ class Page extends Model implements HasMedia
 	protected static function booted(): void
 	{
 		// A replaced CV leaves the disk after the save, not when it is removed
-		// in the form, so a page left unsaved still has its file. One that
-		// another page links to stays.
-		static::updated(function (Page $page) {
-			$gone = array_diff(self::cvFiles($page->getOriginal('content')), self::cvFiles($page->content));
-			if ($gone === []) {
-				return;
-			}
+		// in the form, so a page left unsaved still has its file.
+		static::updated(fn (Page $page) => $page->deleteCvFiles(
+			array_diff(self::cvFiles($page->getOriginal('content')), self::cvFiles($page->content)),
+		));
+		static::deleted(fn (Page $page) => $page->deleteCvFiles(self::cvFiles($page->content)));
+	}
 
-			$used = Page::whereKeyNot($page->getKey())->get(['id', 'content'])->flatMap(fn (Page $other) => self::cvFiles($other->content));
-			Storage::disk('public')->delete(array_values(array_diff($gone, $used->all())));
-		});
+	/** Deletes the given CVs from the disk, except those another page links to. */
+	private function deleteCvFiles(array $files): void
+	{
+		if ($files === []) {
+			return;
+		}
+
+		$used = Page::whereKeyNot($this->getKey())->get(['id', 'content'])->flatMap(fn (Page $other) => self::cvFiles($other->content));
+		Storage::disk('public')->delete(array_values(array_diff($files, $used->all())));
 	}
 
 	/** The CV paths in a page's hero blocks. */

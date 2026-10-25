@@ -74,7 +74,7 @@ Section numbers (`01`, `02` …) are a field, not counted from the order.
 
 | Type | Page | Fields |
 |---|---|---|
-| `hero` | start | `lead`, `phrases` (one per line), `intro_one`, `intro_two`, `work_label` (links to /projekt in the page's language), `cv_label`, `cv_file` (required PDF upload per page, so per language: `public` disk, `cv/`, random name; the original in `cv_file_name` is the link's `download` name; the seeder copies the old PDFs from `public/files`; a replaced CV is deleted from the disk when the page is saved, unless another page links to it: `Page::booted()`) |
+| `hero` | start | `lead`, `phrases` (one per line), `intro_one`, `intro_two`, `work_label` (links to /projekt in the page's language), `cv_label`, `cv_file` (required PDF upload per page, so per language: `public` disk, `cv/`, random name; the original in `cv_file_name` is the link's `download` name; the seeder copies the old PDFs from `public/files`; a replaced CV is deleted from the disk when the page is saved, and a deleted page's CV with it, unless another page links to it: `Page::booted()`) |
 | `featured_cases` | start | `number`, `label`, `aside`, `projects` |
 | `register` | start, /projekt | `number`, `label`, `aside`, `projects`, `all_label` (empty: a plain closing line) |
 | `service_cards` | start | `number`, `label`, `columns[title, items]` (items one per line) |
