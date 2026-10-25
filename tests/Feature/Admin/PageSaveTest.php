@@ -20,6 +20,13 @@ it('saves every seeded page untouched', function () {
     foreach (Page::all() as $page) {
         Livewire::test(EditPage::class, ['record' => $page->getRouteKey()])->call('save')->assertHasNoFormErrors();
     }
+
+    // Each language gets its own CV on the upload disk, under the name the old site served it as.
+    foreach (['sv' => 'Sjeren-Portfolio-cv-2024.pdf', 'en' => 'Sjeren-Portfolio-cv-en-2024.pdf'] as $language => $name) {
+        $hero = collect(Page::where('language', $language)->where('slug', 'start')->sole()->content)->firstWhere('type', 'hero')['data'];
+        expect($hero['cv_file_name'])->toBe($name)->and($hero)->not->toHaveKey('cv_url');
+        Storage::disk('public')->assertExists($hero['cv_file']);
+    }
 });
 
 it('drops a pick whose project was deleted when the page is saved', function () {
@@ -54,13 +61,14 @@ it('stores an uploaded CV under a random name and keeps the name it came with', 
     Storage::disk('public')->assertExists($data['cv_file']);
 });
 
-it('needs a CV path when no CV is uploaded', function () {
+it('needs an uploaded CV and has no path field', function () {
     Project::factory()->count(2)->create();
-    $page = blockPage('hero', ['cv_url' => null] + collect(everyBlock())->firstWhere('type', 'hero')['data']);
+    $page = blockPage('hero', ['cv_file' => null] + collect(everyBlock())->firstWhere('type', 'hero')['data']);
     $form = Livewire::test(EditPage::class, ['record' => $page->getRouteKey()]);
     $uuid = array_key_first($form->get('data.content'));
 
-    $form->call('save')->assertHasFormErrors(["content.{$uuid}.data.cv_url" => 'required_without']);
+    $form->assertFormFieldDoesNotExist("content.{$uuid}.data.cv_url")
+        ->call('save')->assertHasFormErrors(["content.{$uuid}.data.cv_file" => 'required']);
 });
 
 it('rejects a second page with the same slug in the same language', function () {

@@ -27,6 +27,8 @@
 
 .fi-btn {
 background-color: var(--primary-color);
+	/* On the button too: an action's label (Save Page) is a bare text node, not a span. */
+	color: var(--white);
 	span {
 		color: var(--white);
 	}

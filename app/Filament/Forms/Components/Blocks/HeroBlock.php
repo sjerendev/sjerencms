@@ -39,11 +39,8 @@ class HeroBlock extends Block
                     ->disk('public')
                     ->directory('cv')
                     ->storeFileNamesIn('cv_file_name')
-                    ->helperText('A PDF for this language. Replaces the path below'),
-                TextInput::make('cv_url')
-                    ->label('CV path')
-                    ->requiredWithout('cv_file')
-                    ->helperText('Used without an upload. E.g. /files/Sjeren-Portfolio-cv-2024.pdf'),
+                    ->required()
+                    ->helperText('A PDF for this language. It downloads under the name it is uploaded with'),
             ]);
     }
 }

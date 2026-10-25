@@ -9,6 +9,8 @@ use Livewire\Livewire;
 
 beforeEach(function () {
     Storage::fake('public');
+    // The hero's CV is required, and the upload field drops a file that isn't on the disk.
+    Storage::disk('public')->put('cv/a.pdf', '');
     Project::factory()->count(2)->create();
     $this->actingAs(User::factory()->admin()->create());
 });

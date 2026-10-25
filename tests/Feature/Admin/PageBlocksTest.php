@@ -10,7 +10,7 @@ use Livewire\Livewire;
 
 beforeEach(function () {
     Storage::fake('public');
-    foreach (['content-images/a.jpg', 'sticky-carousel/a.jpg', 'sticky-carousel/b.jpg', 'sticky-carousel/c.jpg'] as $file) {
+    foreach (['content-images/a.jpg', 'sticky-carousel/a.jpg', 'sticky-carousel/b.jpg', 'sticky-carousel/c.jpg', 'cv/a.pdf'] as $file) {
         Storage::disk('public')->put($file, 'x');
     }
 

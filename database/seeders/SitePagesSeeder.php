@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Page;
 use App\Models\Project;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * The home page, /om-mig and /projekt in both languages, so the site has
@@ -26,7 +28,8 @@ class SitePagesSeeder extends Seeder
 {
     private const TOOLS = 'Figma · Penpot · Affinity · Adobe CC · Next.js · React · Nuxt · Vue.js · Laravel · Livewire · Filament · Astro · Node · Tailwind · GSAP · Docker · Forge · Envoyer · Vercel · Netlify · Webflow · Wordpress';
 
-    private const CV = ['sv' => '/files/Sjeren-Portfolio-cv-2024.pdf', 'en' => '/files/Sjeren-Portfolio-cv-en-2024.pdf'];
+    /** The old site's CVs in public/files, copied to the upload disk as if uploaded in the admin. */
+    private const CV = ['sv' => 'Sjeren-Portfolio-cv-2024.pdf', 'en' => 'Sjeren-Portfolio-cv-en-2024.pdf'];
 
     /** Page language to the key the Next site's messages and data use. */
     private const NEXT_LOCALE = ['sv' => 'se', 'en' => 'en'];
@@ -131,7 +134,8 @@ class SitePagesSeeder extends Seeder
                 'intro_two' => $this->t($language, 'Home', 'introTwo'),
                 'work_label' => $this->t($language, 'Home', 'linkWork'),
                 'cv_label' => $this->t($language, 'Home', 'linkCv'),
-                'cv_url' => self::CV[$language],
+                'cv_file' => Storage::disk('public')->putFile('cv', new File(public_path('files/'.self::CV[$language]))),
+                'cv_file_name' => self::CV[$language],
             ]),
             $this->block('featured_cases', [
                 'number' => '01',

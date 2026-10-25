@@ -6,7 +6,7 @@ function heroData(): array
 {
     return ['lead' => 'Jag levererar', 'phrases' => "UI/UX-design\nDesignsystem\nFrontend",
         'intro_one' => 'Ett.', 'intro_two' => 'Två.', 'work_label' => 'Se arbetet',
-        'cv_label' => 'Ladda ner CV', 'cv_url' => '/files/Sjeren-Portfolio-cv-2024.pdf'];
+        'cv_label' => 'Ladda ner CV', 'cv_file' => 'cv/01HX.pdf', 'cv_file_name' => 'Sjeren-CV.pdf'];
 }
 
 it('renders the lead with the first phrase standing still', function () {
@@ -30,20 +30,15 @@ it('keeps å, ä and ö whole when it splits the lines and the letters', functio
         ->assertSee('data-phrases="'.e(json_encode(['Åsa', 'Äng'])).'"', false);
 });
 
-it('links to the work and the CV', function () {
-    Page::factory()->homepage()->create(['content' => [['type' => 'hero', 'data' => heroData()]]]);
+it('links to the work and the uploaded CV, under the name it was uploaded with', function () {
+    // A path from before uploads is left in the data and never shown.
+    $data = ['cv_url' => '/files/Sjeren-Portfolio-cv-2024.pdf'] + heroData();
+    Page::factory()->homepage()->create(['content' => [['type' => 'hero', 'data' => $data]]]);
 
     // In order after the lead, so the header's own projekt link doesn't count.
     $this->get('/se')->assertSeeInOrder(['Jag levererar', 'href="'.url('/se/projekt').'"', 'Se arbetet'], false)
-        ->assertSee('href="/files/Sjeren-Portfolio-cv-2024.pdf"', false);
-});
-
-it('links to an uploaded CV before the path, under its own name', function () {
-    $data = ['cv_file' => 'cv/01HX.pdf', 'cv_file_name' => 'Sjeren-CV.pdf'] + heroData();
-    Page::factory()->homepage()->create(['content' => [['type' => 'hero', 'data' => $data]]]);
-
-    $this->get('/se')->assertSee('href="'.Storage::disk('public')->url('cv/01HX.pdf').'" download="Sjeren-CV.pdf"', false)
-        ->assertDontSee('href="/files/Sjeren-Portfolio-cv-2024.pdf"', false);
+        ->assertSee('href="'.Storage::disk('public')->url('cv/01HX.pdf').'" download="Sjeren-CV.pdf"', false)
+        ->assertDontSee('/files/Sjeren-Portfolio-cv-2024.pdf', false);
 });
 
 it('links to the English work on /en', function () {
