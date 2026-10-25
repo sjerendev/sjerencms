@@ -13,6 +13,8 @@ const FROM = { bottom: ['y', 1], top: ['y', -1], left: ['x', -1], right: ['x', 1
 
 const STYLES = 'opacity,visibility,transform';
 
+const hasText = (node) => node.textContent.trim() !== '';
+
 // A text with data-text-motion (TextMotion::normalize) plays once when its top
 // reaches 85% down the window, then is plain text again. app.css keeps it
 // hidden until it is armed here, and shows it after 2 s if that never happens.
@@ -42,8 +44,10 @@ defineMotion('text', (el) => {
 
     // A mask clip reaches 0.25em past the line (app.css .tm-mask) and Å's ring sits above the
     // line box, so a vertical start sits 200% away: at 150% the ring peeked under the edge.
+    // A piece without text (the section head's rule, an empty field) is not split, so it has no
+    // mask to slide behind: it fades in as well.
     const start = motion.mask
-        ? { [`${axis}Percent`]: (axis === 'y' ? 200 : 100) * sign }
+        ? { [`${axis}Percent`]: (axis === 'y' ? 200 : 100) * sign, opacity: (i, item) => (hasText(item) ? 1 : 0) }
         : { opacity: 0, [axis]: motion.distance * sign };
 
     const play = (items) => {
@@ -70,9 +74,11 @@ defineMotion('text', (el) => {
         started = true;
         gsap.set(targets, { clearProps: 'opacity' });
 
-        if (split) {
+        const texts = targets.filter(hasText);
+
+        if (split && texts.length) {
             // autoSplit redoes the lines when the width changes or fonts arrive while it moves.
-            splitText = SplitText.create(targets, {
+            splitText = SplitText.create(texts, {
                 type: split === 'chars' ? 'words,chars' : split,
                 // The pieces and their masks get the class tm / tm-mask, styled in app.css.
                 linesClass: 'tm',
@@ -80,7 +86,8 @@ defineMotion('text', (el) => {
                 charsClass: 'tm',
                 mask: motion.mask ? split : undefined,
                 autoSplit: split === 'lines',
-                onSplit: (self) => play(self[split]),
+                // In page order: each text's pieces, and a piece without text as itself.
+                onSplit: (self) => play(targets.flatMap((t) => (hasText(t) ? self[split].filter((p) => t.contains(p)) : [t]))),
             });
         } else {
             play(targets);
@@ -90,8 +97,17 @@ defineMotion('text', (el) => {
     gsap.set(targets, { opacity: 0 });
     el.dataset.textMotionArmed = '';
 
+    // A text in the last 15% of a window's height of the page never gets its top to 85%: the page
+    // ends first. It starts as soon as it shows instead. Not clamp(): that also holds back a text
+    // already in view at the top of the page until it is scrolled.
+    const when = () => {
+        const top = targets[0].getBoundingClientRect().top + window.scrollY;
+
+        return top + window.innerHeight * 0.15 >= document.documentElement.scrollHeight ? 'top bottom' : 'top 85%';
+    };
+
     // onLeave too: a page reloaded below the text starts past it.
-    const trigger = ScrollTrigger.create({ trigger: targets[0], start: 'top 85%', once: true, onEnter: begin, onLeave: begin });
+    const trigger = ScrollTrigger.create({ trigger: targets[0], start: when, once: true, onEnter: begin, onLeave: begin });
 
     return () => {
         trigger.kill();

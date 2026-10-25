@@ -214,7 +214,7 @@ html[data-player="on"] [data-motion="case-pin"] {
 /* SplitText's masks clip with overflow: clip, which cuts the ring on Å and
    the descenders on the tight headlines (leading 0.95). The clip-path reaches
    0.25em past the line instead, without changing the layout; text.js starts
-   a vertical slide 150% away so nothing peeks below the edge. */
+   a vertical slide 200% away so nothing peeks below the edge. */
 .tm-mask {
   overflow: visible !important;
   clip-path: inset(-0.25em 0);

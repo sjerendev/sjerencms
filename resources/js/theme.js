@@ -27,10 +27,14 @@ document.addEventListener('click', (event) => {
 });
 
 // Livewire's advice against a dark-mode flash: set it again in onSwap,
-// before the new page is painted.
+// before the new page is painted. The swap also drops data-js, and without it
+// text.js takes moving text for already shown and never plays it.
 document.addEventListener('livewire:navigating', (event) => {
     const current = root.dataset.theme ?? 'light';
-    event.detail.onSwap(() => apply(current));
+    event.detail.onSwap(() => {
+        root.dataset.js = '';
+        apply(current);
+    });
 });
 
 document.addEventListener('livewire:navigated', () => apply(root.dataset.theme ?? 'light'));

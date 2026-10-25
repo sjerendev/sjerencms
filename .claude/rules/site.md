@@ -43,9 +43,16 @@
   - Set once, on the Swedish page: `PageMotion::for()` gives an English
     page the motion of the block at the same place on the published
     Swedish page with the same slug, if it is the same type.
-  - Plays once at `top 85%`. It is split only then (split pieces are
-    `aria-hidden`, so a waiting text stays whole for screen readers and is
-    hidden with opacity alone), and the split is reverted when it is done.
+  - Plays once at `top 85%`, or at `top bottom` for a text in the last 15%
+    of a window's height of the page, whose top never reaches 85% (not
+    `clamp()`: that holds back a text in view at the top until scrolled).
+    It is split only then (split pieces are `aria-hidden`, so a waiting text
+    stays whole for screen readers and is hidden with opacity alone), and
+    the split is reverted when it is done. Pieces without text (the section
+    head's rule, an empty field) are not split: they move whole, in page
+    order with the rest, and fade in under a mask.
+  - `theme.js` sets `data-js` again on `wire:navigate`'s swap: without it the
+    CSS hides nothing and text.js takes the text for already shown.
   - `app.css` hides `[data-text-motion]` under `html[data-js]` until text.js
     arms it, and shows it after 2 s if it never does; text.js then leaves a
     shown text standing instead of replaying it. Reduced motion: never
