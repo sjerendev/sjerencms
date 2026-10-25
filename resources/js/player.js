@@ -34,7 +34,12 @@ function clock(seconds) {
 
 function setIcon(button, playing) {
     const svg = button.querySelector('svg');
-    if (svg) svg.innerHTML = playing ? PAUSE : PLAY;
+    // Only on a change: render() runs on every timeupdate, and a shape replaced
+    // between mousedown and mouseup loses the click (Safari drops it).
+    if (svg && svg.dataset.playing !== String(playing)) {
+        svg.innerHTML = playing ? PAUSE : PLAY;
+        svg.dataset.playing = String(playing);
+    }
     const label = playing ? button.dataset.labelPause : button.dataset.labelPlay;
     if (label) button.setAttribute('aria-label', label);
 }
