@@ -18,4 +18,12 @@ class EditRelease extends EditRecord
                 ->hidden(fn ($record) => $record->isSold()),
         ];
     }
+
+    // The admin routes on slug, so a new slug needs the new address or a reload 404s.
+    protected function getRedirectUrl(): ?string
+    {
+        return $this->getRecord()->wasChanged('slug')
+            ? static::getResource()::getUrl('edit', ['record' => $this->getRecord()])
+            : parent::getRedirectUrl();
+    }
 }

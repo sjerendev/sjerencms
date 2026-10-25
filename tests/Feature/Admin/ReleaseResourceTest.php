@@ -57,6 +57,26 @@ it('adds a track with preview and wav from the release page', function () {
         ->and($track->getFirstMedia('wav')->disk)->toBe('music');
 });
 
+it('moves to the new address when the slug is changed on save', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $release = Release::factory()->create(['slug' => 'old']);
+
+    Livewire::test(EditRelease::class, ['record' => $release->getRouteKey()])
+        ->fillForm(['slug' => 'new'])
+        ->call('save')->assertHasNoFormErrors()
+        ->assertRedirect(ReleaseResource::getUrl('edit', ['record' => $release->fresh()]));
+});
+
+it('stays on the page when the slug is unchanged on save', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $release = Release::factory()->create();
+
+    Livewire::test(EditRelease::class, ['record' => $release->getRouteKey()])
+        ->fillForm(['title' => 'Nytt namn'])
+        ->call('save')->assertHasNoFormErrors()
+        ->assertNoRedirect();
+});
+
 it('renders the edit page with the tracks table', function () {
     $this->actingAs(User::factory()->admin()->create());
     $release = Release::factory()->has(Track::factory(), 'tracks')->create();
