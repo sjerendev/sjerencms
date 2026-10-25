@@ -12,7 +12,8 @@
   `database/seeders/data/music.json`, with names from `music-names.json` and
   covers from `covers/`, no audio. Idempotent:
   `php artisan db:seed --class=MusicSeeder`.
-- Admin: `ReleaseResource` (ids in URLs, the public site routes on slug) with
+- Admin: `ReleaseResource` (slug in URLs, as on the public site: Filament
+  builds its links from the model's route key, so an id-only admin 404s) with
   `TracksRelationManager` for tracks, preview and WAV.
 - Uploads up to 1 GB (`config/livewire.php`, `maxSize` on the fields) and
   saved as a stream, not read into memory. The host's PHP

@@ -3,6 +3,7 @@
 use App\Filament\Resources\Releases\Pages\CreateRelease;
 use App\Filament\Resources\Releases\Pages\EditRelease;
 use App\Filament\Resources\Releases\RelationManagers\TracksRelationManager;
+use App\Filament\Resources\Releases\ReleaseResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Release;
@@ -60,7 +61,8 @@ it('renders the edit page with the tracks table', function () {
     $this->actingAs(User::factory()->admin()->create());
     $release = Release::factory()->has(Track::factory(), 'tracks')->create();
 
-    $this->get("/admin/releases/{$release->id}/edit")->assertOk()->assertSee($release->tracks[0]->title);
+    // The URL the table's Edit action links to, not one built by hand.
+    $this->get(ReleaseResource::getUrl('edit', ['record' => $release]))->assertOk()->assertSee($release->tracks[0]->title);
 });
 
 it('rejects a duplicate position and a missing or negative track price as form errors', function () {
@@ -103,9 +105,9 @@ it('hides the delete buttons for a sold release and track', function () {
     $free = Release::factory()->has(Track::factory(), 'tracks')->create();
     OrderItem::factory()->for(Order::factory())->create(['purchasable_type' => Track::class, 'purchasable_id' => $sold->tracks[0]->id]);
 
-    Livewire::test(EditRelease::class, ['record' => $sold->getKey()])
+    Livewire::test(EditRelease::class, ['record' => $sold->getRouteKey()])
         ->assertActionHidden(DeleteAction::class);
-    Livewire::test(EditRelease::class, ['record' => $free->getKey()])
+    Livewire::test(EditRelease::class, ['record' => $free->getRouteKey()])
         ->assertActionVisible(DeleteAction::class);
     Livewire::test(TracksRelationManager::class, ['ownerRecord' => $sold, 'pageClass' => EditRelease::class])
         ->assertActionHidden(TestAction::make('delete')->table($sold->tracks[0]));
