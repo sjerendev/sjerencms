@@ -33,7 +33,10 @@
 
 - `<x-player-bar>` sits in the layout inside `@persist('player')`, so its one
   `<audio>` keeps playing across `wire:navigate`. Hidden until something
-  plays; `<html data-player="on">` then pads the footer.
+  plays; `<html data-player="on">` then pads the footer. It stays on every
+  page until `[data-player-close]` (`<x-player-close>`, in the bar and the
+  mini player) stops the audio, empties the queue, hides the bar and drops
+  `data-player`; `player:state` then has `release: null`.
 - `Release::playlist()` is the single source of what can play: only tracks
   with a preview, null when none. Every play control is rendered only from
   it, and `<x-play-data :releases>` writes the same data as

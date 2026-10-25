@@ -62,6 +62,25 @@ function load(fraction = 0) {
     render();
 }
 
+// Stop and hide; the next play brings the bar back.
+function close() {
+    const a = audio();
+    if (a) {
+        a.pause();
+        a.removeAttribute('src');
+        a.load(); // Drops the preview it was loading.
+    }
+    queue = null;
+    bar().hidden = true;
+    delete html.dataset.player;
+    syncPage(false, 0, 0);
+    document.querySelectorAll('[data-scrub-progress]').forEach((el) => { el.style.width = '0%'; });
+
+    document.dispatchEvent(new CustomEvent('player:state', {
+        detail: { release: null, track: null, playing: false, time: 0, duration: 0 },
+    }));
+}
+
 function toggle() {
     const a = audio();
     if (!a || !current()) return;
@@ -110,7 +129,7 @@ function render() {
 // The play controls and the scrubber on the current page.
 function syncPage(playing, time, duration) {
     const track = current();
-    const mine = (slug) => queue && slug === queue.slug;
+    const mine = (slug) => queue?.slug === slug;
 
     document.querySelectorAll('[data-play-release]').forEach((button) => {
         const on = mine(button.dataset.playRelease) && playing;
@@ -178,6 +197,11 @@ document.addEventListener('click', (event) => {
 
     if (target.closest('[data-player-toggle]')) {
         toggle();
+        return;
+    }
+
+    if (target.closest('[data-player-close]')) {
+        close();
         return;
     }
 

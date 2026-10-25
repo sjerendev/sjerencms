@@ -11,6 +11,14 @@ it('persists one player bar in the layout', function () {
     expect($this->get('/se')->getContent())->toMatch('#x-persist="player"#')->toContain('<audio');
 });
 
+it('has a close button in the bar and the mini player, in each language', function () {
+    Page::factory()->homepage()->create();
+    Page::factory()->homepage()->create(['language' => 'en']);
+
+    expect(substr_count($this->get('/se')->getContent(), 'data-player-close aria-label="Stäng spelaren"'))->toBe(2)
+        ->and(substr_count($this->get('/en')->getContent(), 'data-player-close aria-label="Close the player"'))->toBe(2);
+});
+
 it('only offers play for tracks that have a preview', function () {
     Storage::fake('public');
     $release = Release::factory()->create(['slug' => 'med-ljud']);

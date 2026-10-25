@@ -32,4 +32,5 @@ return [
     'buyTrack' => 'Buy the track',
     'pausePlayer' => 'Pause',
     'playPlayer' => 'Play',
+    'closePlayer' => 'Close the player',
 ];

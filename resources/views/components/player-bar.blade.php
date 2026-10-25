@@ -10,7 +10,7 @@
 >
     <audio preload="none"></audio>
 
-    <div class="hidden h-[80px] grid-cols-[56px_300px_minmax(0,1fr)_90px_180px] items-center gap-[24px] px-[var(--gutter)] lg:grid">
+    <div class="hidden h-[80px] grid-cols-[56px_300px_minmax(0,1fr)_90px_180px_44px] items-center gap-[24px] px-[var(--gutter)] lg:grid">
         <button type="button" data-player-toggle aria-label="{{ __('music.playPlayer') }}" class="flex size-[44px] cursor-pointer items-center justify-center rounded-pill bg-bar-sound text-plate">
             <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/></svg>
         </button>
@@ -29,6 +29,7 @@
         <button type="button" data-cart-add="track" class="lbl cursor-pointer rounded-pill border border-[rgba(237,236,234,0.55)] px-[18px] py-[12px] text-center hover:border-accent hover:bg-accent hover:text-plate">
             {{ __('music.buyTrack') }} · <span data-player-price></span> kr
         </button>
+        <x-player-close />
     </div>
 
     <div class="lg:hidden">
@@ -42,6 +43,7 @@
             <button type="button" data-player-toggle aria-label="{{ __('music.playPlayer') }}" class="flex size-[48px] shrink-0 cursor-pointer items-center justify-center rounded-pill bg-bar-sound text-plate">
                 <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 12 7 3 12.5Z" fill="currentColor"/></svg>
             </button>
+            <x-player-close />
         </div>
     </div>
 </div>

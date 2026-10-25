@@ -32,4 +32,5 @@ return [
     'buyTrack' => 'Köp spåret',
     'pausePlayer' => 'Pausa',
     'playPlayer' => 'Spela',
+    'closePlayer' => 'Stäng spelaren',
 ];
