@@ -38,6 +38,14 @@ it('links to the work and the CV', function () {
         ->assertSee('href="/files/Sjeren-Portfolio-cv-2024.pdf"', false);
 });
 
+it('links to an uploaded CV before the path, under its own name', function () {
+    $data = ['cv_file' => 'cv/01HX.pdf', 'cv_file_name' => 'Sjeren-CV.pdf'] + heroData();
+    Page::factory()->homepage()->create(['content' => [['type' => 'hero', 'data' => $data]]]);
+
+    $this->get('/se')->assertSee('href="'.Storage::disk('public')->url('cv/01HX.pdf').'" download="Sjeren-CV.pdf"', false)
+        ->assertDontSee('href="/files/Sjeren-Portfolio-cv-2024.pdf"', false);
+});
+
 it('links to the English work on /en', function () {
     Page::factory()->homepage()->create(['language' => 'en', 'content' => [['type' => 'hero', 'data' => heroData()]]]);
 

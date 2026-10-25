@@ -6,6 +6,7 @@ use App\Models\Page;
 use App\Models\Project;
 use App\Models\User;
 use Database\Seeders\SitePagesSeeder;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
@@ -35,6 +36,31 @@ it('drops a pick whose project was deleted when the page is saved', function () 
     foreach ($page->fresh()->content as $block) {
         expect(array_column(array_values($block['data']['projects']), 'project_id'))->toBe([$a->id]);
     }
+});
+
+it('stores an uploaded CV under a random name and keeps the name it came with', function () {
+    Storage::fake('public');
+    Project::factory()->count(2)->create();
+    $page = blockPage('hero', collect(everyBlock())->firstWhere('type', 'hero')['data']);
+    $form = Livewire::test(EditPage::class, ['record' => $page->getRouteKey()]);
+    $path = 'data.content.'.array_key_first($form->get('data.content')).'.data';
+
+    $form->set("{$path}.cv_file", UploadedFile::fake()->create('Sjeren-CV.pdf', 100, 'application/pdf'))
+        ->call('save')->assertHasNoFormErrors();
+
+    $data = $page->fresh()->content[0]['data'];
+    expect($data['cv_file'])->toStartWith('cv/')->not->toBe('cv/Sjeren-CV.pdf')
+        ->and($data['cv_file_name'])->toBe('Sjeren-CV.pdf');
+    Storage::disk('public')->assertExists($data['cv_file']);
+});
+
+it('needs a CV path when no CV is uploaded', function () {
+    Project::factory()->count(2)->create();
+    $page = blockPage('hero', ['cv_url' => null] + collect(everyBlock())->firstWhere('type', 'hero')['data']);
+    $form = Livewire::test(EditPage::class, ['record' => $page->getRouteKey()]);
+    $uuid = array_key_first($form->get('data.content'));
+
+    $form->call('save')->assertHasFormErrors(["content.{$uuid}.data.cv_url" => 'required_without']);
 });
 
 it('rejects a second page with the same slug in the same language', function () {

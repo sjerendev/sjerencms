@@ -4,6 +4,7 @@ namespace App\Filament\Forms\Components\Blocks;
 
 use App\Filament\Forms\Components\MotionSettings;
 use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 
@@ -31,9 +32,18 @@ class HeroBlock extends Block
                     ->helperText('Links to the projekt page in this language'),
                 TextInput::make('cv_label')
                     ->required(),
+                // Random name on disk, so the Swedish and English CV never overwrite each other.
+                FileUpload::make('cv_file')
+                    ->label('CV')
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->disk('public')
+                    ->directory('cv')
+                    ->storeFileNamesIn('cv_file_name')
+                    ->helperText('A PDF for this language. Replaces the path below'),
                 TextInput::make('cv_url')
-                    ->required()
-                    ->helperText('E.g. /files/Sjeren-Portfolio-cv-2024.pdf'),
+                    ->label('CV path')
+                    ->requiredWithout('cv_file')
+                    ->helperText('Used without an upload. E.g. /files/Sjeren-Portfolio-cv-2024.pdf'),
             ]);
     }
 }

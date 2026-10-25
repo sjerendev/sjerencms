@@ -28,7 +28,8 @@
                 {{ $data['work_label'] ?? '' }} <span aria-hidden="true">↗</span>
                 <x-wave-underline />
             </a>
-            <a href="{{ $data['cv_url'] ?? '' }}" class="wave-link lbl flex items-center justify-between border-b border-hair-mid pb-[10px] hover:text-accent">
+            {{-- An uploaded CV wins over the path; it downloads under the name it was uploaded with, not its random one on disk. --}}
+            <a href="{{ filled($data['cv_file'] ?? null) ? Storage::disk('public')->url($data['cv_file']) : $data['cv_url'] ?? '' }}"@if (filled($data['cv_file'] ?? null)) download="{{ $data['cv_file_name'] ?? '' }}"@endif class="wave-link lbl flex items-center justify-between border-b border-hair-mid pb-[10px] hover:text-accent">
                 {{ $data['cv_label'] ?? '' }} <span aria-hidden="true">↓</span>
                 <x-wave-underline />
             </a>
