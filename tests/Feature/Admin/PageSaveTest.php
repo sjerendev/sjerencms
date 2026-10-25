@@ -61,6 +61,41 @@ it('stores an uploaded CV under a random name and keeps the name it came with', 
     Storage::disk('public')->assertExists($data['cv_file']);
 });
 
+it('deletes the replaced CV from the disk when a new one is saved', function () {
+    Storage::fake('public');
+    Storage::disk('public')->put('cv/a.pdf', '');
+    Project::factory()->count(2)->create();
+    $page = blockPage('hero', collect(everyBlock())->firstWhere('type', 'hero')['data']);
+    $form = Livewire::test(EditPage::class, ['record' => $page->getRouteKey()]);
+    $path = 'data.content.'.array_key_first($form->get('data.content')).'.data';
+
+    // Emptied first, as the field does on a new pick: Livewire appends an upload to a filled field.
+    $form->set("{$path}.cv_file", [])
+        ->set("{$path}.cv_file", UploadedFile::fake()->create('Ny-CV.pdf', 100, 'application/pdf'))
+        ->call('save')->assertHasNoFormErrors();
+
+    Storage::disk('public')->assertMissing('cv/a.pdf');
+    Storage::disk('public')->assertExists($page->fresh()->content[0]['data']['cv_file']);
+});
+
+it('keeps a replaced CV that another page still links to', function () {
+    Storage::fake('public');
+    Storage::disk('public')->put('cv/a.pdf', '');
+    Project::factory()->count(2)->create();
+    $hero = collect(everyBlock())->firstWhere('type', 'hero')['data'];
+    $page = blockPage('hero', $hero);
+    blockPage('hero', $hero, 'en');
+    $form = Livewire::test(EditPage::class, ['record' => $page->getRouteKey()]);
+    $path = 'data.content.'.array_key_first($form->get('data.content')).'.data';
+
+    // Emptied first, as the field does on a new pick: Livewire appends an upload to a filled field.
+    $form->set("{$path}.cv_file", [])
+        ->set("{$path}.cv_file", UploadedFile::fake()->create('Ny-CV.pdf', 100, 'application/pdf'))
+        ->call('save')->assertHasNoFormErrors();
+
+    Storage::disk('public')->assertExists('cv/a.pdf');
+});
+
 it('needs an uploaded CV and has no path field', function () {
     Project::factory()->count(2)->create();
     $page = blockPage('hero', ['cv_file' => null] + collect(everyBlock())->firstWhere('type', 'hero')['data']);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -48,6 +49,28 @@ class Page extends Model implements HasMedia
 		'show_in_main_nav' => 'boolean',
 		'show_in_footer_nav' => 'boolean'
 	];
+
+	protected static function booted(): void
+	{
+		// A replaced CV leaves the disk after the save, not when it is removed
+		// in the form, so a page left unsaved still has its file. One that
+		// another page links to stays.
+		static::updated(function (Page $page) {
+			$gone = array_diff(self::cvFiles($page->getOriginal('content')), self::cvFiles($page->content));
+			if ($gone === []) {
+				return;
+			}
+
+			$used = Page::whereKeyNot($page->getKey())->get(['id', 'content'])->flatMap(fn (Page $other) => self::cvFiles($other->content));
+			Storage::disk('public')->delete(array_values(array_diff($gone, $used->all())));
+		});
+	}
+
+	/** The CV paths in a page's hero blocks. */
+	private static function cvFiles(?array $content): array
+	{
+		return collect($content)->where('type', 'hero')->pluck('data.cv_file')->filter()->all();
+	}
 
 	public function parent()
 	{
