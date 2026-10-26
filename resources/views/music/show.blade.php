@@ -1,8 +1,6 @@
 {{-- Slapp.dc.html from lg, SlappMobil.dc.html below. --}}
 @php
     $playlist = $release->playlist();
-    $first = $release->tracks->first();
-    $line = __('music.trackLine', ['n' => ':n', 'time' => ':time']);
 @endphp
 <x-layouts.site :title="$title" :description="$description" :alternates="$alternates">
     <div class="gut pt-[12px] lg:pt-[36px]">
@@ -40,29 +38,8 @@
             </dl>
 
             @if ($playlist)
-                {{-- The whole album as one line, one segment per track, width = duration. --}}
-                <div data-scrub-for="{{ $release->slug }}" data-line="{{ $line }}" class="hidden flex-col gap-[12px] lg:flex">
-                    <div class="flex items-center gap-[18px]">
-                        <x-play-button :release="$release" :icon="18" class="size-[64px] bg-bar-sound text-plate" />
-                        <div class="flex flex-col gap-[4px]">
-                            <span data-scrub-title class="text-[20px] font-semibold tracking-[-0.01em]">{{ $first->title }}</span>
-                            <span data-scrub-line class="lbl text-ink-dim">{{ __('music.trackLine', ['n' => $first->position, 'time' => '0:00 / '.$first->clock()]) }}</span>
-                        </div>
-                    </div>
-                    <div data-scrub="{{ $release->slug }}" class="flex h-[30px] items-center gap-[4px]">
-                        @foreach ($release->tracks as $track)
-                            <div data-scrub-track="{{ $track->id }}" style="flex: {{ $track->duration_seconds }} 1 0" @class(['relative flex h-[30px] items-center', 'cursor-pointer' => $track->previewUrl()])>
-                                <span class="block h-[2px] w-full bg-hair"></span>
-                                <span data-scrub-progress style="width: 0%" class="absolute inset-y-0 left-0 flex items-center overflow-hidden bg-paper">
-                                    <svg width="100%" height="30" viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M0 15 Q 6 3 12 15 T 24 15 T 36 15 T 48 15 T 60 15 T 72 15 T 84 15 T 96 15 T 108 15 T 120 15 T 132 15 T 144 15 T 156 15 T 168 15 T 180 15 T 192 15 T 200 15" fill="none" stroke="var(--bar-sound)" stroke-width="1.8"/></svg>
-                                </span>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-[14px] lg:hidden">
-                    <x-play-button :release="$release" :icon="16" class="size-[56px] bg-bar-sound text-plate" />
+                <div class="flex items-center gap-[14px]">
+                    <x-play-button :release="$release" :icon="16" class="size-[56px] bg-bar-sound text-plate lg:size-[64px]" />
                     <span class="lbl">{{ __('music.playAll') }}</span>
                 </div>
             @endif

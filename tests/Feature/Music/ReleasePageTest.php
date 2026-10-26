@@ -22,7 +22,7 @@ function giveWavs(Release $release): void
 
 it('shows the release with meta, tracks and the album form', function () {
     giveWavs($this->release);
-    // The scrubber is a player control, so it needs a track with a preview.
+    // The play control needs a track with a preview.
     Storage::fake('public');
     $this->release->tracks[0]->addMedia(UploadedFile::fake()->create('p.mp3', 10, 'audio/mpeg'))->toMediaCollection('preview');
 
@@ -30,7 +30,7 @@ it('shows the release with meta, tracks and the album form', function () {
         ->assertSee('Past Voyages')->assertSee('10 sep 2026')->assertSee('32 min')->assertSee('WAV')
         ->assertSee('8:44')->assertSee('10:21')->assertSee('Köp · 20 kr')
         ->assertSee('Köp hela albumet')->assertSee('Du väljer, minst 70')
-        ->assertSee('min="70"', false)->assertSee('style="flex: 524 1 0"', false);
+        ->assertSee('min="70"', false)->assertSee('data-play-release="s-d-l-past-voyages"', false);
 });
 
 it('shows more from the same alias without itself or drafts', function () {

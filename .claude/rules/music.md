@@ -16,10 +16,18 @@
   builds its links from the model's route key, so an id-only admin 404s;
   saving a new slug redirects to the new address) with
   `TracksRelationManager` for tracks, preview and WAV.
-- Uploads up to 1 GB (`config/livewire.php`, `maxSize` on the fields) and
+- Uploads up to 1 GB (`config/livewire.php`, `maxSize` on the fields,
+  `max_file_size` in `config/media-library.php`: medialibrary's own default
+  of 10 MB throws `FileIsTooBig` otherwise) and
   saved as a stream, not read into memory. The host's PHP
-  `upload_max_filesize` and `post_max_size` must allow the same: locally
-  they are 20M/25M, so a real WAV only goes up once they are raised.
+  `upload_max_filesize` and `post_max_size` must allow the same. Locally
+  three limits apply: PHP (`php-memory-limits.ini` in the PHP `conf.d`,
+  512M on the dev Mac), Valet's nginx `client_max_body_size` in
+  `/usr/local/etc/nginx/valet/valet.conf` (1024M after a manual edit;
+  `valet install` and `valet upgrade` reset it to 128M, which shows up as
+  a 413) and the 1 GB above. Check the host's values before a big upload.
+  Upload one WAV per track: zipping saves only ~8% and the field accepts
+  only WAV mime types.
 - Deleting a release deletes its tracks through Eloquent, so medialibrary
   removes their preview and WAV files (the foreign key alone would not).
 - Routes in the `{locale}` group, before `{slug}`: `music.index`
@@ -44,8 +52,11 @@
 - Controls read by `resources/js/player.js`: `[data-play-release=<slug>]`
   (queue from the first track, toggles while that release plays),
   `[data-play-track=<id>][data-release=<slug>]`, and
-  `[data-scrub=<slug>] [data-scrub-track=<id>]` (starts at the clicked
-  fraction). A click copies the queue; `ended` moves to the next track and
+  `[data-scrub-track=<id>]`. Those segments are not on the release page:
+  `player.js` builds them in the bar's `[data-player-timeline]` (desktop),
+  one per track in the queue, width = duration, title above, from the
+  queue, not from the page. A click starts the track at the clicked
+  fraction. A click copies the queue; `ended` moves to the next track and
   stops after the last.
 - Events on `document`:
   - `player:state` `{release, track, playing, time, duration}`

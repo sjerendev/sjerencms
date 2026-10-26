@@ -79,7 +79,6 @@ function close() {
     bar().hidden = true;
     delete html.dataset.player;
     syncPage(false, 0, 0);
-    document.querySelectorAll('[data-scrub-progress]').forEach((el) => { el.style.width = '0%'; });
 
     document.dispatchEvent(new CustomEvent('player:state', {
         detail: { release: null, track: null, playing: false, time: 0, duration: 0 },
@@ -149,17 +148,41 @@ function syncPage(playing, time, duration) {
         button.closest('li')?.toggleAttribute('data-current', isCurrent);
     });
 
-    document.querySelectorAll('[data-scrub-for]').forEach((block) => {
-        if (!mine(block.dataset.scrubFor) || !track) return;
-        block.querySelector('[data-scrub-title]').textContent = track.title;
-        block.querySelector('[data-scrub-line]').textContent = block.dataset.line
-            .replace(':n', track.position)
-            .replace(':time', `${clock(time)} / ${clock(duration)}`);
-        block.querySelectorAll('[data-scrub-track]').forEach((segment) => {
-            const progress = segment.querySelector('[data-scrub-progress]');
-            const isCurrent = Number(segment.dataset.scrubTrack) === track.id;
-            if (progress) progress.style.width = isCurrent ? `${Math.min(100, (time / duration) * 100)}%` : '0%';
-        });
+    syncTimeline(time, duration);
+}
+
+const WAVE = '<svg width="100%" height="22" viewBox="0 0 200 22" preserveAspectRatio="none" aria-hidden="true"><path d="M0 11 Q 6 1 12 11 T 24 11 T 36 11 T 48 11 T 60 11 T 72 11 T 84 11 T 96 11 T 108 11 T 120 11 T 132 11 T 144 11 T 156 11 T 168 11 T 180 11 T 192 11 T 200 11" fill="none" stroke="var(--bar-sound)" stroke-width="1.6"/></svg>';
+
+// The bar's timeline: one segment per playable track of the queue, width =
+// duration, the title above it. Built once per queue (the bar is persisted),
+// then only the progress moves.
+function syncTimeline(time, duration) {
+    const box = document.querySelector('[data-player-timeline]');
+    if (!box) return;
+
+    const key = queue ? `${queue.slug}:${queue.tracks.map((t) => t.id).join(',')}` : '';
+    if (box.dataset.key !== key) {
+        box.dataset.key = key;
+        box.replaceChildren(...(queue?.tracks ?? []).map((t) => {
+            const segment = document.createElement('div');
+            segment.dataset.scrubTrack = t.id;
+            segment.style.flex = `${t.seconds} 1 0`;
+            segment.className = 'flex min-w-0 cursor-pointer flex-col gap-[4px]';
+            segment.innerHTML = `<span data-scrub-title class="lbl truncate text-[rgba(237,236,234,0.62)]"></span>
+                <span class="relative flex h-[22px] items-center">
+                    <span class="block h-px w-full bg-[rgba(237,236,234,0.3)]"></span>
+                    <span data-scrub-progress style="width: 0%" class="absolute inset-y-0 left-0 flex items-center overflow-hidden bg-bar">${WAVE}</span>
+                </span>`;
+            segment.querySelector('[data-scrub-title]').textContent = t.title;
+            return segment;
+        }));
+    }
+
+    const track = current();
+    box.querySelectorAll('[data-scrub-track]').forEach((segment) => {
+        const isCurrent = Number(segment.dataset.scrubTrack) === track?.id;
+        segment.querySelector('[data-scrub-title]').classList.toggle('text-bar-sound', isCurrent);
+        segment.querySelector('[data-scrub-progress]').style.width = isCurrent ? `${Math.min(100, (time / duration) * 100)}%` : '0%';
     });
 }
 
@@ -185,9 +208,9 @@ document.addEventListener('click', (event) => {
 
     const segment = target.closest('[data-scrub-track]');
     if (segment) {
-        const data = music()[segment.closest('[data-scrub]')?.dataset.scrub];
+        const data = queue; // The segments are the bar's, built from the queue.
         const i = data?.tracks.findIndex((t) => t.id === Number(segment.dataset.scrubTrack)) ?? -1;
-        if (i < 0) return; // No preview for this track.
+        if (i < 0) return;
         const rect = segment.getBoundingClientRect();
         const fraction = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
         const a = audio();
